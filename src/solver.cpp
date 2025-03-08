@@ -11,6 +11,7 @@ module;
 #include <tuple>
 
 import day01;
+import day02;
 
 // --------
 export module solver;
@@ -81,6 +82,7 @@ void solver(std::string fpath) {
 
 std::map<int, std::function<void(std::string)>> Solvers{
     {1, solver<&day01::solve, 1>},
+    {2, solver<&day02::solve, 2>},
 };
 
 void runAllSolver() {
