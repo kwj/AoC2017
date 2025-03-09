@@ -5,6 +5,7 @@ URL: https://adventofcode.com/2017
 ## Requirement
 
 * [Clang](https://clang.llvm.org/) (confirmed to work with Clang 1.19.1)
+* [libc++](https://libcxx.llvm.org/)  (confirmed to work with libc++ 1.19.1)
 * [CMake](https://cmake.org/) (confimed to work with CMake 3.30.1)
 * [Ninja](https://ninja-build.org/) (confimed to work with Ninja 1.12.1)
 
