@@ -1,5 +1,6 @@
 module;
 
+#include <iostream>
 #include <string>
 #include <regex>
 #include <vector>
@@ -9,7 +10,7 @@ export module util;
 
 export namespace util {
 
-std::string getLine(std::stringstream &ss);
+std::string getLine(std::istream &is);
 std::vector<int> getNumbers(std::string const &s);
 std::vector<int> getUNumbers(std::string const &s);
 
@@ -20,9 +21,9 @@ module :private;
 
 namespace util {
 
-std::string getLine(std::stringstream &ss) {
+std::string getLine(std::istream &is) {
     std::string line;
-    std::getline(ss, line);
+    std::getline(is, line);
 
     return line;
 }
