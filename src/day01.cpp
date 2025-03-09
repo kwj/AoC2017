@@ -55,7 +55,7 @@ int part1(std::string const &s) {
 }
 
 int part2(std::string const &s) {
-    return captcha(s, s.size() / 2);
+    return captcha(s, static_cast<int>(s.size()) / 2);
 }
 
 }  // module day01
