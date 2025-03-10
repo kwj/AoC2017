@@ -27,7 +27,7 @@ module;
 #include <sstream>
 #include <string>
 #include <tuple>
-#include <vector>
+#include <unordered_map>
 #include <complex>
 
 import util;
@@ -75,22 +75,16 @@ long part1(long target) {
     }
 }
 
-long getValue(std::vector<std::vector<long>> const &m, std::complex<int> pos) {
-    auto x = static_cast<unsigned int>(pos.real());
-    auto y = static_cast<unsigned int>(pos.imag());
+struct ComplexHash {
+    std::size_t operator()(std::complex<int> const &key) const {
+        auto r = static_cast<long>(key.real());
+        auto i = static_cast<long>(key.imag());
 
-    return m[y][x];
-}
+        return std::hash<long>{}((r & 0xFFFF) << 16 | (i & 0xFFFF));
+    }
+};
 
-void setValue(std::vector<std::vector<long>> &m, std::complex<int> pos, long v) {
-    auto x = static_cast<unsigned int>(pos.real());
-    auto y = static_cast<unsigned int>(pos.imag());
-    m[y][x] = v;
-
-    return;
-}
-
-long fixValue(std::vector<std::vector<long>> const &m, std::complex<int> pos) {
+long fixValue(std::unordered_map<std::complex<int>, long, ComplexHash> &m, std::complex<int> const &pos) {
     std::array<std::complex<int>, 8> dirs{
         std::complex<int>{1, 0},
         std::complex<int>{1, 1},
@@ -103,26 +97,23 @@ long fixValue(std::vector<std::vector<long>> const &m, std::complex<int> pos) {
     };
 
     long result{0};
-    for (auto d : dirs) {
-        result += getValue(m, pos + d);
+    for (auto const d : dirs) {
+        result += m[pos + d];
     }
 
     return result;
 }
 
 long part2(long target) {
-    auto size{static_cast<unsigned int>(std::lround(std::ceil(std::sqrt(target))) + 2)};
-    std::vector<std::vector<long>> matrix(size, std::vector<long>(size, 0));
-
-    std::complex<int> pos(size / 2, size / 2);
+    std::unordered_map<std::complex<int>, long, ComplexHash> grid = {{{0, 0}, 1}};
+    std::complex<int> pos(0, 0);
     std::complex<int> dir(1, 0);
-    matrix[size / 2][size / 2] = 1;
     int i{0};
     int dist{1};
 
-    while (getValue(matrix, pos) <= target) {
+    while (grid[pos] <= target) {
         pos += dir;
-        setValue(matrix, pos, fixValue(matrix, pos));
+        grid[pos] = fixValue(grid, pos);
 
         if (++i == dist) {
             i = 0;
@@ -133,7 +124,7 @@ long part2(long target) {
         }
     }
 
-    return getValue(matrix, pos);
+    return grid[pos];
 }
 
 }  // module day03
