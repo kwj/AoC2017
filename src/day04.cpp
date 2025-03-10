@@ -69,4 +69,3 @@ long part2(std::vector<std::vector<std::string>> &vvs) {
 }
 
 }  // module day04
-
