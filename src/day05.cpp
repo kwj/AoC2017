@@ -5,8 +5,6 @@ module;
 #include <string>
 #include <vector>
 
-import util;
-
 // --------
 export module day05;
 
