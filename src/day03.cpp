@@ -98,14 +98,16 @@ long fixValue(std::unordered_map<std::complex<int>, long, ComplexHash> &m, std::
 
     long result{0};
     for (auto const d : dirs) {
-        result += m[pos + d];
+        result += m[pos + d];  // If m[pos + d] doesn't exist, it is initialized to 0.
     }
 
     return result;
 }
 
 long part2(long target) {
+    // std::complex has the == operator, so use it.
     std::unordered_map<std::complex<int>, long, ComplexHash> grid = {{{0, 0}, 1}};
+
     std::complex<int> pos(0, 0);
     std::complex<int> dir(1, 0);
     int i{0};
