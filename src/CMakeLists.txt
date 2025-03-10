@@ -12,6 +12,7 @@ target_sources(
         day02.cpp
         day03.cpp
         day04.cpp
+        day05.cpp
         solver.cpp
 )
 
