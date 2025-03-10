@@ -22,13 +22,13 @@
 
 module;
 
-#include <array>
 #include <cmath>
+#include <complex>
 #include <sstream>
 #include <string>
 #include <tuple>
 #include <unordered_map>
-#include <complex>
+#include <array>
 
 import util;
 
@@ -85,16 +85,16 @@ struct ComplexHash {
 };
 
 long fixValue(std::unordered_map<std::complex<int>, long, ComplexHash> &m, std::complex<int> const &pos) {
-    std::array<std::complex<int>, 8> dirs{
-        std::complex<int>{1, 0},
-        std::complex<int>{1, 1},
-        std::complex<int>{0, 1},
-        std::complex<int>{-1, 1},
-        std::complex<int>{-1, 0},
-        std::complex<int>{-1, -1},
-        std::complex<int>{0, -1},
-        std::complex<int>{1, -1},
-    };
+    std::array<std::complex<int>, 8> dirs = {{
+        {1, 0},
+        {1, 1},
+        {0, 1},
+        {-1, 1},
+        {-1, 0},
+        {-1, -1},
+        {0, -1},
+        {1, -1},
+    }};
 
     long result{0};
     for (auto const d : dirs) {
