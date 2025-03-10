@@ -6,6 +6,8 @@ module;
 #include <string>
 #include <tuple>
 
+import util;
+
 // --------
 export module day01;
 
@@ -30,10 +32,7 @@ std::tuple<long, long> solve(std::stringstream &ss) {
 }
 
 std::string parse(std::stringstream &ss) {
-    std::string line;
-    std::getline(ss, line);
-
-    return line;
+    return util::getLine(ss);
 }
 
 long captcha(std::string const &s1, long offset) {
