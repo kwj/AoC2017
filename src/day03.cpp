@@ -85,7 +85,7 @@ struct ComplexHash {
 };
 
 long fixValue(std::unordered_map<std::complex<int>, long, ComplexHash> &m, std::complex<int> const &pos) {
-    std::array<std::complex<int>, 8> dirs = {{
+    auto dirs = std::to_array<std::complex<int>>({
         {1, 0},
         {1, 1},
         {0, 1},
@@ -94,7 +94,7 @@ long fixValue(std::unordered_map<std::complex<int>, long, ComplexHash> &m, std::
         {-1, -1},
         {0, -1},
         {1, -1},
-    }};
+    });
 
     long result{0};
     for (auto const d : dirs) {
