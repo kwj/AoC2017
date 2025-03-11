@@ -15,6 +15,7 @@ import day02;
 import day03;
 import day04;
 import day05;
+import day06;
 
 // --------
 export module solver;
@@ -89,6 +90,7 @@ std::map<int, std::function<void(std::string)>> Solvers{
     {3, solver<&day03::solve, 3>},
     {4, solver<&day04::solve, 4>},
     {5, solver<&day05::solve, 5>},
+    {6, solver<&day06::solve, 6>},
 };
 
 void runAllSolver() {
