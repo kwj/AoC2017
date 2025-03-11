@@ -1,8 +1,8 @@
 module;
 
 #include <algorithm>
+#include <istream>
 #include <ranges>
-#include <sstream>
 #include <string>
 #include <tuple>
 
@@ -13,8 +13,8 @@ export module day01;
 
 export namespace day01 {
 
-std::tuple<long, long> solve(std::stringstream &ss);
-std::string parse(std::stringstream &ss);
+std::tuple<long, long> solve(std::istream &is);
+std::string parse(std::istream &is);
 long part1(std::string const &s);
 long part2(std::string const &s);
 
@@ -25,14 +25,14 @@ module :private;
 
 namespace day01 {
 
-std::tuple<long, long> solve(std::stringstream &ss) {
-    auto input_data = parse(ss);
+std::tuple<long, long> solve(std::istream &is) {
+    auto input_data = parse(is);
 
     return {part1(input_data), part2(input_data)};
 }
 
-std::string parse(std::stringstream &ss) {
-    return util::getLine(ss);
+std::string parse(std::istream &is) {
+    return util::getLine(is);
 }
 
 long captcha(std::string const &s1, long offset) {

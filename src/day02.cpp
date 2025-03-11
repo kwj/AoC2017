@@ -1,8 +1,8 @@
 module;
 
 #include <algorithm>
+#include <istream>
 #include <ranges>
-#include <sstream>
 #include <string>
 #include <vector>
 
@@ -13,8 +13,8 @@ export module day02;
 
 export namespace day02 {
 
-std::tuple<long, long> solve(std::stringstream &ss);
-std::vector<std::vector<long>> parse(std::stringstream &ss);
+std::tuple<long, long> solve(std::istream &is);
+std::vector<std::vector<long>> parse(std::istream &is);
 long part1(std::vector<std::vector<long>> const &vvs);
 long part2(std::vector<std::vector<long>> const &vvs);
 
@@ -25,16 +25,16 @@ module :private;
 
 namespace day02 {
 
-std::tuple<long, long> solve(std::stringstream &ss) {
-    auto input_data = parse(ss);
+std::tuple<long, long> solve(std::istream &is) {
+    auto input_data = parse(is);
 
     return {part1(input_data), part2(input_data)};
 }
 
-std::vector<std::vector<long>> parse(std::stringstream &ss) {
+std::vector<std::vector<long>> parse(std::istream &is) {
     std::vector<std::vector<long>> result;
 
-    for (std::string line; std::getline(ss, line);) {
+    for (std::string line; std::getline(is, line);) {
         auto nums = util::getNumbers(line);
         std::ranges::sort(nums, std::ranges::greater());
         result.push_back(nums);

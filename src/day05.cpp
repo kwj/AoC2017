@@ -1,7 +1,7 @@
 module;
 
 #include <functional>
-#include <sstream>
+#include <istream>
 #include <string>
 #include <vector>
 
@@ -10,8 +10,8 @@ export module day05;
 
 export namespace day05 {
 
-std::tuple<long, long> solve(std::stringstream &ss);
-std::vector<long> parse(std::stringstream &ss);
+std::tuple<long, long> solve(std::istream &is);
+std::vector<long> parse(std::istream &is);
 long part1(std::vector<long> const &vvs);
 long part2(std::vector<long> const &vvs);
 
@@ -22,16 +22,16 @@ module :private;
 
 namespace day05 {
 
-std::tuple<long, long> solve(std::stringstream &ss) {
-    auto input_data = parse(ss);
+std::tuple<long, long> solve(std::istream &is) {
+    auto input_data = parse(is);
 
     return {part1(input_data), part2(input_data)};
 }
 
-std::vector<long> parse(std::stringstream &ss) {
+std::vector<long> parse(std::istream &is) {
     std::vector<long> result;
 
-    for (std::string line; std::getline(ss, line);) {
+    for (std::string line; std::getline(is, line);) {
         result.push_back(std::stol(line));
     }
 

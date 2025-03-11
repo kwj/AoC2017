@@ -2,7 +2,7 @@ module;
 
 #include <algorithm>
 #include <ranges>
-#include <sstream>
+#include <istream>
 #include <string>
 #include <tuple>
 #include <vector>
@@ -12,8 +12,8 @@ export module day04;
 
 export namespace day04 {
 
-std::tuple<long, long> solve(std::stringstream &ss);
-std::vector<std::vector<std::string>> parse(std::stringstream &ss);
+std::tuple<long, long> solve(std::istream &is);
+std::vector<std::vector<std::string>> parse(std::istream &is);
 long part1(std::vector<std::vector<std::string>> &vvs);
 long part2(std::vector<std::vector<std::string>> &vvs);
 
@@ -24,16 +24,16 @@ module :private;
 
 namespace day04 {
 
-std::tuple<long, long> solve(std::stringstream &ss) {
-    auto input_data = parse(ss);
+std::tuple<long, long> solve(std::istream &is) {
+    auto input_data = parse(is);
 
     return {part1(input_data), part2(input_data)};
 }
 
-std::vector<std::vector<std::string>> parse(std::stringstream &ss) {
+std::vector<std::vector<std::string>> parse(std::istream &is) {
     std::vector<std::vector<std::string>> result;
 
-    for (std::string line; std::getline(ss, line);) {
+    for (std::string line; std::getline(is, line);) {
         result.push_back(line | std::views::split(' ') | std::ranges::to<std::vector<std::string>>());
     }
 

@@ -24,7 +24,7 @@ module;
 
 #include <cmath>
 #include <complex>
-#include <sstream>
+#include <istream>
 #include <string>
 #include <tuple>
 #include <unordered_map>
@@ -37,8 +37,8 @@ export module day03;
 
 export namespace day03 {
 
-std::tuple<long, long> solve(std::stringstream &ss);
-long parse(std::stringstream &ss);
+std::tuple<long, long> solve(std::istream &is);
+long parse(std::istream &is);
 long part1(long target);
 long part2(long target);
 
@@ -49,14 +49,14 @@ module :private;
 
 namespace day03 {
 
-std::tuple<long, long> solve(std::stringstream &ss) {
-    auto input_data = parse(ss);
+std::tuple<long, long> solve(std::istream &is) {
+    auto input_data = parse(is);
 
     return {part1(input_data), part2(input_data)};
 }
 
-long parse(std::stringstream &ss) {
-    return std::stol(util::getLine(ss));
+long parse(std::istream &is) {
+    return std::stol(util::getLine(is));
 }
 
 inline long ring_max_number(long n) {
