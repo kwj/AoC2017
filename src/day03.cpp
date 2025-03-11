@@ -22,13 +22,13 @@
 
 module;
 
+#include <array>
 #include <cmath>
 #include <complex>
 #include <istream>
 #include <string>
 #include <tuple>
 #include <unordered_map>
-#include <array>
 
 import util;
 

@@ -28,8 +28,6 @@ module :private;
 
 namespace day06 {
 
-//constexpr long N_BANKS{16};
-
 std::tuple<long, long> solve(std::istream &is) {
     auto input_data = parse(is);
 
