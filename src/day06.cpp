@@ -4,6 +4,7 @@ module;
 #include <array>
 #include <istream>
 #include <string>
+#include <tuple>
 #include <utility>
 #include <vector>
 

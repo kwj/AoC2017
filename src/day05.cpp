@@ -3,6 +3,7 @@ module;
 #include <functional>
 #include <istream>
 #include <string>
+#include <tuple>
 #include <vector>
 
 // --------

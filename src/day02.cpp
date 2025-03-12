@@ -4,6 +4,7 @@ module;
 #include <istream>
 #include <ranges>
 #include <string>
+#include <tuple>
 #include <vector>
 
 import util;
