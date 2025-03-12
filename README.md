@@ -2,7 +2,7 @@
 
 URL: https://adventofcode.com/2017
 
-## Requirement
+## Requirements
 
 * [Clang](https://clang.llvm.org/) (confirmed to work with Clang 1.19.1)
 * [libc++](https://libcxx.llvm.org/) (confirmed to work with libc++ 1.19.1)
@@ -17,8 +17,8 @@ URL: https://adventofcode.com/2017
 * [Day 4: High-Entropy Passphrases](./src/day04.cpp)
 * [Day 5: A Maze of Twisty Trampolines, All Alike](./src/day05.cpp)
 * [Day 6: Memory Reallocation](./src/day06.cpp)
-<!--
 * [Day 7: Recursive Circus](./src/day07.cpp)
+<!--
 * [Day 8: I Heard You Like Registers](./src/day08.cpp)
 * [Day 9: Stream Processing](./src/day09.cpp)
 * [Day 10: Knot Hash](./src/day10.cpp)
