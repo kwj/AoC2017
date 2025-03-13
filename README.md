@@ -19,8 +19,8 @@ URL: https://adventofcode.com/2017
 * [Day 6: Memory Reallocation](./src/day06.cpp)
 * [Day 7: Recursive Circus](./src/day07.cpp)
 * [Day 8: I Heard You Like Registers](./src/day08.cpp)
-<!--
 * [Day 9: Stream Processing](./src/day09.cpp)
+<!--
 * [Day 10: Knot Hash](./src/day10.cpp)
 * [Day 11: Hex Ed](./src/day11.cpp)
 * [Day 12: Digital Plumber](./src/day12.cpp)
