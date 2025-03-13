@@ -32,6 +32,11 @@ module;
 #include <unordered_map>
 #include <vector>
 
+// --------
+export module day07;
+
+export namespace day07 {
+
 struct Disc {
     std::string name;
     size_t id;
@@ -40,11 +45,6 @@ struct Disc {
     std::vector<size_t> children;
     std::vector<long> sub_tower_weight; // each child tower's total weight
 };
-
-// --------
-export module day07;
-
-export namespace day07 {
 
 std::tuple<std::string, long> solve(std::istream &is);
 std::vector<Disc> parse(std::istream &is);
@@ -86,7 +86,7 @@ std::vector<Disc> parse(std::istream &is) {
 
             if (m.length(4) > 0) {
                 std::vector<std::string> children;
-                for (auto const word : std::views::split(m[4].str(), ", "sv)) {
+                for (auto const &&word : std::views::split(m[4].str(), ", "sv)) {
                     children.push_back(std::string(std::string_view(word)));
                 }
                 childMap[idx] = children;

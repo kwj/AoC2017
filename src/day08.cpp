@@ -10,17 +10,17 @@ module;
 #include <unordered_map>
 #include <vector>
 
+// --------
+export module day08;
+
+export namespace day08 {
+
 struct Instruction {
     std::string r1;
     std::string r2;
     std::function<long(long)> op_fn;
     std::function<bool(long)> cond_fn;
 };
-
-// --------
-export module day08;
-
-export namespace day08 {
 
 std::tuple<long, long> solve(std::istream &is);
 std::vector<Instruction> parse(std::istream &is);
