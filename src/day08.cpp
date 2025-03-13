@@ -95,12 +95,12 @@ long part1(std::vector<Instruction> const &insts) {
         }
     }
 
-    std::vector<long> values;
+    long max_value{LONG_MIN};
     for (auto const &[_, v] : regs) {
-        values.push_back(v);
+        max_value = std::max(max_value, v);
     }
 
-    return *std::max_element(values.begin(), values.end());
+    return max_value;
 }
 
 long part2(std::vector<Instruction> const &insts) {
