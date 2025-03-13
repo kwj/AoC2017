@@ -81,13 +81,13 @@ std::string part2(std::string const &s) {
     lengths.append_range(tail);
 
     auto hashed_data = knotHash(lengths, 64);
-    std::string hash_str;
+    std::ostringstream oss;
     for (auto i = 0; i < KNOTS_LEN; i += 16) {
         auto h = std::ranges::fold_left(hashed_data.begin() + i, hashed_data.begin() + i + 16, 0, std::bit_xor<long>());
-        hash_str.append(std::format("{:02x}", h & 0xFF));
+        oss << std::format("{:02x}", h & 0xFF);
     }
 
-    return hash_str;
+    return oss.str();
 }
 
 } // namespace day10
