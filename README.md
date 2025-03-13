@@ -21,8 +21,8 @@ URL: https://adventofcode.com/2017
 * [Day 8: I Heard You Like Registers](./src/day08.cpp)
 * [Day 9: Stream Processing](./src/day09.cpp)
 * [Day 10: Knot Hash](./src/day10.cpp)
-<!--
 * [Day 11: Hex Ed](./src/day11.cpp)
+<!--
 * [Day 12: Digital Plumber](./src/day12.cpp)
 * [Day 13: Packet Scanners](./src/day13.cpp)
 * [Day 14: Disk Defragmentation](./src/day14.cpp)
