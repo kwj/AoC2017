@@ -59,8 +59,7 @@ std::vector<long> parse(std::istream &is) {
         std::vector<unsigned long> nums = util::getUNumbers(line);
 
         // ignore program ID (The reason for this is the comment at the beginning of this file)
-        nums.erase(nums.begin());
-        connections.push_back(std::ranges::to<std::vector<size_t>>(nums));
+        connections.push_back(std::ranges::drop_view{nums, 1} | std::ranges::to<std::vector<size_t>>());
     }
 
     // Each element is a number of programs in a group. The first element result[0]
