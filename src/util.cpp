@@ -12,7 +12,7 @@ export namespace util {
 
 std::string getLine(std::istream &is);
 std::vector<long> getNumbers(std::string_view sv);
-std::vector<long> getUNumbers(std::string_view sv);
+std::vector<unsigned long> getUNumbers(std::string_view sv);
 
 } // namespace util
 
@@ -41,13 +41,13 @@ std::vector<long> getNumbers(std::string_view sv) {
     return result;
 }
 
-std::vector<long> getUNumbers(std::string_view sv) {
+std::vector<unsigned long> getUNumbers(std::string_view sv) {
     std::regex re(R"(\d+)");
-    std::vector<long> result;
+    std::vector<unsigned long> result;
 
     std::match_results<std::string_view::const_iterator> m;
     while (std::regex_search(sv.begin(), sv.end(), m, re)) {
-        result.push_back(std::stol(m.str()));
+        result.push_back(std::stoul(m.str()));
         sv = sv.substr(static_cast<size_t>(m.position(0) + m.length(0)));
     }
 
