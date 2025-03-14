@@ -1,8 +1,8 @@
 module;
 
 #include <iostream>
-#include <string>
 #include <regex>
+#include <string_view>
 #include <vector>
 
 // ----
@@ -11,8 +11,8 @@ export module util;
 export namespace util {
 
 std::string getLine(std::istream &is);
-std::vector<long> getNumbers(std::string const &s);
-std::vector<long> getUNumbers(std::string const &s);
+std::vector<long> getNumbers(std::string_view sv);
+std::vector<long> getUNumbers(std::string_view sv);
 
 } // namespace util
 
@@ -28,27 +28,27 @@ std::string getLine(std::istream &is) {
     return line;
 }
 
-std::vector<long> getNumbers(std::string const &s) {
-    std::string src{s};
+std::vector<long> getNumbers(std::string_view sv) {
     std::regex re(R"(-?\d+)");
     std::vector<long> result;
 
-    for (std::smatch m; std::regex_search(src, m, re);) {
+    std::match_results<std::string_view::const_iterator> m;
+    while (std::regex_search(sv.begin(), sv.end(), m, re)) {
         result.push_back(std::stol(m.str()));
-        src = m.suffix();
+        sv = sv.substr(static_cast<size_t>(m.position(0) + m.length(0)));
     }
 
     return result;
 }
 
-std::vector<long> getUNumbers(std::string const &s) {
-    std::string src{s};
+std::vector<long> getUNumbers(std::string_view sv) {
     std::regex re(R"(\d+)");
     std::vector<long> result;
 
-    for (std::smatch m; std::regex_search(src, m, re);) {
+    std::match_results<std::string_view::const_iterator> m;
+    while (std::regex_search(sv.begin(), sv.end(), m, re)) {
         result.push_back(std::stol(m.str()));
-        src = m.suffix();
+        sv = sv.substr(static_cast<size_t>(m.position(0) + m.length(0)));
     }
 
     return result;
