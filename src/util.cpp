@@ -2,6 +2,7 @@ module;
 
 #include <iostream>
 #include <regex>
+#include <string>
 #include <string_view>
 #include <vector>
 
@@ -29,26 +30,30 @@ std::string getLine(std::istream &is) {
 }
 
 std::vector<long> getNumbers(std::string_view sv) {
-    std::regex re(R"(-?\d+)");
     std::vector<long> result;
 
-    std::match_results<std::string_view::const_iterator> m;
-    while (std::regex_search(sv.begin(), sv.end(), m, re)) {
-        result.push_back(std::stol(m.str()));
-        sv = sv.substr(static_cast<size_t>(m.position(0) + m.length(0)));
+    std::regex re(R"(-?\d+)");
+    auto it = std::regex_token_iterator<std::string_view::const_iterator>{
+        sv.cbegin(), sv.cend(), re
+    };
+
+    for (decltype(it) last; it != last; ++it) {
+        result.push_back(std::stol(*it));
     }
 
     return result;
 }
 
 std::vector<unsigned long> getUNumbers(std::string_view sv) {
-    std::regex re(R"(\d+)");
     std::vector<unsigned long> result;
 
-    std::match_results<std::string_view::const_iterator> m;
-    while (std::regex_search(sv.begin(), sv.end(), m, re)) {
-        result.push_back(std::stoul(m.str()));
-        sv = sv.substr(static_cast<size_t>(m.position(0) + m.length(0)));
+    std::regex re(R"(\d+)");
+    auto it = std::regex_token_iterator<std::string_view::const_iterator>{
+        sv.cbegin(), sv.cend(), re
+    };
+
+    for (decltype(it) last; it != last; ++it) {
+        result.push_back(std::stoul(*it));
     }
 
     return result;
