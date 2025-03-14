@@ -36,7 +36,7 @@ std::tuple<long, long> solve(std::istream &is) {
     return {part1(result), part2(result)};
 }
 
-long countGroupPrograms(
+long countProgramsInGroup(
     std::vector<std::vector<size_t>> const &connections,
     std::vector<bool> &tbl,
     size_t id
@@ -45,7 +45,7 @@ long countGroupPrograms(
     for (auto const &nbr_id : connections[id]) {
         if (!tbl[nbr_id]) {
             tbl[nbr_id] = true;
-            cnt += countGroupPrograms(connections, tbl, nbr_id);
+            cnt += countProgramsInGroup(connections, tbl, nbr_id);
         }
     }
 
@@ -71,7 +71,7 @@ std::vector<long> parse(std::istream &is) {
     for (size_t id{0}; id < connections.size(); ++id) {
         if (!tbl[id]) {
             tbl[id] = true;
-            result.push_back(countGroupPrograms(connections, tbl, id));
+            result.push_back(countProgramsInGroup(connections, tbl, id));
         }
     }
 
