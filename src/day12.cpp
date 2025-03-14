@@ -54,15 +54,20 @@ long countGroupPrograms(
 
 std::vector<long> parse(std::istream &is) {
     std::vector<std::vector<size_t>> connections;
-
     std::string line;
     while (std::getline(is, line)) {
         std::vector<unsigned long> nums = util::getUNumbers(line);
-        nums.erase(nums.begin()); // ignore program ID (The reason for this is the comment at the beginning of this file)
+
+        // ignore program ID (The reason for this is the comment at the beginning of this file)
+        nums.erase(nums.begin());
         connections.push_back(std::ranges::to<std::vector<size_t>>(nums));
     }
 
+    // Each element is a number of programs in a group. The first element result[0]
+    // indicates the group containing the program 0, however, the rest elements are
+    // unknown. It cuts corners.
     std::vector<long> result;
+
     std::vector<bool> tbl(connections.size());
     for (size_t id{0}; id < connections.size(); ++id) {
         if (!tbl[id]) {
