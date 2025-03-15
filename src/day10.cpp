@@ -12,8 +12,6 @@ module;
 
 import util;
 
-constexpr long KNOTS_LEN{256};
-
 // --------
 export module day10;
 
@@ -30,6 +28,8 @@ std::string part2(std::string const &s);
 module :private;
 
 namespace day10 {
+
+constexpr long KNOTS_LEN{256};
 
 std::tuple<long, std::string> solve(std::istream &is) {
     auto result = parse(is);
