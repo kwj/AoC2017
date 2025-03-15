@@ -42,7 +42,7 @@ std::vector<std::vector<std::string>> parse(std::istream &is) {
 
 bool isValid(std::vector<std::string> const &vs) {
     std::vector<std::string> words{vs};
-    std::sort(words.begin(), words.end());
+    std::ranges::sort(words);
 
     for (std::size_t i = 0; i < words.size() - 1; ++i) {
         if (words[i] == words[i + 1]) {
@@ -61,7 +61,7 @@ long part2(std::vector<std::vector<std::string>> &vvs) {
     std::vector<std::vector<std::string>> tmp_vvs{vvs};
     for (auto &vs : tmp_vvs) {
         for (auto &word : vs) {
-            std::sort(word.begin(), word.end());
+            std::ranges::sort(word);
         }
     }
 

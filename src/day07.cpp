@@ -152,7 +152,7 @@ long findDelta(std::vector<Disc> const &discs, size_t root_id) {
             }
         default:
             std::vector<long> work{self.sub_tower_weight};
-            std::sort(work.begin(), work.end());
+            std::ranges::sort(work);
             if (work[0] == work[1]) {
                 return work[0] - work.back();
             } else {
