@@ -122,33 +122,32 @@ std::vector<size_t> getNbrs(size_t idx) {
     return nbrs;
 }
 
-long countSpacesInRegion(std::vector<long> &squares, size_t idx) {
-    long cnt{1};
+void checkSpacesInRegion(std::vector<long> &squares, size_t idx) {
     for (auto const &nbrs_idx : getNbrs(idx)) {
         if (squares[nbrs_idx] != 0) {
             squares[nbrs_idx] = 0;
-            cnt += countSpacesInRegion(squares, nbrs_idx);
+            checkSpacesInRegion(squares, nbrs_idx);
         }
     }
 
-    return cnt;
+    return;
 }
 
 long part2(std::vector<long> const &grid) {
-    std::vector<long> regions;
-
     // 0: free space, or checked used space
     // 1: unchecked used space
     std::vector<long> squares{grid};
 
+    long n_regions{0};
     for (size_t idx{0}; idx < squares.size(); ++idx) {
         if (squares[idx] != 0) {
             squares[idx] = 0;
-            regions.push_back(countSpacesInRegion(squares, idx));
+            checkSpacesInRegion(squares, idx);
+            ++n_regions;
         }
     }
 
-    return static_cast<long>(regions.size());
+    return n_regions;
 }
 
 } // namespace day14
