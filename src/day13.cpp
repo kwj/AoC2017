@@ -37,10 +37,11 @@ std::tuple<long, long> solve(std::istream &is) {
 }
 
 std::map<long, std::set<long>> parse(std::istream &is) {
+    // Note the use an ordered map to solve part 2.
     // key: range, value: a set of depths
     std::map<long, std::set<long>> result;
-    std::string line;
-    while (std::getline(is, line)) {
+
+    for (std::string line; std::getline(is, line);) {
         std::vector<long> nums = util::getNumbers(line);
         result[nums[1]].insert(nums[0]);
     }
@@ -76,18 +77,17 @@ long part2(std::map<long, std::set<long>> const &tbl) {
     for (auto const &[r, depths] : tbl) {
         // period to scan the top of a layer whose range is `r`.
         auto period = 2 * (r - 1);
+
         auto next_lcm = std::lcm(crnt_lcm, period);
         next_delays.clear();
-
         for (auto const &d : delays) {
             for (long gap = 0; gap < next_lcm; gap += crnt_lcm) {
                 auto next_d = d + gap;
 
-                // assume that initial delay is next_d, check if the packet is not caught by all layers whose period is 2(r - 1).
+                // assume that initial delay is next_d, check if the packet doesn't caught by each layer whose period is 2(r - 1).
                 if (std::all_of(depths.begin(), depths.end(), [&](auto const &depth){ return !isCaught(period, depth, next_d); })) {
                     next_delays.push_back(next_d);
                 }
-
             }
         }
 
