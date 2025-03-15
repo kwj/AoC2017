@@ -105,17 +105,23 @@ long part1(std::vector<long> const &grid) {
 
 std::vector<size_t> getNbrs(size_t idx) {
     std::vector<size_t> nbrs;
+    auto q = idx / EDGE_LEN;
+    auto r = idx % EDGE_LEN;
 
-    if (idx >= EDGE_LEN) {
+    if (q > 0) {
+        // upper side
         nbrs.push_back(idx - EDGE_LEN);
     }
-    if (idx < EDGE_LEN * (EDGE_LEN - 1)) {
+    if (q < EDGE_LEN - 1) {
+        // bottom side
         nbrs.push_back(idx + EDGE_LEN);
     }
-    if (idx / EDGE_LEN == (idx - 1) / EDGE_LEN) {
+    if (r > 0) {
+        // left side
         nbrs.push_back(idx - 1);
     }
-    if (idx / EDGE_LEN == (idx + 1) / EDGE_LEN) {
+    if (r < EDGE_LEN - 1) {
+        // right side
         nbrs.push_back(idx + 1);
     }
 
