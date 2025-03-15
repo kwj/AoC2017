@@ -38,14 +38,14 @@ std::tuple<long, long> solve(std::istream &is) {
 
 long countProgramsInGroup(
     std::vector<std::vector<size_t>> const &connections,
-    std::vector<bool> &tbl,
+    std::vector<bool> &id_tbl,
     size_t id
 ) {
     long cnt{1};
     for (auto const &nbr_id : connections[id]) {
-        if (!tbl[nbr_id]) {
-            tbl[nbr_id] = true;
-            cnt += countProgramsInGroup(connections, tbl, nbr_id);
+        if (!id_tbl[nbr_id]) {
+            id_tbl[nbr_id] = true;
+            cnt += countProgramsInGroup(connections, id_tbl, nbr_id);
         }
     }
 
@@ -67,11 +67,14 @@ std::vector<long> parse(std::istream &is) {
     // unknown. It cuts corners.
     std::vector<long> result;
 
-    std::vector<bool> tbl(connections.size());
+    // All elements are initialized to default value `false`.
+    // It means that the ID does not checked yet.
+    std::vector<bool> id_tbl(connections.size());
+
     for (size_t id{0}; id < connections.size(); ++id) {
-        if (!tbl[id]) {
-            tbl[id] = true;
-            result.push_back(countProgramsInGroup(connections, tbl, id));
+        if (!id_tbl[id]) {
+            id_tbl[id] = true;
+            result.push_back(countProgramsInGroup(connections, id_tbl, id));
         }
     }
 
