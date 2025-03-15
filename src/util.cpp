@@ -13,7 +13,7 @@ export namespace util {
 
 std::string getLine(std::istream &is);
 std::vector<long> getNumbers(std::string_view sv);
-std::vector<unsigned long> getUNumbers(std::string_view sv);
+std::vector<long> getUNumbers(std::string_view sv);
 
 } // namespace util
 
@@ -29,10 +29,9 @@ std::string getLine(std::istream &is) {
     return line;
 }
 
-std::vector<long> getNumbers(std::string_view sv) {
+std::vector<long> allNumbers(std::string_view sv, std::regex re) {
     std::vector<long> result;
 
-    std::regex re(R"(-?\d+)");
     auto it = std::regex_token_iterator<std::string_view::const_iterator>{
         sv.cbegin(), sv.cend(), re
     };
@@ -44,19 +43,16 @@ std::vector<long> getNumbers(std::string_view sv) {
     return result;
 }
 
-std::vector<unsigned long> getUNumbers(std::string_view sv) {
-    std::vector<unsigned long> result;
+std::vector<long> getNumbers(std::string_view sv) {
+    std::regex re(R"(-?\d+)");
 
+    return allNumbers(sv, re);
+}
+
+std::vector<long> getUNumbers(std::string_view sv) {
     std::regex re(R"(\d+)");
-    auto it = std::regex_token_iterator<std::string_view::const_iterator>{
-        sv.cbegin(), sv.cend(), re
-    };
 
-    for (decltype(it) last; it != last; ++it) {
-        result.push_back(std::stoul(*it));
-    }
-
-    return result;
+    return allNumbers(sv, re);
 }
 
 } // namespace util

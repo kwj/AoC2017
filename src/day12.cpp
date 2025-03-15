@@ -56,7 +56,7 @@ std::vector<long> parse(std::istream &is) {
     std::vector<std::vector<size_t>> connections;
     std::string line;
     while (std::getline(is, line)) {
-        std::vector<unsigned long> nums = util::getUNumbers(line);
+        std::vector<long> nums = util::getNumbers(line);
 
         // ignore program ID (The reason for this is the comment at the beginning of this file)
         connections.push_back(std::ranges::drop_view{nums, 1} | std::ranges::to<std::vector<size_t>>());
