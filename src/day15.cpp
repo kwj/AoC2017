@@ -45,18 +45,18 @@ std::tuple<unsigned long, unsigned long> judgement(unsigned long num_a, unsigned
     constexpr long P2_N_PAIRS{5'000'000};
     constexpr unsigned long A{16807};
     constexpr unsigned long B{48271};
-    constexpr unsigned long M(0x7FFFFFFF);
+    constexpr unsigned long M{0x7FFFFFFF};
 
-    long p1_cnt{0};
-    long judge_p1{0};
     std::vector<unsigned long> mul4;
     std::vector<unsigned long> mul8;
-    long m4_cnt{0};
-    long m8_cnt{0};
-
     mul4.reserve(P2_N_PAIRS);
     mul8.reserve(P2_N_PAIRS);
 
+    long p1_cnt{0};
+    long m4_cnt{0};
+    long m8_cnt{0};
+
+    long judge_p1{0};
     while (p1_cnt < P1_N_PAIRS || m4_cnt < P2_N_PAIRS || m4_cnt < P2_N_PAIRS) {
         num_a = (num_a * A) % M;
         num_b = (num_b * B) % M;
@@ -89,13 +89,13 @@ std::tuple<unsigned long, unsigned long> judgement(unsigned long num_a, unsigned
 }
 
 std::tuple<unsigned long, unsigned long> parse(std::istream &is) {
-    std::vector<long> seeds;
+    std::vector<unsigned long> seeds;
     for (std::string line; std::getline(is, line);) {
         auto nums = util::getNumbers(line);
-        seeds.push_back(nums[0]);
+        seeds.push_back(static_cast<unsigned long>(nums[0]));
     }
 
-    return judgement(static_cast<unsigned long>(seeds[0]), static_cast<unsigned long>(seeds[1]));
+    return judgement(seeds[0], seeds[1]);
 }
 
 unsigned long part1(std::tuple<unsigned long, unsigned long> const &result) {
