@@ -26,8 +26,8 @@ URL: https://adventofcode.com/2017
 * [Day 13: Packet Scanners](./src/day13.cpp)
 * [Day 14: Disk Defragmentation](./src/day14.cpp)
 * [Day 15: Dueling Generators](./src/day15.cpp)
-<!--
 * [Day 16: Permutation Promenade](./src/day16.cpp)
+<!--
 * [Day 17: Spinlock](./src/day17.cpp)
 * [Day 18: Duet](./src/day18.cpp)
 * [Day 19: A Series of Tubes](./src/day19.cpp)
