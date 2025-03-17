@@ -61,8 +61,8 @@ export namespace day18 {
 
 std::tuple<long, long> solve(std::istream &is);
 std::vector<long> parse(std::istream &is);
-long part1(std::vector<long> &vs);
-long part2(std::vector<long> &vs);
+long part1(std::vector<long> const &vs);
+long part2(std::vector<long> const &vs);
 
 } // namespace day18
 
@@ -102,11 +102,11 @@ std::vector<long> parse(std::istream &is) {
     return vs;
 }
 
-long part1(std::vector<long> &vs) {
+long part1(std::vector<long> const &vs) {
     return vs.back();
 }
 
-long part2(std::vector<long> &vs) {
+long part2(std::vector<long> const &vs) {
     std::vector<long> work{vs};
     auto cont_flag{true};
     long cnt{0};
