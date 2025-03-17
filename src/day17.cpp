@@ -24,8 +24,6 @@ module :private;
 
 namespace day17 {
 
-constexpr long TARGET{2017};
-
 std::tuple<long, long> solve(std::istream &is) {
     auto input_data = parse(is);
 
@@ -37,11 +35,12 @@ long parse(std::istream &is) {
 }
 
 long part1(long step) {
+    constexpr long N_INSERTIONS{2017};
     std::vector<long> buf{0};
-    buf.reserve(TARGET + 1);
+    buf.reserve(N_INSERTIONS + 1);
 
     long pos{0};
-    for (long i{1}; i <= TARGET; ++i) {
+    for (long i{1}; i <= N_INSERTIONS; ++i) {
         pos = (pos + step) % static_cast<long>(buf.size()) + 1;
         buf.insert(buf.begin() + static_cast<std::vector<long>::difference_type>(pos), i);
     }
