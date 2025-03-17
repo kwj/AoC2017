@@ -18,13 +18,13 @@ export namespace day16 {
 class Choreography {
 public:
     Choreography();
-    Choreography(std::vector<size_t> const &op_pos, std::vector<size_t> const &op_chr) : pos_tbl(op_pos), chr_tbl(op_chr) {}
+    Choreography(std::vector<size_t> const &op_pos, std::vector<size_t> const &op_ltr) : by_pos_tbl(op_pos), by_ltr_tbl(op_ltr) {}
     Choreography dance(Choreography const &other);
     Choreography merge(Choreography const &other);
     std::string show();
 private:
-    std::vector<size_t> pos_tbl;
-    std::vector<size_t> chr_tbl;
+    std::vector<size_t> by_pos_tbl;
+    std::vector<size_t> by_ltr_tbl;
 };
 
 std::tuple<std::string, std::string> solve(std::istream &is);
@@ -43,12 +43,12 @@ constexpr size_t N_PROGRAMS{16};
 
 Choreography::Choreography() {
     std::vector<size_t> op_pos(N_PROGRAMS);
-    std::vector<size_t> op_chr(N_PROGRAMS);
+    std::vector<size_t> op_ltr(N_PROGRAMS);
     std::iota(op_pos.begin(), op_pos.end(), 0);
-    std::iota(op_chr.begin(), op_chr.end(), 0);
+    std::iota(op_ltr.begin(), op_ltr.end(), 0);
 
-    pos_tbl = op_pos;
-    chr_tbl = op_chr;
+    by_pos_tbl = op_pos;
+    by_ltr_tbl = op_ltr;
 
     return;
 }
@@ -58,24 +58,24 @@ Choreography Choreography::dance(Choreography const &other) {
 }
 
 Choreography Choreography::merge(Choreography const &other) {
-    decltype(pos_tbl) new_p;
-    decltype(chr_tbl) new_c;
+    decltype(by_pos_tbl) new_p;
+    decltype(by_ltr_tbl) new_c;
 
-    for (auto const &i : pos_tbl) {
-        new_p.push_back(other.pos_tbl[i]);
+    for (auto const &i : by_pos_tbl) {
+        new_p.push_back(other.by_pos_tbl[i]);
     }
-    for (auto const &i : chr_tbl) {
-        new_c.push_back(other.chr_tbl[i]);
+    for (auto const &i : by_ltr_tbl) {
+        new_c.push_back(other.by_ltr_tbl[i]);
     }
 
     return {new_p, new_c};
 }
 
 std::string Choreography::show() {
-    decltype(pos_tbl) work;
+    decltype(by_pos_tbl) work;
 
-    for (auto const &i : pos_tbl) {
-        work.push_back(chr_tbl[i] + 'a');
+    for (auto const &i : by_pos_tbl) {
+        work.push_back(by_ltr_tbl[i] + 'a');
     }
 
     return std::ranges::to<std::string>(work);
@@ -95,9 +95,9 @@ Choreography parse(std::istream &is) {
 
     // 'a', 'b' ... --> 0, 1, ...
     std::vector<size_t> op_pos(N_PROGRAMS);
-    std::vector<size_t> op_chr(N_PROGRAMS);
+    std::vector<size_t> op_ltr(N_PROGRAMS);
     std::iota(op_pos.begin(), op_pos.end(), 0);
-    std::iota(op_chr.begin(), op_chr.end(), 0);
+    std::iota(op_ltr.begin(), op_ltr.end(), 0);
 
     auto num_it = nums.begin();
     for (auto const &cmd : cmds) {
@@ -112,13 +112,13 @@ Choreography parse(std::istream &is) {
             std::iter_swap(op_pos.begin() + p1, op_pos.begin() + p2);
         } else {
             // Partner
-            auto chr_it1 = std::find(op_chr.begin(), op_chr.end(), cmd[1] - 'a');
-            auto chr_it2 = std::find(op_chr.begin(), op_chr.end(), cmd[3] - 'a');
-            std::iter_swap(chr_it1, chr_it2);
+            auto ltr_it1 = std::find(op_ltr.begin(), op_ltr.end(), cmd[1] - 'a');
+            auto ltr_it2 = std::find(op_ltr.begin(), op_ltr.end(), cmd[3] - 'a');
+            std::iter_swap(ltr_it1, ltr_it2);
         }
     }
 
-    return {op_pos, op_chr};
+    return {op_pos, op_ltr};
 }
 
 std::string part1(Choreography const &choreo_tbl) {
