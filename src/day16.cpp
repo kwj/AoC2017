@@ -1,7 +1,6 @@
 module;
 
 #include <algorithm>
-#include <deque>
 #include <istream>
 #include <numeric>
 #include <ranges>
@@ -94,33 +93,28 @@ Choreography parse(std::istream &is) {
     auto cmds = line | std::views::split(',') | std::ranges::to<std::vector<std::string>>();
     auto nums = util::getNumbers(line);
 
-    std::deque<std::string> dq_cmd(cmds.begin(), cmds.end());
-    std::deque<long> dq_num(nums.begin(), nums.end());
-
     // 'a', 'b' ... --> 0, 1, ...
     std::vector<size_t> op_pos(N_PROGRAMS);
     std::vector<size_t> op_chr(N_PROGRAMS);
     std::iota(op_pos.begin(), op_pos.end(), 0);
     std::iota(op_chr.begin(), op_chr.end(), 0);
 
-    for (auto const &cmd : dq_cmd) {
+    auto num_it = nums.begin();
+    for (auto const &cmd : cmds) {
         if (cmd[0] == 's') {
             // Spin
-            auto offset = dq_num.front();
-            dq_num.pop_front();
+            auto offset = *num_it++;
             std::rotate(op_pos.begin(), op_pos.end() - offset, op_pos.end());
         } else if (cmd[0] == 'x') {
             // Exchange
-            auto p1 = dq_num.front();
-            dq_num.pop_front();
-            auto p2 = dq_num.front();
-            dq_num.pop_front();
+            auto p1 = *num_it++;
+            auto p2 = *num_it++;
             std::iter_swap(op_pos.begin() + p1, op_pos.begin() + p2);
         } else {
             // Partner
-            auto it1 = std::find(op_chr.begin(), op_chr.end(), cmd[1] - 'a');
-            auto it2 = std::find(op_chr.begin(), op_chr.end(), cmd[3] - 'a');
-            std::iter_swap(it1, it2);
+            auto chr_it1 = std::find(op_chr.begin(), op_chr.end(), cmd[1] - 'a');
+            auto chr_it2 = std::find(op_chr.begin(), op_chr.end(), cmd[3] - 'a');
+            std::iter_swap(chr_it1, chr_it2);
         }
     }
 
