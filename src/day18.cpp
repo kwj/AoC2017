@@ -13,35 +13,64 @@ The initial data is the numerical sequence generated in the part 1.
 
 The two processes are referred to as proc/0 and proc/1.
 
-    proc/0                proc/1      (example: 6-elements)
+    proc/0                proc/1      (example: 7-elements)
       |                     |
-      | --(initial data)--> |         [25, 83, 66, 8, 98, 78]
+      | --(initial data)--> |         [27, 83, 13, 66, 8, 98, 25]
       |                     |
-      | <------ (1) ------- |         [83, 66, 25, 98, 78, 8]
+      | <------ (1) ------- |         [83, 27, 66, 13, 98, 25, 8]  (swap occurred)
       |                     |
-      | ------- (2) ------> |         [83, 66, 98, 78, 25, 8]
+      | ------- (2) ------> |         [83, 66, 27, 98, 25, 13, 8]  (swap occurred)
       |                     |
-               .....
+      | <------ (3) ------- |         [83, 66, 98, 27, 25, 13, 8]  (swap occurred)
       |                     |
-      | <------ (n) ------- |         [98, 83, 78, 66, 25, 8]
+      | ------- (4) ------> |         [83, 98, 66, 27, 25, 13, 8]  (swap occurred)
+      |                     |
+      | <------ (5) ------- |         [98, 83, 66, 27, 25, 13, 8]  (swap occurred)
+      |                     |
+      | ------- (6) ------> |         [98, 83, 66, 27, 25, 13, 8]
+      |                     |
+      | <------ (7) ------- |         [98, 83, 66, 27, 25, 13, 8]
       |                     |
 
-    (1): sequence of 127 numbers with at least the smallest number at the tail
-    (2): sequence of 127 numbers with at least two descending sorted numbers at the tail
-     .....
-    (n): sequence of 127 numbers with all sorted numbers in descending order
+            (1): sequence of 127 numbers after first pass
+            (2): sequence of 127 numbers after second pass
+              .....
 
-Each process only receives after sending the all sorted sequence. So they get into a deadlock state.
+    ===> Number of times a number is sent in the proc/1 is 7 * 4 = 28.
 
-The answer, the number of numbers sent by proc/1, is 127 * ceil(n/2).
+Each process enters a deadlock state after sending sorted sequences with no
+elements swapping occurring.
+
+By the way, there are cases where proc/0 completes the sort.
+
+    proc/0                proc/1      (example: 7-elements)
+      |                     |
+      | --(initial data)--> |         [27, 98, 13, 66, 8, 83, 25]
+      |                     |
+      | <------ (1) ------- |         [98, 27, 66, 13, 83, 25, 8]  (swap occurred)
+      |                     |
+      | ------- (2) ------> |         [98, 66, 27, 83, 25, 13, 8]  (swap occurred)
+      |                     |
+      | <------ (3) ------- |         [98, 66, 83, 27, 25, 13, 8]  (swap occurred)
+      |                     |
+      | ------- (4) ------> |         [98, 83, 66, 27, 25, 13, 8]  (swap occurred)
+      |                     |
+      | <------ (5) ------- |         [98, 83, 66, 27, 25, 13, 8]
+      |                     |
+      | ------- (6) ------> |         [98, 83, 66, 27, 25, 13, 8]
+      |                     |
+
+    ===> Number of times a number is sent in the proc/1 is 7 * 3 = 21.
+
+I was too lazy to implement a simulator and translated the given program into an program
+using another algorithm. So, I need to consider both cases where the proc/1 completes
+the sort or not.
 
 -------------------------
 
-I was too lazy to implement a simulator, so I wrote a program which treated
-the first 'set p ###' (line 10 in my given input data) as the seed value.
-
-Note other parameters are hard encoded. Because other input data files which
-I saw on GitHub had same values.
+I wrote a program which treated the first 'set p ###' (line 10 in my given input
+data) as the seed value. Note other parameters are hard encoded. Because other input
+data files which I saw on GitHub had same values.
 */
 
 module;
@@ -85,18 +114,20 @@ std::vector<long> parse(std::istream &is) {
     std::regex re(R"(set p (\d+))");
     std::smatch m;
     std::regex_search(content, m, re);
-    auto seed = std::stol(m[1].str());
+    auto seed = std::stoull(m[1].str());
 
-    constexpr long M1{0x7FFFFFFF}; // 2^31 - 1
-    constexpr long M2{10000};
-    constexpr long A1{8505};
-    constexpr long A2{129749};
-    constexpr long C{12345};
+    constexpr unsigned long long M1{0x7FFFFFFF}; // 2^31 - 1
+    constexpr unsigned long long M2{10000};
+    constexpr unsigned long long A1{8505};
+    constexpr unsigned long long A2{129749};
+    constexpr unsigned long long C{12345};
+    constexpr long N_ELEMENTS{127};
     std::vector<long> vs;
-    long x = seed;
-    for (auto i{127}; i > 0; --i) {
+    vs.reserve(N_ELEMENTS);
+    auto x = seed;
+    for (auto i{N_ELEMENTS}; i > 0; --i) {
         x = (((x * A1) % M1) * A2 + C) % M1;
-        vs.push_back(x % M2);
+        vs.push_back(static_cast<long>(x % M2));
     }
 
     return vs;
@@ -119,10 +150,14 @@ long part2(std::vector<long> const &vs) {
                 cont_flag = true;
             }
         }
+
         ++cnt;
+        if (cont_flag == true && std::is_sorted(work.begin(), work.end(), std::greater<long>{})) {
+            ++cnt;
+        }
     }
 
-    return 127 * ((cnt + 1) / 2);
+    return static_cast<long>(work.size()) * ((cnt + 1) / 2);
 }
 
 }  // module day18
