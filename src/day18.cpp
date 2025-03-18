@@ -11,7 +11,9 @@ the answer to the problem.
 This is a cooperative bubble sort (descending order) by two processes.
 The initial data is the numerical sequence generated in the part 1.
 
-The two processes are referred to as proc/0 and proc/1.
+In the following, for simplicity, consider a sequence of numbers of
+length 7 instead of 127. The two processes are referred to as proc/0
+and proc/1.
 
     proc/0                proc/1      (example: 7-elements)
       |                     |
@@ -32,16 +34,12 @@ The two processes are referred to as proc/0 and proc/1.
       | <------ (7) ------- |         [98, 83, 66, 27, 25, 13, 8]
       |                     |
 
-            (1): sequence of 127 numbers after first pass
-            (2): sequence of 127 numbers after second pass
-              .....
-
     ===> Number of times a number is sent in the proc/1 is 7 * 4 = 28.
 
-Each process enters a deadlock state after sending sorted sequences with no
-elements swapping occurring.
+Each process enters a deadlock state after sending sorted sequences with no elements
+swapping occurring.
 
-By the way, there are cases where proc/0 completes the sort.
+By the way, there are cases where the proc/0 completes the sort instead of the proc/1.
 
     proc/0                proc/1      (example: 7-elements)
       |                     |
@@ -62,9 +60,9 @@ By the way, there are cases where proc/0 completes the sort.
 
     ===> Number of times a number is sent in the proc/1 is 7 * 3 = 21.
 
-I was too lazy to implement a simulator and translated the given program into an program
-using another algorithm. So, I need to consider both cases where the proc/1 completes
-the sort or not.
+I had to consider both cases where the proc/1 completes the sort or not. Because I was
+too lazy to implement a simulator and translated the given program into an program using
+another algorithm.
 
 -------------------------
 
