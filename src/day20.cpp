@@ -18,8 +18,8 @@ the initial position closer to the origin is not necessarily closer to the
 origin in the long term. Similarly, it could be said that the particle/4 is
 closer to the origin than the particle/3 in the following example.
 
-  particle/3: p=< 1,0,0>, v=< 1,0,0>, a=<0,0,0>
-  particle/4: p=<-2,0,0>, v=< 1,0,0>, a=<0,0,0>
+  particle/3: p=< 0,0,0>, v=< 1,0,0>, a=<0,0,0>
+  particle/4: p=<-1,0,0>, v=< 1,0,0>, a=<0,0,0>
 
 In other words, neither initial velocity nor initial position can be used as
 a tie-breaker.
