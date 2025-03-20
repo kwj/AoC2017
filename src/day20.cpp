@@ -9,8 +9,9 @@
      ...
     k  (p+k*v+(k(k+1)/2)*a, v+k*a, a)
 
- p + k*v + (k/(k+1)/2)*a = p + k*v + (k^2 * (a/2) +  k * a/2)
-                          = p + k * (v + a/2) + k^2 * a/2
+  pos(k) = p + k*v + (k/(k+1)/2)*a
+         = p + k*v + (k^2 * (a/2) +  k * a/2)
+         = p + k * (v + a/2) + k^2 * a/2
 
 [Part 1]
 Assuming a situation where an infinite amount of time has elapsed, the one with
@@ -311,8 +312,8 @@ bool isSquare(long n) {
     if (n < 0) {
         return false;
     } else {
-        long sq_long = static_cast<long>(std::sqrt(n));
-        return sq_long * sq_long == n;
+        long sq_n = static_cast<long>(std::sqrt(n));
+        return sq_n * sq_n == n;
     }
 }
 
@@ -331,13 +332,13 @@ std::optional<std::vector<long>> solveQuadratic(long a, long b, long c) {
         if (!isSquare(D)) {
             return std::nullopt;
         }
-        long sqD = static_cast<long>(std::sqrt(D));
+        long sq_D = static_cast<long>(std::sqrt(D));
 
-        if ((-b + sqD) % (2 * a) == 0) {
-            result.push_back((-b + sqD) / (2 * a));
+        if ((-b + sq_D) % (2 * a) == 0) {
+            result.push_back((-b + sq_D) / (2 * a));
         }
-        if ((-b - sqD) % (2 * a) == 0) {
-            result.push_back((-b - sqD) / (2 * a));
+        if ((-b - sq_D) % (2 * a) == 0) {
+            result.push_back((-b - sq_D) / (2 * a));
         }
     }
 
