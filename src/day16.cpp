@@ -4,6 +4,7 @@ module;
 #include <istream>
 #include <numeric>
 #include <ranges>
+#include <sstream>
 #include <string>
 #include <tuple>
 #include <vector>
@@ -72,13 +73,13 @@ Choreography Choreography::merge(Choreography const &other) {
 }
 
 std::string Choreography::show() {
-    decltype(by_pos_tbl) work;
+    std::ostringstream oss;
 
     for (auto const &i : by_pos_tbl) {
-        work.push_back(by_ltr_tbl[i] + 'a');
+        oss << static_cast<char>(by_ltr_tbl[i] + 'a');
     }
 
-    return std::ranges::to<std::string>(work);
+    return oss.str();
 }
 
 std::tuple<std::string, std::string> solve(std::istream &is) {
