@@ -56,7 +56,7 @@ long run(std::vector<long> insts, std::function<long(long)> f) {
 
 long part1(std::vector<long> const &vn) {
     std::vector<long> instructions{vn};
-    std::function<long(long)> f = [](long n){ return n + 1; };
+    auto f = [](long n){ return n + 1; };
 
     return run(instructions, f);
 }
@@ -65,7 +65,7 @@ long part1(std::vector<long> const &vn) {
 // If we want to improve performance, we should analyze the input data.
 long part2(std::vector<long> const &vn) {
     std::vector<long> instructions{vn};
-    std::function<long(long)> f = [](long n){ return n >= 3 ? n - 1 : n + 1; };
+    auto f = [](long n){ return n >= 3 ? n - 1 : n + 1; };
 
     return run(instructions, f);
 }
