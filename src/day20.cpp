@@ -5,10 +5,10 @@ the smallest magnitudo of acceleration is the answer we seek. However, we can't
 fix the answer by this method when multiple particles with same magnitude of
 acceleration exist.
 
-When the magnitudes of acceleration are equal, the smaller magnitude of velocity
-is not necessarily closer to the origin in the long term. For example, it could be
-said that the particle/2 is closer to the origin than the particle/1 after a sufficient
-time has elapsed.
+When the magnitudes of acceleration are equal, the smaller magnitude of initial
+velocity is not necessarily closer to the origin in the long term. For example,
+it could be said that the particle/2 is closer to the origin than the particle/1
+after a sufficient time has elapsed.
 
   particle/1: p=< 0,0,0>, v=< 0,0,0>, a=<1,0,0>
   particle/2: p=< 0,0,0>, v=<-1,0,0>, a=<1,0,0>
@@ -21,18 +21,21 @@ closer to the origin than the particle/3 in the following example.
   particle/3: p=< 1,0,0>, v=< 1,0,0>, a=<0,0,0>
   particle/4: p=<-2,0,0>, v=< 1,0,0>, a=<0,0,0>
 
+In other words, neither initial velocity nor initial position can be used as
+a tie-breaker.
+
 
 There were three particles with the smallest magnitude of acceleration in my
-given data. I've thought of two ways to solve the problem.
+given data. I thought of two ways to solve the problem.
 
-One is to determine the answer by positions of particles after a time that
-seems sufficient. The other to determine the answer by to measure distances
+One was to determine the answer by positions of particles after a time that
+seems sufficient. The other was to determine the answer by to measure distances
 at multiple times and checks for changes. Since neither method have basis,
 I chose the latter, which seems more tedious in this case.
 
-The distances were measured three times at 1000 tick intervals, and I determined
-the closest particle if there were no changes in the order between particles and
-the distance traveled increased monotonically.
+The distances were measured several times at 1000 tick intervals, and I determined
+the closest particle to the origin when there were no changes in the order between
+particles and the distance traveled increased monotonically.
 
 A conceptual diagram for the case of three particles and three times of checking
 is shown below.
@@ -116,7 +119,6 @@ public:
     std::vector<long> v;
     std::vector<long> a;
     std::vector<long> position(long const tick = 0) const;
-    //long isCollision(Particle &other);
 };
 
 std::tuple<long, long> solve(std::istream &is);
@@ -276,7 +278,8 @@ long findClosestParticleId(std::vector<Particle> const &ps) {
 }
 
 long part1(std::vector<Particle> const &particles) {
-    // find particles with the smallest magnitude of acceleration
+    // find candidate particles closest to the origin
+    // candidate is the particle with the smallest magnitude of acceleration
     auto acc_cmp = [](Particle const &x, Particle const &y) {
         return manhattan_distance(x.a) < manhattan_distance(y.a);
     };
@@ -284,7 +287,6 @@ long part1(std::vector<Particle> const &particles) {
         (*std::min_element(particles.begin(), particles.end(), acc_cmp)).a
     );
 
-    // candidate particles closest to the origin
     std::vector<Particle> cands;
     for (auto const &p : particles) {
         if (manhattan_distance(p.a) == min_acc) {
