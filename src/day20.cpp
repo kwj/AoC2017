@@ -1,4 +1,17 @@
 /*
+ tick  particle (pos, vel, acc)
+------------------
+    0  (p, v, a)
+    1  (p+v+a, v+a, a)
+    2  (p+v+a+v+a+a, v+a+a, a) = (p+2v+3a, v+2a, a)
+    3  (p+2v+3a+v+2a+a, v+2a+a, a) = (p+3v+6a, v+3a, a)
+    4  (p+3v+6a+v+3a+a, v+3a+a, a) = (p+4v+10a, v+4a, a)
+     ...
+    k  (p+k*v+(k(k+1)/2)*a, v+k*a, a)
+
+ p + k*v + (k/(k+1)/2)*a = p + k*v + (k^2 * (a/2) +  k * a/2)
+                          = p + k * (v + a/2) + k^2 * a/2
+
 [Part 1]
 Assuming a situation where an infinite amount of time has elapsed, the one with
 the smallest magnitudo of acceleration is the answer we seek. However, we can't
@@ -43,39 +56,28 @@ is shown below.
   Dist_p0(t1)    <=    Dist_p1(t1)    <=    Dist_p2(t1)
        |                    |                    |
        |                    |                    |
- diff_p0(t2,t1)  <=   diff_p1(t2,t1)  <=   diff_p2(t2,t1)
+  Δ_p0(t1,t2)    <=    Δ_p1(t1,t2)    <=    Δ_p2(t1,t2)
        |                    |                    |
        v                    v                    v
   Dist_p0(t2)    <=    Dist_p1(t2)    <=    Dist_p2(t2)
        |                    |                    |
        |                    |                    |
- diff_p0(t3,t2)  <=   diff_p1(t3,t2)  <=   diff_p2(t3,t2)
+  Δ_p0(t2,t3)    <=    Δ_p1(t2,t3)    <=    Δ_p2(t2,t3)
        |                    |                    |
        v                    v                    v
   Dist_p0(t3)    <=    Dist_p1(t3)    <=    Dist_p2(t3)
 
-and then
+    (*) Δ_p#(j,k) = Dist_p#(k) - Dist_p#(j)
 
-  diff_p0(t2,t1) <= dist_p0(t3,t2)
-  diff_p1(t2,t1) <= dist_p1(t3,t2)
-  diff_p2(t2,t1) <= dist_p2(t3,t2)
+and then,
+
+  Δ_p0(t1,t2) <= Δ_p0(t2,t3)
+  Δ_p1(t1,t2) <= Δ_p1(t2,t3)
+  Δ_p2(t1,t2) <= Δ_p2(t2,t3)
 
 [Part 2]
 Examine up the particles and times of possible collisions and check them all
 in time order.
-
-  tick  particle (pos, vel, acc)
- ------------------
-     0  (p, v, a)
-     1  (p+v+a, v+a, a)
-     2  (p+v+a+v+a+a, v+a+a, a) = (p+2v+3a, v+2a, a)
-     3  (p+2v+3a+v+2a+a, v+2a+a, a) = (p+3v+6a, v+3a, a)
-     4  (p+3v+6a+v+3a+a, v+3a+a, a) = (p+4v+10a, v+4a, a)
-      ...
-     k  (p+k*v+(k(k+1)/2)*a, v+k*a, a)
-
-  p + k*v + (k/(k+1)/2)*a = p + k*v + (k^2 * (a/2) +  k * a/2)
-                          = p + k * (v + a/2) + k^2 * a/2
 
 If two particles collide at time T:
   particle/1 (p1, v1, a1)
@@ -83,7 +85,7 @@ If two particles collide at time T:
 
   2*p1 + T * (2*v1 + a1) + T^2 * a1 = 2*p2 + T * (2*v2 + a2) + T^2 * a2
  -->
-  (a1 - a2) * T^2 + (2*v1 + a1 - 2*v2 - a2) * T + 2 * (p1 -p2)
+  (a1 - a2) * T^2 + (2*v1 + a1 - 2*v2 - a2) * T + 2 * (p1 -p2) = 0
   ^^^(A)^^^         ^^^^^^^^^^^(B)^^^^^^^^^       ^^^^^(C)^^^^
 
   discriminant D = B^2 - 4AC == 0
@@ -242,18 +244,19 @@ bool isFindClosest(std::deque<std::vector<std::pair<long, long>>> const &dq) {
     return true;
 }
 
-std::vector<std::pair<long, long>> makePositions(std::vector<Particle> const &ps, long t) {
-    constexpr auto pair_cmp = [](std::pair<long, long> const &x, std::pair<long, long> const &y) {
+std::vector<std::pair<long, long>> measureDistances(std::vector<Particle> const &ps, long t) {
+    // compare on the first element of a pair, manhattan distance
+    auto pair_cmp = [](std::pair<long, long> const &x, std::pair<long, long> const &y) {
         return x.first < y.first;
     };
 
-    std::vector<std::pair<long, long>> positions;
+    std::vector<std::pair<long, long>> distances;
     for (auto const &p : ps) {
-        positions.push_back(std::make_pair(norm(p.position(t)), p.id));
+        distances.push_back({norm(p.position(t)), p.id});
     }
-    std::sort(positions.begin(), positions.end(), pair_cmp);
+    std::ranges::sort(distances, pair_cmp);
 
-    return positions;
+    return distances;
 }
 
 long findClosestParticleId(std::vector<Particle> const &ps) {
@@ -262,17 +265,17 @@ long findClosestParticleId(std::vector<Particle> const &ps) {
     // the first N_COUNT times are at 1000, 2000, ... ticks elapsed
     constexpr long N_COUNT{5};  // it must be equal or larger than 3
     constexpr long TICK{1'000};
-    long tick = TICK;
-    while (tick <= TICK * N_COUNT) {
-        dq.push_back(makePositions(ps, tick));
-        tick += TICK;
+    long t = TICK;
+    while (t <= TICK * N_COUNT) {
+        dq.push_back(measureDistances(ps, t));
+        t += TICK;
     }
 
     // repeat with time advancing until the change of distances is stable
     while (!isFindClosest(dq)) {
         dq.pop_front();
-        dq.push_back(makePositions(ps, tick));
-        tick += TICK;
+        dq.push_back(measureDistances(ps, t));
+        t += TICK;
     }
 
     return dq[0][0].second;
