@@ -160,7 +160,8 @@ std::vector<Particle> parse(std::istream &is) {
     return result;
 }
 
-long manhattan_distance(std::vector<long> const &vs) {
+// manhattan norm (1-norm)
+long norm(std::vector<long> const &vs) {
     long result{0};
     for (auto const &v : vs) {
         result += std::abs(v);
@@ -248,7 +249,7 @@ std::vector<std::pair<long, long>> makePositions(std::vector<Particle> const &ps
 
     std::vector<std::pair<long, long>> positions;
     for (auto const &p : ps) {
-        positions.push_back(std::make_pair(manhattan_distance(p.position(t)), p.id));
+        positions.push_back(std::make_pair(norm(p.position(t)), p.id));
     }
     std::sort(positions.begin(), positions.end(), pair_cmp);
 
@@ -281,15 +282,15 @@ long part1(std::vector<Particle> const &particles) {
     // find candidate particles closest to the origin
     // candidate is the particle with the smallest magnitude of acceleration
     auto acc_cmp = [](Particle const &x, Particle const &y) {
-        return manhattan_distance(x.a) < manhattan_distance(y.a);
+        return norm(x.a) < norm(y.a);
     };
-    auto min_acc = manhattan_distance(
+    auto min_acc = norm(
         (*std::min_element(particles.begin(), particles.end(), acc_cmp)).a
     );
 
     std::vector<Particle> cands;
     for (auto const &p : particles) {
-        if (manhattan_distance(p.a) == min_acc) {
+        if (norm(p.a) == min_acc) {
             cands.push_back(p);
         }
     }
