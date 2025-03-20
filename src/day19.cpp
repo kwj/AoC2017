@@ -66,7 +66,7 @@ std::pair<std::string, long> followPath(std::vector<std::vector<char>> &grid) {
 std::pair<std::string, long> parse(std::istream &is) {
     std::vector<std::vector<char>> grid;
     for (std::string line; std::getline(is, line);) {
-        grid.push_back(std::views::all(line) | std::ranges::to<std::vector<char>>());
+        grid.push_back(line | std::ranges::to<std::vector<char>>());
     }
 
     return followPath(grid);
