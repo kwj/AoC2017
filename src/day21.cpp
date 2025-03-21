@@ -1,5 +1,4 @@
 /*
-
 Example rules
 -------------
 #./.. => .#./#../##.
@@ -7,7 +6,7 @@ Example rules
 ##/.. => #../#.#/..#
 .#/#. => .##/#.#/#..
 ##/## => #.#/.#./#.#
-.#./..#/#.. => ###./.###/..#./##.#
+.#./..#/### => ###./.###/..#./##.#
 
 [step 0]
   .#.
@@ -66,8 +65,9 @@ Three iterations from a 3x3 grid will transition to a state with nine 3x3 grids.
 I therefore decided to create a conversion table based on three iterations and
 used recursion to find the answer.
 
-std::array<ConvGrid, 512> conv_tbl;
-  Conversion table with 3x3 grids as indexes. An index is obtained as follows.
+std::map<size_t, ConvGrid> conv_tbl;
+  Conversion table with a 3x3 grids as a key. A key is obtained as follows.
+  Only seven entries exist. [number of 2x2 to 3x3 patterns(6) + start grid(1) = 7]
 
     .#.
     ..# --> {0, 1, 0, 0, 0, 1, 1, 1, 1} --> 0b010001111 -> 143
@@ -81,7 +81,7 @@ struct ConvGrid {
   pop_count:
     Number of lit pixels after 0 to 3 iterations
   next_grids:
-    Information on nine 3x3 grids after three iterations.
+    Nine 3x3 grids after three iterations.
     In the above example, it would look like this
 
       {{236, 2}, {297, 3}, {166, 3}, {341, 1}}
@@ -112,9 +112,9 @@ struct ConvGrid {
 };
 
 std::tuple<long, long> solve(std::istream &is);
-std::array<ConvGrid, 512> parse(std::istream &is);
-long part1(std::array<ConvGrid, 512> const &conv_tbl);
-long part2(std::array<ConvGrid, 512> const &conv_tbl);
+std::map<size_t, ConvGrid> parse(std::istream &is);
+long part1(std::map<size_t, ConvGrid> const &conv_tbl);
+long part2(std::map<size_t, ConvGrid> const &conv_tbl);
 
 } // namespace day21
 
@@ -132,6 +132,12 @@ struct Map_3to4 {
     std::array<size_t, 16> bits;
     long pop_count;
 };
+
+//  the start grid (glider)
+//    .#.
+//    ..# --> {0, 1, 0, 0, 0, 1, 1, 1, 1}
+//    ###
+std::vector<size_t> start_grid = {0, 1, 0, 0, 0, 1, 1, 1, 1};
 
 std::tuple<long, long> solve(std::istream &is) {
     auto input_data = parse(is);
@@ -173,7 +179,8 @@ std::set<size_t> getVariants_2x2(std::vector<size_t> const &bit_seq) {
     return ids;
 }
 
-std::set<size_t> update2to3(std::array<Map_2to3, 16> &m_2to3, std::string_view sv) {
+// Update the 2x2 to 3x3 mapping table and return the 3x3 grid's ID which is used as a key
+size_t update2to3(std::array<Map_2to3, 16> &m_2to3, std::string_view sv) {
     std::vector<size_t> src;
     std::array<size_t, 9> dst;
     auto src_idxes = std::vector<size_t>{0, 1, 3, 4};
@@ -201,7 +208,7 @@ std::set<size_t> update2to3(std::array<Map_2to3, 16> &m_2to3, std::string_view s
         m_2to3[i] = Map_2to3(dst, cnt);
     }
 
-    return ids;
+    return bitsToId(dst);
 }
 
 std::set<size_t> getVariants_3x3(std::vector<size_t> const &bit_seq) {
@@ -229,7 +236,8 @@ std::set<size_t> getVariants_3x3(std::vector<size_t> const &bit_seq) {
     return ids;
 }
 
-std::set<size_t> update3to4(std::array<Map_3to4, 512> &m_3to4, std::string_view sv) {
+// Update the 3x3 to 4x4 mapping table
+void update3to4(std::array<Map_3to4, 512> &m_3to4, std::string_view sv) {
     std::vector<size_t> src;
     std::array<size_t, 16> dst;
     auto src_idxes = std::vector<size_t>{0, 1, 2, 4, 5, 6, 8, 9, 10};
@@ -257,7 +265,7 @@ std::set<size_t> update3to4(std::array<Map_3to4, 512> &m_3to4, std::string_view 
         m_3to4[i] = Map_3to4(dst, cnt);
     }
 
-    return ids;
+    return;
 }
 
 ConvGrid makeConvGrid(std::array<Map_2to3, 16> const &m_2to3, std::array<Map_3to4, 512> const &m_3to4, size_t start) {
@@ -320,60 +328,48 @@ ConvGrid makeConvGrid(std::array<Map_2to3, 16> const &m_2to3, std::array<Map_3to
     return result;
 }
 
-std::array<ConvGrid, 512> parse(std::istream &is) {
+std::map<size_t, ConvGrid> parse(std::istream &is) {
     std::array<Map_2to3, 16> m_2to3;  // 16 = 2 ^ 4
     std::array<Map_3to4, 512> m_3to4;  // 512 = 2 ^ 9
-    std::vector<std::set<size_t>> id_group;
+    std::vector<size_t> id_group{bitsToId(start_grid)};
 
     for (std::string line; std::getline(is, line);) {
         switch (line.size()) {
             case 20: // 2x2 grid to 3x3 grid
-                std::ignore = update2to3(m_2to3, line);
+                id_group.push_back(update2to3(m_2to3, line));
                 break;
             case 34: // 3x3 grid to 4x4 grid
-                id_group.push_back(update3to4(m_3to4, line));
+                update3to4(m_3to4, line);
                 break;
         }
     }
 
-    std::array<ConvGrid, 512> result;
-    for (auto const &ids: id_group) {
-        auto primary_id = *ids.begin();
-        auto conv_grid = makeConvGrid(m_2to3, m_3to4, primary_id);
-        for (auto const id : ids) {
-            result[id] = conv_grid;
-        }
+    std::map<size_t, ConvGrid> result;
+    for (auto const &id: id_group) {
+        result[id] = makeConvGrid(m_2to3, m_3to4, id);
     }
 
     return result;
 }
 
-long countUpPixels(std::array<ConvGrid, 512> const &conv_tbl, size_t id, size_t depth) {
+long countUpPixels(std::map<size_t, ConvGrid> const &conv_tbl, size_t id, size_t depth) {
     if (depth <= 3) {
-        return conv_tbl[id].pop_count[depth];
+        return conv_tbl.at(id).pop_count[depth];
     }
 
     long acc{0};
-    for (auto const [next_id, cnt] : conv_tbl[id].next_grids) {
+    for (auto const [next_id, cnt] : conv_tbl.at(id).next_grids) {
         acc += cnt * countUpPixels(conv_tbl, next_id, depth - 3);
     }
 
     return acc;
 }
 
-//  .#.
-//  ..# --> {0, 1, 0, 0, 0, 1, 1, 1, 1}
-//  ###
-
-long part1(std::array<ConvGrid, 512> const &conv_tbl) {
-    std::vector<size_t> start_grid = {0, 1, 0, 0, 0, 1, 1, 1, 1};
-
+long part1(std::map<size_t, ConvGrid> const &conv_tbl) {
     return countUpPixels(conv_tbl, bitsToId(start_grid), 5);
 }
 
-long part2(std::array<ConvGrid, 512> const &conv_tbl) {
-    std::vector<size_t> start_grid = {0, 1, 0, 0, 0, 1, 1, 1, 1};
-
+long part2(std::map<size_t, ConvGrid> const &conv_tbl) {
     return countUpPixels(conv_tbl, bitsToId(start_grid), 18);
 }
 
