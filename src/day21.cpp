@@ -123,12 +123,12 @@ module :private;
 
 namespace day21 {
 
-struct Map_2to3 {
+struct Map_2x2to3x3 {
     std::array<size_t, 9> bits;
     long pop_count;
 };
 
-struct Map_3to4 {
+struct Map_3x3to4x4 {
     std::array<size_t, 16> bits;
     long pop_count;
 };
@@ -181,7 +181,7 @@ std::set<size_t> getVariants_2x2(T const &bit_seq) {
 }
 
 // Update the 2x2 to 3x3 mapping table and return the 3x3 grid's ID which is used as a key
-size_t update2to3(std::array<Map_2to3, 16> &m_2to3, std::string_view sv) {
+size_t update_2x2to3x3(std::array<Map_2x2to3x3, 16> &m, std::string_view sv) {
     std::array<size_t, 4> src = {0, 1, 3, 4};
     std::array<size_t, 9> dst = {9, 10, 11, 13, 14, 15, 17, 18, 19};
     auto f = [&sv](size_t idx) { return sv[idx] == '#' ? 1uz : 0uz; };
@@ -189,10 +189,9 @@ size_t update2to3(std::array<Map_2to3, 16> &m_2to3, std::string_view sv) {
     std::for_each(src.begin(), src.end(), [&f](size_t &n) { n = f(n); });
     std::for_each(dst.begin(), dst.end(), [&f](size_t &n) { n = f(n); });
 
-    auto ids = getVariants_2x2(src);
     auto cnt = std::popcount(bitsToId(src));
-    for (auto i : ids) {
-        m_2to3[i] = Map_2to3(dst, cnt);
+    for (auto id : getVariants_2x2(src)) {
+        m[id] = Map_2x2to3x3(dst, cnt);
     }
 
     return bitsToId(dst);
@@ -225,7 +224,7 @@ std::set<size_t> getVariants_3x3(T const &bit_seq) {
 }
 
 // Update the 3x3 to 4x4 mapping table
-void update3to4(std::array<Map_3to4, 512> &m_3to4, std::string_view sv) {
+void update_3x3to4x4(std::array<Map_3x3to4x4, 512> &m, std::string_view sv) {
     std::array<size_t, 9> src = {0, 1, 2, 4, 5, 6, 8, 9, 10};
     std::array<size_t, 16> dst = {15, 16, 17, 18, 20, 21, 22, 23, 25, 26, 27, 28, 30, 31, 32, 33};
     auto f = [&sv](size_t idx) { return sv[idx] == '#' ? 1uz : 0uz; };
@@ -233,67 +232,66 @@ void update3to4(std::array<Map_3to4, 512> &m_3to4, std::string_view sv) {
     std::for_each(src.begin(), src.end(), [&f](size_t &n) { n = f(n); });
     std::for_each(dst.begin(), dst.end(), [&f](size_t &n) { n = f(n); });
 
-    auto ids = getVariants_3x3(src);
     auto cnt = std::popcount(bitsToId(src));
-    for (auto i : ids) {
-        m_3to4[i] = Map_3to4(dst, cnt);
+    for (auto id : getVariants_3x3(src)) {
+        m[id] = Map_3x3to4x4(dst, cnt);
     }
 
     return;
 }
 
-ConvGrid makeConvGrid(std::array<Map_2to3, 16> const &m_2to3, std::array<Map_3to4, 512> const &m_3to4, size_t start) {
+ConvGrid makeConvGrid(std::array<Map_2x2to3x3, 16> const &m_2to3, std::array<Map_3x3to4x4, 512> const &m_3to4, size_t start) {
     ConvGrid result{};
-    std::array<size_t, 16> grid1;
-    std::array<size_t, 36> grid2;
-    std::array<size_t, 81> grid3;
-    grid1.fill(0);
-    grid2.fill(0);
-    grid3.fill(0);
+    std::array<size_t, 16> grid_16;
+    std::array<size_t, 36> grid_36;
+    std::array<size_t, 81> grid_81;
+    grid_16.fill(0);
+    grid_36.fill(0);
+    grid_81.fill(0);
 
     // step 0
     result.pop_count[0] = m_3to4[start].pop_count;
 
     // step 1
-    grid1 = m_3to4[start].bits;
-    result.pop_count[1] = std::count(grid1.begin(), grid1.end(), 1);
+    grid_16 = m_3to4[start].bits;
+    result.pop_count[1] = std::count(grid_16.begin(), grid_16.end(), 1);
 
     // step 2
-    std::vector<std::pair<size_t, size_t>> idxmap_1to2 = {
+    std::vector<std::pair<size_t, size_t>> idxmap_1 = {
         {0, 0}, {2, 3},
         {8, 18}, {10, 21}
     };
-    for (auto const [i, j] : idxmap_1to2) {
-        auto id = bitsToId(std::vector<size_t>{grid1[i], grid1[i+1], grid1[i+4], grid1[i+5]});
+    for (auto const [i, j] : idxmap_1) {
+        auto id = bitsToId(std::vector<size_t>{grid_16[i], grid_16[i + 1], grid_16[i + 4], grid_16[i + 5]});
         auto it = m_2to3[id].bits.begin();
         for (size_t k{0}; k < 3; ++k) {
-            grid2[j + 6 * k] = *it++;
-            grid2[j + 6 * k + 1] = *it++;
-            grid2[j + 6 * k + 2] = *it++;
+            grid_36[j + 6 * k] = *it++;
+            grid_36[j + 6 * k + 1] = *it++;
+            grid_36[j + 6 * k + 2] = *it++;
         }
     }
-    result.pop_count[2] = std::count(grid2.begin(), grid2.end(), 1);
+    result.pop_count[2] = std::count(grid_36.begin(), grid_36.end(), 1);
 
     // step 3
     std::map<size_t, long> counter;
-    std::vector<std::pair<size_t, size_t>> idxmap_2to3 = {
+    std::vector<std::pair<size_t, size_t>> idxmap_2 = {
         {0, 0}, {2, 3}, {4, 6},
         {12, 27}, {14, 30}, {16, 33},
         {24, 54}, {26, 57}, {28, 60}
     };
-    for (auto const [i, j] : idxmap_2to3) {
-        auto id = bitsToId(std::vector<size_t>{grid2[i], grid2[i+1], grid2[i+6], grid2[i+7]});
+    for (auto const [i, j] : idxmap_2) {
+        auto id = bitsToId(std::vector<size_t>{grid_36[i], grid_36[i + 1], grid_36[i + 6], grid_36[i + 7]});
         auto it = m_2to3[id].bits.begin();
         for (size_t k{0}; k < 3; ++k) {
-            grid3[j + 9 * k] = *it++;
-            grid3[j + 9 * k + 1] = *it++;
-            grid3[j + 9 * k + 2] = *it++;
+            grid_81[j + 9 * k] = *it++;
+            grid_81[j + 9 * k + 1] = *it++;
+            grid_81[j + 9 * k + 2] = *it++;
         }
 
         auto next_id = bitsToId(m_2to3[id].bits);
         counter[next_id] += 1;
     }
-    result.pop_count[3] = std::count(grid3.begin(), grid3.end(), 1);
+    result.pop_count[3] = std::count(grid_81.begin(), grid_81.end(), 1);
 
     for (auto const [id, cnt] : counter) {
         result.next_grids.push_back({id, cnt});
@@ -303,17 +301,17 @@ ConvGrid makeConvGrid(std::array<Map_2to3, 16> const &m_2to3, std::array<Map_3to
 }
 
 std::map<size_t, ConvGrid> parse(std::istream &is) {
-    std::array<Map_2to3, 16> m_2to3;  // 16 = 2 ^ 4
-    std::array<Map_3to4, 512> m_3to4;  // 512 = 2 ^ 9
+    std::array<Map_2x2to3x3, 16> m_2to3;  // 16 = 2 ^ 4
+    std::array<Map_3x3to4x4, 512> m_3to4;  // 512 = 2 ^ 9
     std::vector<size_t> id_group{bitsToId(start_grid)};
 
     for (std::string line; std::getline(is, line);) {
         switch (line.size()) {
             case 20: // 2x2 grid to 3x3 grid
-                id_group.push_back(update2to3(m_2to3, line));
+                id_group.push_back(update_2x2to3x3(m_2to3, line));
                 break;
             case 34: // 3x3 grid to 4x4 grid
-                update3to4(m_3to4, line);
+                update_3x3to4x4(m_3to4, line);
                 break;
         }
     }
