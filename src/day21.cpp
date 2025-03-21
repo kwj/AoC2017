@@ -62,18 +62,18 @@ nine 3x3 grids:
 
 [Part 1 and 2]
 Three iterations from a 3x3 grid will transition to a state with nine 3x3 grids.
-I therefore decided to create a conversion table based on three iterations and
+I therefore decided to create a transition table based on three iterations and
 used recursion to find the answer.
 
-std::map<size_t, ConvGrid> conv_tbl;
-  Conversion table with a 3x3 grids as a key. A key is obtained as follows.
+std::map<size_t, TransGrid> trans_tbl;
+  Transition table with a 3x3 grids as a key. A key is obtained as follows.
   There are only seven entries exist at most. [number of 2x2 to 3x3 patterns(6) + start grid(1) = 7]
 
     .#.
     ..# --> {0, 1, 0, 0, 0, 1, 1, 1, 1} --> 0b010001111 -> 143
     ###
 
-struct ConvGrid {
+struct TransGrid {
     std::array<long, 4> pop_count;
     std::vector<std::pair<size_t, long>> next_grids;
 };
@@ -82,9 +82,12 @@ struct ConvGrid {
     Number of lit pixels after 0 to 3 iterations
   next_grids:
     Nine 3x3 grids after three iterations.
-    In the above example, it would look like this
 
-      {{236, 2}, {297, 3}, {166, 3}, {341, 1}}
+  In the above example, it would look like this:
+    {
+      pop_count: {5, 10, 17, 39}
+      next_grids: {{236, 2}, {297, 3}, {166, 3}, {341, 1}}
+    }
 */
 
 module;
@@ -106,15 +109,15 @@ export module day21;
 
 export namespace day21 {
 
-struct ConvGrid {
+struct TransGrid {
     std::array<long, 4> pop_count;
     std::vector<std::pair<size_t, long>> next_grids;
 };
 
 std::tuple<long, long> solve(std::istream &is);
-std::map<size_t, ConvGrid> parse(std::istream &is);
-long part1(std::map<size_t, ConvGrid> const &conv_tbl);
-long part2(std::map<size_t, ConvGrid> const &conv_tbl);
+std::map<size_t, TransGrid> parse(std::istream &is);
+long part1(std::map<size_t, TransGrid> const &trans_tbl);
+long part2(std::map<size_t, TransGrid> const &trans_tbl);
 
 } // namespace day21
 
@@ -240,8 +243,8 @@ void update_3x3to4x4(std::array<Map_3x3to4x4, 512> &m, std::string_view sv) {
     return;
 }
 
-ConvGrid makeConvGrid(std::array<Map_2x2to3x3, 16> const &m_2to3, std::array<Map_3x3to4x4, 512> const &m_3to4, size_t start) {
-    ConvGrid result{};
+TransGrid makeTransGrid(std::array<Map_2x2to3x3, 16> const &m_2to3, std::array<Map_3x3to4x4, 512> const &m_3to4, size_t start) {
+    TransGrid result{};
     std::array<size_t, 16> grid_16;
     std::array<size_t, 36> grid_36;
     std::array<size_t, 81> grid_81;
@@ -300,7 +303,7 @@ ConvGrid makeConvGrid(std::array<Map_2x2to3x3, 16> const &m_2to3, std::array<Map
     return result;
 }
 
-std::map<size_t, ConvGrid> parse(std::istream &is) {
+std::map<size_t, TransGrid> parse(std::istream &is) {
     std::array<Map_2x2to3x3, 16> m_2to3;  // 16 = 2 ^ 4
     std::array<Map_3x3to4x4, 512> m_3to4;  // 512 = 2 ^ 9
     std::vector<size_t> id_group{bitsToId(start_grid)};
@@ -316,33 +319,33 @@ std::map<size_t, ConvGrid> parse(std::istream &is) {
         }
     }
 
-    std::map<size_t, ConvGrid> result;
+    std::map<size_t, TransGrid> result;
     for (auto const &id: id_group) {
-        result[id] = makeConvGrid(m_2to3, m_3to4, id);
+        result[id] = makeTransGrid(m_2to3, m_3to4, id);
     }
 
     return result;
 }
 
-long countUpPixels(std::map<size_t, ConvGrid> const &conv_tbl, size_t id, size_t depth) {
+long countUpPixels(std::map<size_t, TransGrid> const &trans_tbl, size_t id, size_t depth) {
     if (depth <= 3) {
-        return conv_tbl.at(id).pop_count[depth];
+        return trans_tbl.at(id).pop_count[depth];
     }
 
     long acc{0};
-    for (auto const [next_id, cnt] : conv_tbl.at(id).next_grids) {
-        acc += cnt * countUpPixels(conv_tbl, next_id, depth - 3);
+    for (auto const [next_id, cnt] : trans_tbl.at(id).next_grids) {
+        acc += cnt * countUpPixels(trans_tbl, next_id, depth - 3);
     }
 
     return acc;
 }
 
-long part1(std::map<size_t, ConvGrid> const &conv_tbl) {
-    return countUpPixels(conv_tbl, bitsToId(start_grid), 5);
+long part1(std::map<size_t, TransGrid> const &trans_tbl) {
+    return countUpPixels(trans_tbl, bitsToId(start_grid), 5);
 }
 
-long part2(std::map<size_t, ConvGrid> const &conv_tbl) {
-    return countUpPixels(conv_tbl, bitsToId(start_grid), 18);
+long part2(std::map<size_t, TransGrid> const &trans_tbl) {
+    return countUpPixels(trans_tbl, bitsToId(start_grid), 18);
 }
 
 }  // module day21
