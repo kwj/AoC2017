@@ -150,7 +150,7 @@ size_t bitsToId(T const &bit_seq) {
     return id;
 }
 
-std::set<size_t> getVariant2(std::vector<size_t> const &bit_seq) {
+std::set<size_t> getVariants_2x2(std::vector<size_t> const &bit_seq) {
     std::set<size_t> ids;
     auto w{bit_seq};
 
@@ -195,7 +195,7 @@ std::set<size_t> update2to3(std::array<Map_2to3, 16> &m_2to3, std::string_view s
         }
     }
 
-    auto ids = getVariant2(src);
+    auto ids = getVariants_2x2(src);
     auto cnt = std::popcount(bitsToId(src));
     for (auto i : ids) {
         m_2to3[i] = Map_2to3(dst, cnt);
@@ -204,7 +204,7 @@ std::set<size_t> update2to3(std::array<Map_2to3, 16> &m_2to3, std::string_view s
     return ids;
 }
 
-std::set<size_t> getVariant3(std::vector<size_t> const &bit_seq) {
+std::set<size_t> getVariants_3x3(std::vector<size_t> const &bit_seq) {
     std::set<size_t> ids;
     auto w{bit_seq};
 
@@ -251,7 +251,7 @@ std::set<size_t> update3to4(std::array<Map_3to4, 512> &m_3to4, std::string_view 
         }
     }
 
-    auto ids = getVariant3(src);
+    auto ids = getVariants_3x3(src);
     auto cnt = std::popcount(bitsToId(src));
     for (auto i : ids) {
         m_3to4[i] = Map_3to4(dst, cnt);
