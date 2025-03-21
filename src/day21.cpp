@@ -323,22 +323,21 @@ ConvGrid makeConvGrid(std::array<Map_2to3, 16> const &m_2to3, std::array<Map_3to
 std::array<ConvGrid, 512> parse(std::istream &is) {
     std::array<Map_2to3, 16> m_2to3;  // 16 = 2 ^ 4
     std::array<Map_3to4, 512> m_3to4;  // 512 = 2 ^ 9
-    std::vector<std::set<size_t>> id_grp2;
-    std::vector<std::set<size_t>> id_grp3;
+    std::vector<std::set<size_t>> id_group;
 
     for (std::string line; std::getline(is, line);) {
         switch (line.size()) {
             case 20:
-                id_grp2.push_back(update2to3(m_2to3, line));
+                std::ignore = update2to3(m_2to3, line);
                 break;
             case 34:
-                id_grp3.push_back(update3to4(m_3to4, line));
+                id_group.push_back(update3to4(m_3to4, line));
                 break;
         }
     }
 
     std::array<ConvGrid, 512> result;
-    for (auto const &ids: id_grp3) {
+    for (auto const &ids: id_group) {
         auto primary_id = *ids.begin();
         auto conv_grid = makeConvGrid(m_2to3, m_3to4, primary_id);
         for (auto const id : ids) {
