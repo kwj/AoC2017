@@ -124,13 +124,11 @@ module :private;
 namespace day21 {
 
 struct Map_2to3 {
-    size_t tag;
     std::array<size_t, 9> bits;
     long pop_count;
 };
 
 struct Map_3to4 {
-    size_t tag;
     std::array<size_t, 16> bits;
     long pop_count;
 };
@@ -141,7 +139,8 @@ std::tuple<long, long> solve(std::istream &is) {
     return {part1(input_data), part2(input_data)};
 }
 
-size_t bitsToId(std::vector<size_t> const &bit_seq) {
+template <typename T>
+size_t bitsToId(T const &bit_seq) {
     size_t id{0};
 
     for (auto const b : bit_seq) {
@@ -197,10 +196,9 @@ std::set<size_t> update2to3(std::array<Map_2to3, 16> &m_2to3, std::string_view s
     }
 
     auto ids = getVariant2(src);
-    auto tag = bitsToId(src);
-    auto cnt = std::popcount(tag);
+    auto cnt = std::popcount(bitsToId(src));
     for (auto i : ids) {
-        m_2to3[i] = Map_2to3(tag, dst, cnt);
+        m_2to3[i] = Map_2to3(dst, cnt);
     }
 
     return ids;
@@ -254,10 +252,9 @@ std::set<size_t> update3to4(std::array<Map_3to4, 512> &m_3to4, std::string_view 
     }
 
     auto ids = getVariant3(src);
-    auto tag = bitsToId(src);
-    auto cnt = std::popcount(tag);
+    auto cnt = std::popcount(bitsToId(src));
     for (auto i : ids) {
-        m_3to4[i] = Map_3to4(tag, dst, cnt);
+        m_3to4[i] = Map_3to4(dst, cnt);
     }
 
     return ids;
@@ -311,13 +308,13 @@ ConvGrid makeConvGrid(std::array<Map_2to3, 16> const &m_2to3, std::array<Map_3to
             grid3[j + 9 * k + 2] = *it++;
         }
 
-        auto next_id = bitsToId(std::vector<size_t>{m_2to3[id].bits.begin(), m_2to3[id].bits.end()});
-        counter[m_3to4[next_id].tag] += 1;
+        auto next_id = bitsToId(m_2to3[id].bits);
+        counter[next_id] += 1;
     }
     result.pop_count[3] = std::count(grid3.begin(), grid3.end(), 1);
 
-    for (auto const [tag, cnt] : counter) {
-        result.next_grids.push_back({tag, cnt});
+    for (auto const [id, cnt] : counter) {
+        result.next_grids.push_back({id, cnt});
     }
 
     return result;
