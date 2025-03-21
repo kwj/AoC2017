@@ -245,6 +245,8 @@ bool isFindClosest(std::deque<std::vector<std::pair<long, long>>> const &dq) {
     return true;
 }
 
+// Measure manhattan distance from the origin of each particle at the time of `t`,
+// and sort them in ascending order
 std::vector<std::pair<long, long>> measureDistances(std::vector<Particle> const &ps, long t) {
     // compare on the first element of a pair, manhattan distance
     auto pair_cmp = [](std::pair<long, long> const &x, std::pair<long, long> const &y) {
