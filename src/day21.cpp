@@ -327,10 +327,10 @@ std::array<ConvGrid, 512> parse(std::istream &is) {
 
     for (std::string line; std::getline(is, line);) {
         switch (line.size()) {
-            case 20:
+            case 20: // 2x2 grid to 3x3 grid
                 std::ignore = update2to3(m_2to3, line);
                 break;
-            case 34:
+            case 34: // 3x3 grid to 4x4 grid
                 id_group.push_back(update3to4(m_3to4, line));
                 break;
         }
