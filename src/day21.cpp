@@ -83,11 +83,12 @@ struct TransGrid {
   next_grids:
     Nine 3x3 grids after three iterations.
 
-  In the above example, it would look like this:
-    {
-      pop_count: {5, 10, 17, 39}
-      next_grids: {{236, 2}, {297, 3}, {166, 3}, {341, 1}}
-    }
+In the above example, it would look like this:
+
+  trans_tbl[143] = {
+      .pop_count = {5, 10, 17, 39},
+      .next_grids = {{236, 2}, {297, 3}, {166, 3}, {341, 1}}
+  };
 */
 
 module;
@@ -183,7 +184,7 @@ std::set<size_t> getVariants_2x2(T const &bit_seq) {
     return ids;
 }
 
-// Update the 2x2 to 3x3 mapping table and return the 3x3 grid's ID which is used as a key
+// Update the 2x2 to 3x3 mapping table and return a 3x3 grid's ID which is used as a key
 size_t update_2x2to3x3(std::array<Map_2x2to3x3, 16> &m, std::string_view sv) {
     std::array<size_t, 4> src = {0, 1, 3, 4};
     std::array<size_t, 9> dst = {9, 10, 11, 13, 14, 15, 17, 18, 19};
