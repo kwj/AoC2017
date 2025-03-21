@@ -67,7 +67,7 @@ used recursion to find the answer.
 
 std::map<size_t, ConvGrid> conv_tbl;
   Conversion table with a 3x3 grids as a key. A key is obtained as follows.
-  Only seven entries exist. [number of 2x2 to 3x3 patterns(6) + start grid(1) = 7]
+  There are only seven entries exist at most. [number of 2x2 to 3x3 patterns(6) + start grid(1) = 7]
 
     .#.
     ..# --> {0, 1, 0, 0, 0, 1, 1, 1, 1} --> 0b010001111 -> 143
@@ -156,7 +156,8 @@ size_t bitsToId(T const &bit_seq) {
     return id;
 }
 
-std::set<size_t> getVariants_2x2(std::vector<size_t> const &bit_seq) {
+template <typename T>
+std::set<size_t> getVariants_2x2(T const &bit_seq) {
     std::set<size_t> ids;
     auto w{bit_seq};
 
@@ -181,26 +182,12 @@ std::set<size_t> getVariants_2x2(std::vector<size_t> const &bit_seq) {
 
 // Update the 2x2 to 3x3 mapping table and return the 3x3 grid's ID which is used as a key
 size_t update2to3(std::array<Map_2to3, 16> &m_2to3, std::string_view sv) {
-    std::vector<size_t> src;
-    std::array<size_t, 9> dst;
-    auto src_idxes = std::vector<size_t>{0, 1, 3, 4};
-    auto dst_idxes = std::vector<size_t>{9, 10, 11, 13, 14, 15, 17, 18, 19};
+    std::array<size_t, 4> src = {0, 1, 3, 4};
+    std::array<size_t, 9> dst = {9, 10, 11, 13, 14, 15, 17, 18, 19};
+    auto f = [&sv](size_t idx) { return sv[idx] == '#' ? 1uz : 0uz; };
 
-    for (auto const idx : src_idxes) {
-        if (sv[idx] == '#') {
-            src.push_back(1);
-        } else {
-            src.push_back(0);
-        }
-    }
-    auto it = dst.begin();
-    for (auto const idx : dst_idxes) {
-        if (sv[idx] == '#') {
-            *(it++) = 1;
-        } else {
-            *(it++) = 0;
-        }
-    }
+    std::for_each(src.begin(), src.end(), [&f](size_t &n) { n = f(n); });
+    std::for_each(dst.begin(), dst.end(), [&f](size_t &n) { n = f(n); });
 
     auto ids = getVariants_2x2(src);
     auto cnt = std::popcount(bitsToId(src));
@@ -211,7 +198,8 @@ size_t update2to3(std::array<Map_2to3, 16> &m_2to3, std::string_view sv) {
     return bitsToId(dst);
 }
 
-std::set<size_t> getVariants_3x3(std::vector<size_t> const &bit_seq) {
+template <typename T>
+std::set<size_t> getVariants_3x3(T const &bit_seq) {
     std::set<size_t> ids;
     auto w{bit_seq};
 
@@ -238,26 +226,12 @@ std::set<size_t> getVariants_3x3(std::vector<size_t> const &bit_seq) {
 
 // Update the 3x3 to 4x4 mapping table
 void update3to4(std::array<Map_3to4, 512> &m_3to4, std::string_view sv) {
-    std::vector<size_t> src;
-    std::array<size_t, 16> dst;
-    auto src_idxes = std::vector<size_t>{0, 1, 2, 4, 5, 6, 8, 9, 10};
-    auto dst_idxes = std::vector<size_t>{15, 16, 17, 18, 20, 21, 22, 23, 25, 26, 27, 28, 30, 31, 32, 33};
+    std::array<size_t, 9> src = {0, 1, 2, 4, 5, 6, 8, 9, 10};
+    std::array<size_t, 16> dst = {15, 16, 17, 18, 20, 21, 22, 23, 25, 26, 27, 28, 30, 31, 32, 33};
+    auto f = [&sv](size_t idx) { return sv[idx] == '#' ? 1uz : 0uz; };
 
-    for (auto const idx : src_idxes) {
-        if (sv[idx] == '#') {
-            src.push_back(1);
-        } else {
-            src.push_back(0);
-        }
-    }
-    auto it = dst.begin();
-    for (auto const idx : dst_idxes) {
-        if (sv[idx] == '#') {
-            *(it++) = 1;
-        } else {
-            *(it++) = 0;
-        }
-    }
+    std::for_each(src.begin(), src.end(), [&f](size_t &n) { n = f(n); });
+    std::for_each(dst.begin(), dst.end(), [&f](size_t &n) { n = f(n); });
 
     auto ids = getVariants_3x3(src);
     auto cnt = std::popcount(bitsToId(src));
