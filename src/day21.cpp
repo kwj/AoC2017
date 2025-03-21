@@ -128,13 +128,13 @@ module :private;
 namespace day21 {
 
 struct Map_2x2to3x3 {
-    std::array<size_t, 9> bits;
-    long pop_count;
+    std::array<size_t, 9> bits; // 3x3 grid after transition
+    long pop_count; // number of lit pixels in 2x2 grid
 };
 
 struct Map_3x3to4x4 {
-    std::array<size_t, 16> bits;
-    long pop_count;
+    std::array<size_t, 16> bits; // 4x4 grid after transition
+    long pop_count; // number of lit pixels in 3x3 grid
 };
 
 //  the start grid (glider)
@@ -185,7 +185,7 @@ std::set<size_t> getVariants_2x2(T const &bit_seq) {
 }
 
 // Update the 2x2 to 3x3 mapping table and return a 3x3 grid's ID which is used as a key
-size_t update_2x2to3x3(std::array<Map_2x2to3x3, 16> &m, std::string_view sv) {
+size_t configMap(std::array<Map_2x2to3x3, 16> &m, std::string_view sv) {
     std::array<size_t, 4> src = {0, 1, 3, 4};
     std::array<size_t, 9> dst = {9, 10, 11, 13, 14, 15, 17, 18, 19};
     auto f = [&sv](size_t idx) { return sv[idx] == '#' ? 1uz : 0uz; };
@@ -228,7 +228,7 @@ std::set<size_t> getVariants_3x3(T const &bit_seq) {
 }
 
 // Update the 3x3 to 4x4 mapping table
-void update_3x3to4x4(std::array<Map_3x3to4x4, 512> &m, std::string_view sv) {
+void configMap(std::array<Map_3x3to4x4, 512> &m, std::string_view sv) {
     std::array<size_t, 9> src = {0, 1, 2, 4, 5, 6, 8, 9, 10};
     std::array<size_t, 16> dst = {15, 16, 17, 18, 20, 21, 22, 23, 25, 26, 27, 28, 30, 31, 32, 33};
     auto f = [&sv](size_t idx) { return sv[idx] == '#' ? 1uz : 0uz; };
@@ -305,23 +305,26 @@ TransGrid makeTransGrid(std::array<Map_2x2to3x3, 16> const &m_2to3, std::array<M
 }
 
 std::map<size_t, TransGrid> parse(std::istream &is) {
+    // The indices of these arrays are also used as the ID of these structures.
     std::array<Map_2x2to3x3, 16> m_2to3;  // 16 = 2 ^ 4
     std::array<Map_3x3to4x4, 512> m_3to4;  // 512 = 2 ^ 9
+
+    // Grid IDs for TransGrid objects creation
     std::vector<size_t> id_group{bitsToId(start_grid)};
 
     for (std::string line; std::getline(is, line);) {
         switch (line.size()) {
             case 20: // 2x2 grid to 3x3 grid
-                id_group.push_back(update_2x2to3x3(m_2to3, line));
+                id_group.push_back(configMap(m_2to3, line)); // function overloading
                 break;
             case 34: // 3x3 grid to 4x4 grid
-                update_3x3to4x4(m_3to4, line);
+                configMap(m_3to4, line); // function overloading
                 break;
         }
     }
 
     std::map<size_t, TransGrid> result;
-    for (auto const &id: id_group) {
+    for (auto const id: id_group) {
         result[id] = makeTransGrid(m_2to3, m_3to4, id);
     }
 
