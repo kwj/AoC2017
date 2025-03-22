@@ -60,9 +60,8 @@ InitialGrid parse(std::istream &is) {
     std::unordered_map<std::complex<int>, int, ComplexHash> grid;
     int y{0};
     for (auto chars : work) {
-        for (auto it = chars.begin(); it != chars.end(); ++it) {
-            int x = static_cast<int>(std::distance(chars.begin(), it));
-            if (*it == '#') {
+        for (auto [x, ch] : std::views::zip(std::views::iota(0), chars)) {
+            if (ch == '#') {
                 grid[{x, y}] = INFECTED;
             }
         }

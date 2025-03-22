@@ -5,6 +5,7 @@ module;
 #include <functional>
 #include <istream>
 #include <numeric>
+#include <ranges>
 #include <sstream>
 #include <string>
 #include <string_view>
@@ -145,8 +146,8 @@ long part2(std::vector<long> const &grid) {
     std::vector<long> squares{grid};
 
     long n_regions{0};
-    for (size_t idx{0}; idx < squares.size(); ++idx) {
-        if (squares[idx] != 0) {
+    for (auto [idx, sq] : std::views::zip(std::views::iota(0uz), squares)) {
+        if (sq != 0) {
             squares[idx] = 0;
             checkSpacesInRegion(squares, idx);
             ++n_regions;

@@ -126,8 +126,8 @@ long calcWeight(std::vector<Disc> &discs, size_t id) {
     Disc &self = discs[id];
 
     // P2164R9 (views::enumerate) is not yet supported in libc++ 19.
-    for (size_t idx = 0; idx < self.children.size(); ++idx) {
-        self.sub_tower_weight[idx] = calcWeight(discs, self.children[idx]);
+    for (auto [idx, child] : std::views::zip(std::views::iota(0uz), self.children)) {
+        self.sub_tower_weight[idx] = calcWeight(discs, child);
     }
 
     return self.weight + std::accumulate(self.sub_tower_weight.begin(), self.sub_tower_weight.end(), 0);
