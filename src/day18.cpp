@@ -158,4 +158,4 @@ long part2(std::vector<long> const &vs) {
     return static_cast<long>(work.size()) * ((cnt + 1) / 2);
 }
 
-}  // module day18
+} // namespace day18

@@ -57,5 +57,5 @@ long part2(std::string const &s) {
     return captcha(s, s.size() / 2);
 }
 
-}  // module day01
+} // namespace day01
 

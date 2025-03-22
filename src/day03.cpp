@@ -129,5 +129,5 @@ long part2(long target) {
     return grid[pos];
 }
 
-}  // module day03
+} // namespace day03
 

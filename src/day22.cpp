@@ -107,4 +107,4 @@ long part2(InitialGrid const &init_grid) {
     return simulate(init_grid, 10'000'000, 1);
 }
 
-}  // module day22
+} // namespace day22

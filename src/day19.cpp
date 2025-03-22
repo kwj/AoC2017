@@ -80,4 +80,4 @@ long part2(std::pair<std::string, long> &result) {
     return result.second;
 }
 
-}  // module day19
+} // namespace day19

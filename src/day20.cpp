@@ -437,4 +437,4 @@ long part2(std::vector<Particle> const &particles) {
     return static_cast<long>(std::count(survival_tbl.begin(), survival_tbl.end(), true));
 }
 
-}  // module day20
+} // namespace day20

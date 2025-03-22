@@ -68,4 +68,4 @@ long part2(std::vector<std::vector<std::string>> &vvs) {
     return static_cast<long>(std::count_if(tmp_vvs.begin(), tmp_vvs.end(), isValid));
 }
 
-}  // module day04
+} // namespace day04

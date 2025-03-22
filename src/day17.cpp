@@ -134,4 +134,4 @@ Naturally, it was dramatically faster than a naive fifty million times loop.
     4617    50010210
 */
 
-}  // module day17
+} // namespace day17

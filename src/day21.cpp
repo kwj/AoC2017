@@ -352,4 +352,4 @@ long part2(std::map<size_t, TransGrid> const &trans_tbl) {
     return countUpPixels(trans_tbl, bitsToId(start_grid), 18);
 }
 
-}  // module day21
+} // namespace day21
