@@ -67,11 +67,13 @@ used recursion to find the answer.
 
 std::map<size_t, TransGrid> trans_tbl;
   Transition table with a 3x3 grids as a key. A key is obtained as follows.
-  There are only seven entries exist at most. [number of 2x2 to 3x3 patterns(6) + start grid(1) = 7]
 
     .#.
     ..# --> {0, 1, 0, 0, 0, 1, 1, 1, 1} --> 0b010001111 -> 143
     ###
+
+  There are only seven entries at most.
+    number of '2x2 to 3x3' patterns(6) + start grid(1) = 7
 
 struct TransGrid {
     std::array<long, 4> pop_count;

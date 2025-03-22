@@ -2,11 +2,12 @@
 I decompiled the given input data and observed it.
 
 If debug mode is enabled, this program checks `b`, a seed value, is a
-composite number or not. The way to check is to multiply numbers in the
-range [2, b) by each other and determine if the result is equal to `b`.
+composite number or not. The way to check is to multiply all numbers in
+the range [2, b) by each other and determine if the result is equal to `b`.
 
 If debug mode is disabled, this program counts the number of composite
-numbers in the sequence [b, b + 17, b + 34, ... , b + 1000 * 17].
+numbers in the sequence [b, b + 17, b + 34, ... , b + 1000 * 17]. The method
+of determining composite number is the same as in debug mode.
 
 The following is an equivalent pseudo code, but it uses a naive method
 to determine composite number or not. Therefore, if the value of `b` is
@@ -49,12 +50,11 @@ encoded. Because other input data files which I saw on GitHub had
 same values.
 
 [Part 1]
-Since the solution is the number of multiplication times  when determining
+Since the solution is the number of multiplication times when determining
 the composite number or not, the answer is `(b - 2) * (b - 2)`.
 
 [Part 2]
-I used a little efficient primality test to determine a number is composite
-or not.
+I used a little naive primality test to determine a number is composite or not.
 */
 
 module;
