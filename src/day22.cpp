@@ -82,7 +82,7 @@ long simulate(InitialGrid const &init_grid, long iteration, int delta)  {
 
     while (iteration-- > 0) {
         auto [it, _] = grid.try_emplace(pos, CLEAN);
-        auto crnt_state = (*it).second;
+        auto crnt_state = it->second;
         auto new_state = (crnt_state + delta) & 0b11;
 
         grid[pos] = new_state;
