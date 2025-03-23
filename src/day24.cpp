@@ -17,7 +17,7 @@ struct Component {
     bool used;
     long port1;
     long port2;
-    long weight;
+    long strength;
 };
 
 std::tuple<long, long> solve(std::istream &is);
@@ -39,19 +39,21 @@ std::tuple<long, long> solve(std::istream &is) {
 }
 
 template <typename Fn>
-void dfs(std::vector<Component> &cmpnts, long target, long total_weight, long depth, Fn f) {
-    for (auto &[used, p1, p2, w] : cmpnts) {
+void dfs(std::vector<Component> &cmpnts, long target, long total_strength, long len, Fn &&f) {
+    for (auto &[used, p1, p2, str] : cmpnts) {
         if (used) {
             continue;
         }
 
         if (target == p1 || target == p2) {
             used = true;
-            dfs(cmpnts, target ^ p1 ^ p2, total_weight + w, depth + 1, f);
+            dfs(cmpnts, target ^ p1 ^ p2, total_strength + str, len + 1, f);
             used = false;
         }
     }
-    f(total_weight, depth);
+
+    // this bridge cannot be extended any further
+    f(total_strength, len);
 
     return;
 }
@@ -66,11 +68,11 @@ std::pair<long, long> parse(std::istream &is) {
     long max_strength{0};
     long max_strength_when_longest{0};
     long max_length{0};
-    auto f = [&](long w, long l) {
-        max_strength = std::max(max_strength, w);
-        if (l >= max_length) {
-            max_strength_when_longest = std::max(max_strength_when_longest, w);
-            max_length = l;
+    auto f = [&](long str, long len) {
+        max_strength = std::max(max_strength, str);
+        if (len >= max_length) {
+            max_strength_when_longest = std::max(max_strength_when_longest, str);
+            max_length = len;
         }
     };
     dfs(cmpnts, 0, 0, 0, f);
