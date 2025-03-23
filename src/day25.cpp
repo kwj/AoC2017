@@ -17,9 +17,9 @@ export module day25;
 export namespace day25 {
 
 struct Op {
-    unsigned long v;
-    size_t next;
-    bool dir;
+    size_t v; // a value to write (it is also used as an index)
+    size_t next; // next state (it is also used as an index)
+    bool dir; // true: right, false: left
 };
 
 struct Head {
@@ -46,6 +46,9 @@ std::tuple<long> solve(std::istream &is) {
     return {part1(input_data)};
 }
 
+// virtual tape:
+//   it acts like as a stack except it returns a value N
+//   when calling read() on empty queue.
 template <typename T, T N>
 class Tape {
 public:
@@ -120,12 +123,15 @@ unsigned long run(size_t state, long steps, std::vector<std::array<Op, 2>> &rule
     while (steps-- > 0) {
         auto [v, next_state, dir] = rules[state][curr];
         counter += v - curr;
+
+        // write a new value on the tape, move the cursor to the right/left and
+        // read a next value from the tape
         if (dir) {
-            // write and step to the right
+            // right
             tape_l.write(v);
             curr = tape_r.read();
         } else {
-            // write and step to the left
+            // left
             tape_r.write(v);
             curr = tape_l.read();
         }
