@@ -61,8 +61,6 @@ long part1(std::vector<long> const &vn) {
     return run(instructions, f);
 }
 
-// It takes a few seconds on Raspberry Pi 4.
-// If we want to improve performance, we should analyze the input data.
 long part2(std::vector<long> const &vn) {
     std::vector<long> instructions{vn};
     auto f = [](long n){ return n >= 3 ? n - 1 : n + 1; };

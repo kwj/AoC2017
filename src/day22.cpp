@@ -102,7 +102,6 @@ long part1(InitialGrid const &init_grid) {
     return simulate(init_grid, 10'000, 2);
 }
 
-// It took over 10 seconds on Raspberry Pi 4.
 long part2(InitialGrid const &init_grid) {
     return simulate(init_grid, 10'000'000, 1);
 }
