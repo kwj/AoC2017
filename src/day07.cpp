@@ -7,7 +7,8 @@ the answer cannot be fixed for the following input data. (b = 2 or c = 1)
   b (1)
   c (2)
 
-Nor can the following input data be used to fix the answer. (b = 3 or c = 1 or f = 4)
+Nor can the following input data be used to fix the answer.
+(b = 3 or c = 1 or f = 4)
 
   a (2) -> b, c
   b (2) -> f
@@ -16,7 +17,8 @@ Nor can the following input data be used to fix the answer. (b = 3 or c = 1 or f
   e (2)
   f (3)
 
-My solution therefore assumes that there is one and only answer for a given input data.
+My solution therefore assumes that there is one and only answer for a given
+input data.
 */
 
 module;
@@ -100,7 +102,7 @@ std::vector<Disc> parse(std::istream &is) {
         std::for_each(children.begin(), children.end(), [&](std::string const &name){
             auto child_id = idMap[name];
             discs[parent_id].children.push_back(child_id);
-            discs[parent_id].sub_tower_weight.push_back(0); // tentative value. it will be updated by calcWeight().
+            discs[parent_id].sub_tower_weight.push_back(0);
             discs[child_id].parent = parent_id;
         });
     }
@@ -142,22 +144,22 @@ bool isBalanced(Disc const &disc) {
 long findDelta(std::vector<Disc> const &discs, size_t root_id) {
     auto &self = discs[root_id];
 
-    // assume that self.children.size() >= 2 because the root disc has two or more child discs.
-    switch (self.children.size()) {
-        case 2:
-            if (isBalanced(discs[self.children[0]])) {
-                return self.sub_tower_weight[0] - self.sub_tower_weight[1];
-            } else {
-                return self.sub_tower_weight[1] - self.sub_tower_weight[0];
-            }
-        default:
-            std::vector<long> work{self.sub_tower_weight};
-            std::ranges::sort(work);
-            if (work[0] == work[1]) {
-                return work[0] - work.back();
-            } else {
-                return work.back() - work[0];
-            }
+    // assume that self.children.size() >= 2
+    // since the root disc has two or more child discs.
+    if (self.children.size() == 2) {
+        if (isBalanced(discs[self.children[0]])) {
+            return self.sub_tower_weight[0] - self.sub_tower_weight[1];
+        } else {
+            return self.sub_tower_weight[1] - self.sub_tower_weight[0];
+        }
+    } else {
+        std::vector<long> work{self.sub_tower_weight};
+        std::ranges::sort(work);
+        if (work[0] == work[1]) {
+            return work[0] - work.back();
+        } else {
+            return work.back() - work[0];
+        }
     }
 }
 
@@ -169,7 +171,8 @@ std::tuple<size_t, long> findBadDisc(std::vector<Disc> const &discs, size_t id, 
         return std::make_tuple(id, self.weight + delta);
     }
 
-    // if each child disc has same sub-total weight, the disc `discs[id]` is the bad disc.
+    // if each child disc has same sub-total weight, the disc `discs[id]` is
+    // the bad disc.
     if (isBalanced(discs[id])) {
         return std::make_tuple(id, self.weight + delta);
     }
@@ -188,7 +191,9 @@ std::tuple<size_t, long> findBadDisc(std::vector<Disc> const &discs, size_t id, 
             return findBadDisc(discs, self.children[0], delta);
         } else {
             auto it = std::find_if(self.sub_tower_weight.begin() + 1, self.sub_tower_weight.end(), [&](long w) { return key != w; });
-            return findBadDisc(discs, self.children[static_cast<size_t>(it - self.sub_tower_weight.begin())], delta);
+            auto idx = static_cast<size_t>(it - self.sub_tower_weight.begin());
+
+            return findBadDisc(discs, self.children[idx], delta);
         }
     }
 }

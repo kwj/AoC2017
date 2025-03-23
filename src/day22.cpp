@@ -16,10 +16,11 @@ export namespace day22 {
 
 struct ComplexHash {
     std::size_t operator()(std::complex<int> const &key) const {
+        auto h = std::hash<long> {};
         auto r = static_cast<long>(key.real());
         auto i = static_cast<long>(key.imag());
 
-        return std::hash<long>{}((r & 0xFFFF) << 16 | (i & 0xFFFF));
+        return h((r & 0xFFFF) << 16 | (i & 0xFFFF));
     }
 };
 

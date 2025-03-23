@@ -58,8 +58,8 @@ long part1(std::vector<std::vector<long>> const &vvs) {
 // Note: `vs` is a list of int in descending order.
 long findQuotient(std::vector<long> const &vs) {
     auto n_elm{vs.size()};
-    for (std::size_t i = 0; i < n_elm - 1; ++i) {
-        for (std::size_t j = i + 1; j < n_elm; ++j) {
+    for (auto i = 0uz; i < n_elm - 1; ++i) {
+        for (auto j = i + 1; j < n_elm; ++j) {
             if (vs[i] % vs[j] == 0) {
                 return vs[i] / vs[j];
             }

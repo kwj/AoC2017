@@ -71,7 +71,7 @@ std::vector<long> parse(std::istream &is) {
     // It means that the ID does not checked yet.
     std::vector<bool> id_tbl(connections.size());
 
-    for (size_t id{0}; id < connections.size(); ++id) {
+    for (auto id = 0uz; id < connections.size(); ++id) {
         if (!id_tbl[id]) {
             id_tbl[id] = true;
             result.push_back(countProgramsInGroup(connections, id_tbl, id));

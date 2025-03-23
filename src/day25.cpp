@@ -91,12 +91,12 @@ Head parse(std::istream &is) {
     std::map<size_t, std::array<Op, 2>> tmp;
 
     auto data = std::span(lines);
-    for (size_t offset = 3; offset < lines.size() - 2; offset += 10) {
+    for (auto offset = 3uz; offset < lines.size() - 2; offset += 10) {
         std::array<Op, 2> actions;
         auto block = data.subspan(offset, 10uz);
         auto state = static_cast<size_t>(block[0][9] - 'A');
 
-        for (size_t i = 0; i < 2; ++i) {
+        for (auto i = 0uz; i < 2; ++i) {
             auto crnt = static_cast<size_t>(block[4 * i + 1][26] - '0');
             auto v = static_cast<unsigned long>(block[4 * i + 2][22] - '0');
             auto dir = block[4 * i + 3][27] == 'r';

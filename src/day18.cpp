@@ -123,7 +123,7 @@ std::vector<long> parse(std::istream &is) {
     std::vector<long> vs;
     vs.reserve(N_ELEMENTS);
     auto x = seed;
-    for (auto i{N_ELEMENTS}; i > 0; --i) {
+    for (auto i = N_ELEMENTS; i > 0; --i) {
         x = (((x * A1) % M1) * A2 + C) % M1;
         vs.push_back(static_cast<long>(x % M2));
     }

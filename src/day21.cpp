@@ -167,7 +167,7 @@ std::set<size_t> getVariants_2x2(T const &bit_seq) {
     std::set<size_t> ids;
     auto w{bit_seq};
 
-    for (auto i{0}; i < 8; ++i) {
+    for (auto i = 0; i < 8; ++i) {
         ids.insert(bitsToId(w));
 
         // rotate
@@ -208,7 +208,7 @@ std::set<size_t> getVariants_3x3(T const &bit_seq) {
     std::set<size_t> ids;
     auto w{bit_seq};
 
-    for (auto i{0}; i < 8; ++i) {
+    for (auto i = 0; i < 8; ++i) {
         ids.insert(bitsToId(w));
 
         // rotate
@@ -270,7 +270,7 @@ TransGrid makeTransGrid(std::array<Map_2x2to3x3, 16> const &m_2to3, std::array<M
     for (auto const [i, j] : idxmap_1) {
         auto id = bitsToId(std::vector<size_t>{grid_16[i], grid_16[i + 1], grid_16[i + 4], grid_16[i + 5]});
         auto it = m_2to3[id].bits.begin();
-        for (size_t k{0}; k < 3; ++k) {
+        for (auto k = 0uz; k < 3; ++k) {
             grid_36[j + 6 * k] = *it++;
             grid_36[j + 6 * k + 1] = *it++;
             grid_36[j + 6 * k + 2] = *it++;
@@ -288,7 +288,7 @@ TransGrid makeTransGrid(std::array<Map_2x2to3x3, 16> const &m_2to3, std::array<M
     for (auto const [i, j] : idxmap_2) {
         auto id = bitsToId(std::vector<size_t>{grid_36[i], grid_36[i + 1], grid_36[i + 6], grid_36[i + 7]});
         auto it = m_2to3[id].bits.begin();
-        for (size_t k{0}; k < 3; ++k) {
+        for (auto k = 0uz; k < 3; ++k) {
             grid_81[j + 9 * k] = *it++;
             grid_81[j + 9 * k + 1] = *it++;
             grid_81[j + 9 * k + 2] = *it++;
@@ -316,10 +316,12 @@ std::map<size_t, TransGrid> parse(std::istream &is) {
 
     for (std::string line; std::getline(is, line);) {
         switch (line.size()) {
-            case 20: // 2x2 grid to 3x3 grid
+            case 20:
+                // 2x2 grid to 3x3 grid
                 id_group.push_back(configMap(m_2to3, line)); // function overloading
                 break;
-            case 34: // 3x3 grid to 4x4 grid
+            case 34:
+                // 3x3 grid to 4x4 grid
                 configMap(m_3to4, line); // function overloading
                 break;
         }

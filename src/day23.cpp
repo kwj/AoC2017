@@ -112,7 +112,7 @@ bool isPrime(long n) {
     }
 
     auto sq_n = static_cast<long>(std::sqrt(n));
-    for (long i{5}; i <= sq_n; i += 6) {
+    for (long i = 5; i <= sq_n; i += 6) {
         if (n % i == 0 || n % (i + 2) == 0) {
             return false;
         }

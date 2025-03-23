@@ -79,7 +79,7 @@ std::tuple<unsigned long, unsigned long> judgement(unsigned long num_a, unsigned
     }
 
     long judge_p2{0};
-    for (std::tuple<unsigned long &, unsigned long &> tpl : std::views::zip(mul4, mul8)) {
+    for (auto tpl : std::views::zip(mul4, mul8)) {
         if (std::get<0>(tpl) == std::get<1>(tpl)) {
             ++judge_p2;
         }

@@ -77,14 +77,17 @@ long part1(long target) {
 
 struct ComplexHash {
     std::size_t operator()(std::complex<int> const &key) const {
+        auto h = std::hash<long> {};
         auto r = static_cast<long>(key.real());
         auto i = static_cast<long>(key.imag());
 
-        return std::hash<long>{}((r & 0xFFFF) << 16 | (i & 0xFFFF));
+        return h((r & 0xFFFF) << 16 | (i & 0xFFFF));
     }
 };
 
-long fixValue(std::unordered_map<std::complex<int>, long, ComplexHash> &m, std::complex<int> const &pos) {
+using Grid = std::unordered_map<std::complex<int>, long, ComplexHash>;
+
+long fixValue(Grid &m, std::complex<int> const &pos) {
     auto dirs = std::to_array<std::complex<int>>({
         {1, 0},
         {1, 1},
@@ -98,7 +101,8 @@ long fixValue(std::unordered_map<std::complex<int>, long, ComplexHash> &m, std::
 
     long result{0};
     for (auto const d : dirs) {
-        result += m[pos + d];  // If m[pos + d] doesn't exist, it is initialized to 0.
+        // If m[pos + d] doesn't exist, it is initialized to 0.
+        result += m[pos + d];
     }
 
     return result;
@@ -106,7 +110,7 @@ long fixValue(std::unordered_map<std::complex<int>, long, ComplexHash> &m, std::
 
 long part2(long target) {
     // std::complex has the == operator, so use it.
-    std::unordered_map<std::complex<int>, long, ComplexHash> grid = {{{0, 0}, 1}};
+    Grid grid = {{{0, 0}, 1}};
 
     std::complex<int> pos(0, 0);
     std::complex<int> dir(1, 0);

@@ -37,8 +37,8 @@ std::tuple<std::string, long> solve(std::istream &is) {
 /* What a terrible code... */
 std::pair<std::string, long> followPath(std::vector<std::vector<char>> &grid) {
     // find the start position and set the initial direction (down[dx=0,dy=1])
-    size_t x = static_cast<size_t>(std::find(grid[0].begin(), grid[0].end(), '|') - grid[0].begin());
-    size_t y{0};
+    auto x = static_cast<size_t>(std::find(grid[0].begin(), grid[0].end(), '|') - grid[0].begin());
+    auto y{0uz};
     int dx{0}, dy{1};
 
     std::ostringstream oss;

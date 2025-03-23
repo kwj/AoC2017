@@ -44,7 +44,7 @@ bool isValid(std::vector<std::string> const &vs) {
     std::vector<std::string> words{vs};
     std::ranges::sort(words);
 
-    for (std::size_t i = 0; i < words.size() - 1; ++i) {
+    for (auto i = 0uz; i < words.size() - 1; ++i) {
         if (words[i] == words[i + 1]) {
             return false;
         }

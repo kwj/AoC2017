@@ -67,7 +67,7 @@ std::vector<long> makeGrid(std::string_view prefix) {
     std::vector<long> lengths;
     std::vector<long> const tail{17, 31, 73, 47, 23};
 
-    for (size_t k = 0; k < EDGE_LEN; ++k) {
+    for (auto k = 0uz; k < EDGE_LEN; ++k) {
         lengths.clear();
         auto s = std::format("{}-{}", prefix, k);
         std::istringstream iss(s);

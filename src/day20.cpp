@@ -121,7 +121,7 @@ public:
     std::vector<long> p;
     std::vector<long> v;
     std::vector<long> a;
-    std::vector<long> position(long const tick = 0) const;
+    std::vector<long> position(long tick = 0) const;
 };
 
 std::tuple<long, long> solve(std::istream &is);
@@ -136,8 +136,8 @@ module :private;
 
 namespace day20 {
 
-std::vector<long> Particle::position(long const tick) const {
-    auto new_p = [](long const pos, long const vel, long const acc, long const t){
+std::vector<long> Particle::position(long tick) const {
+    auto new_p = [](long pos, long vel, long acc, long t) {
         return pos + t * vel + (t * (t + 1)) * acc / 2;
     };
 
@@ -200,10 +200,10 @@ bool isFindClosest(std::deque<std::vector<std::pair<long, long>>> const &dq) {
     // work =
     //   [[diff_p0(t2,t1), diff_p0(t3,t2), ...], [diff_p1(t2,t1), diff_p0(t3,t2), ...], ...]
     std::vector<std::vector<long>> work;
-    for (size_t i{0}; i < n_particles; ++i) {
+    for (auto i = 0uz; i < n_particles; ++i) {
         std::vector<long> vs;
         long prev{0};
-        for (size_t j{0}; j < dq.size(); ++j) {
+        for (auto j = 0uz; j < dq.size(); ++j) {
             vs.push_back(dq[j][i].first - prev);
             prev = dq[j][i].first;
         }
@@ -225,9 +225,9 @@ bool isFindClosest(std::deque<std::vector<std::pair<long, long>>> const &dq) {
     // trans_work =
     //   [[diff_p0(t2,t1), diff_p1(t2,t1), ...], [diff_p0(t3,t2), diff_p1(t3,t2), ...], ...]
     std::vector<std::vector<long>> trans_work;
-    for (size_t i{0}; i < work[0].size(); ++i) {
+    for (auto i = 0uz; i < work[0].size(); ++i) {
         std::vector<long> vs;
-        for (size_t j{0}; j < n_particles; ++j) {
+        for (auto j = 0uz; j < n_particles; ++j) {
             vs.push_back(work[j][i]);
         }
         trans_work.push_back(vs);
@@ -287,11 +287,10 @@ long findClosestParticleId(std::vector<Particle> const &ps) {
 long part1(std::vector<Particle> const &particles) {
     // find candidate particles closest to the origin
     // candidate is the particle with the smallest magnitude of acceleration
-    auto acc_cmp = [](Particle const &x, Particle const &y) {
-        return norm(x.a) < norm(y.a);
-    };
     auto min_acc = norm(
-        (*std::min_element(particles.begin(), particles.end(), acc_cmp)).a
+        (*std::min_element(particles.begin(), particles.end(), [](Particle const &x, Particle const &y) {
+            return norm(x.a) < norm(y.a);
+        })).a
     );
 
     std::vector<Particle> cands;
@@ -361,7 +360,7 @@ std::optional<long> getCollisionTime(Particle const &p1, Particle const &p2) {
     std::set<long> tmp;
 
     // i: x, y, z axis
-    for (size_t i{0}; i < 3; ++i) {
+    for (auto i = 0uz; i < 3; ++i) {
         auto dp = p1.p[i] - p2.p[i];
         auto dv = p1.v[i] - p2.v[i];
         auto da = p1.a[i] - p2.a[i];
@@ -394,14 +393,14 @@ std::optional<long> getCollisionTime(Particle const &p1, Particle const &p2) {
 // key: estimated time of collision
 // value: vector of colliding particle pairs
 //
-// <example from my given data>
-// key = 10
-// value = (26, 27) (26, 28) (26, 29) (26, 30) (27, 28) (27, 29) (27, 30) (28, 29) (28, 30) (29, 30)
+// <example>
+// key = 7
+// value = (26, 27) (26, 28) (27, 28)
 std::map<long, std::vector<std::pair<size_t, size_t>>> makeCollisionMap(std::vector<Particle> const &particles) {
     std::map<long, std::vector<std::pair<size_t, size_t>>> collisions;
 
-    for (size_t i{0}; i < particles.size() - 1; ++i) {
-        for (size_t j = i + 1; j < particles.size(); ++j) {
+    for (auto i = 0uz; i < particles.size() - 1; ++i) {
+        for (auto j = i + 1; j < particles.size(); ++j) {
             auto t = getCollisionTime(particles[i], particles[j]);
             if (t) {
                 collisions[t.value()].push_back({i, j});
