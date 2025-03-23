@@ -72,7 +72,7 @@ std::map<size_t, TransGrid> trans_tbl;
     ..# --> {0, 1, 0, 0, 0, 1, 1, 1, 1} --> 0b010001111 -> 143
     ###
 
-  There are only seven entries at most.
+  Only seven entries are needed at most.
     number of '2x2 to 3x3' patterns(6) + start grid(1) = 7
 
 struct TransGrid {
@@ -129,6 +129,18 @@ module :private;
 
 namespace day21 {
 
+std::tuple<long, long> solve(std::istream &is) {
+    auto input_data = parse(is);
+
+    return {part1(input_data), part2(input_data)};
+}
+
+//  the start grid (glider)
+//    .#.
+//    ..# --> {0, 1, 0, 0, 0, 1, 1, 1, 1}
+//    ###
+std::vector<size_t> start_grid = {0, 1, 0, 0, 0, 1, 1, 1, 1};
+
 struct Map_2x2to3x3 {
     std::array<size_t, 9> bits; // 3x3 grid after transition
     long pop_count; // number of lit pixels in 2x2 grid
@@ -138,18 +150,6 @@ struct Map_3x3to4x4 {
     std::array<size_t, 16> bits; // 4x4 grid after transition
     long pop_count; // number of lit pixels in 3x3 grid
 };
-
-//  the start grid (glider)
-//    .#.
-//    ..# --> {0, 1, 0, 0, 0, 1, 1, 1, 1}
-//    ###
-std::vector<size_t> start_grid = {0, 1, 0, 0, 0, 1, 1, 1, 1};
-
-std::tuple<long, long> solve(std::istream &is) {
-    auto input_data = parse(is);
-
-    return {part1(input_data), part2(input_data)};
-}
 
 template <typename T>
 size_t bitsToId(T const &bit_seq) {
