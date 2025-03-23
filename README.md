@@ -35,16 +35,14 @@ URL: https://adventofcode.com/2017
 * [Day 22: Sporifica Virus](./src/day22.cpp)
 * [Day 23: Coprocessor Conflagration](./src/day23.cpp)
 * [Day 24: Electromagnetic Moat](./src/day24.cpp)
-<!--
 * [Day 25: The Halting Problem](./src/day25.cpp)
--->
 
 ## How to build
 ```console
 $ mkdir build
-$ env CXX=/usr/bin/clang++ cmake -S . -B ./build -G Ninja && (cd build; ninja)
+$ env CXX=/usr/bin/clang++ cmake -S . -B ./build -G Ninja
+$ cmake --build ./build
 ```
-
 
 ## How to use
 
