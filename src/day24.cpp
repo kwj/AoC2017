@@ -39,7 +39,7 @@ std::tuple<long, long> solve(std::istream &is) {
 }
 
 template <typename Fn>
-void dfs(std::vector<Component> &cmpnts, long target, long total_strength, long len, Fn &&f) {
+void checkBridges(std::vector<Component> &cmpnts, long target, long total_strength, long len, Fn &&f) {
     for (auto &[used, p1, p2, str] : cmpnts) {
         if (used) {
             continue;
@@ -47,7 +47,7 @@ void dfs(std::vector<Component> &cmpnts, long target, long total_strength, long 
 
         if (target == p1 || target == p2) {
             used = true;
-            dfs(cmpnts, target ^ p1 ^ p2, total_strength + str, len + 1, f);
+            checkBridges(cmpnts, target ^ p1 ^ p2, total_strength + str, len + 1, f);
             used = false;
         }
     }
@@ -75,7 +75,7 @@ std::pair<long, long> parse(std::istream &is) {
             max_length = len;
         }
     };
-    dfs(cmpnts, 0, 0, 0, f);
+    checkBridges(cmpnts, 0, 0, 0, f);
 
     return {max_strength, max_strength_when_longest};
 }
