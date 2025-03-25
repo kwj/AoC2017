@@ -83,13 +83,15 @@ module :private;
 
 namespace day23 {
 
-std::tuple<long, long> solve(std::istream &is) {
+std::tuple<long, long>
+solve(std::istream &is) {
     auto input_data = parse(is);
 
     return {part1(input_data), part2(input_data)};
 }
 
-long parse(std::istream &is) {
+long
+parse(std::istream &is) {
     std::ostringstream oss;
     oss << is.rdbuf();
     std::string content = oss.str();
@@ -102,7 +104,8 @@ long parse(std::istream &is) {
     return seed;
 }
 
-bool isPrime(long n) {
+bool
+isPrime(long n) {
     if (n < 4) {
         return n == 2 || n == 3;
     }
@@ -121,14 +124,16 @@ bool isPrime(long n) {
     return true;
 }
 
-long part1(long b) {
+long
+part1(long b) {
     return (b - 2) * (b - 2);
 }
 
-long part2(long b) {
+long
+part2(long b) {
     b = 100000 + 100 * b;
     long c = b + 17000;
-    long result{0};
+    long result {0};
 
     for (; b <= c; b += 17) {
         if (!isPrime(b)) {

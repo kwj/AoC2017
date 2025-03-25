@@ -16,20 +16,22 @@ std::vector<long> parse(std::istream &is);
 long part1(std::vector<long> const &vvs);
 long part2(std::vector<long> const &vvs);
 
-}  // namespace day05
+} // namespace day05
 
 // --------
 module :private;
 
 namespace day05 {
 
-std::tuple<long, long> solve(std::istream &is) {
+std::tuple<long, long>
+solve(std::istream &is) {
     auto input_data = parse(is);
 
     return {part1(input_data), part2(input_data)};
 }
 
-std::vector<long> parse(std::istream &is) {
+std::vector<long>
+parse(std::istream &is) {
     std::vector<long> result;
 
     for (std::string line; std::getline(is, line);) {
@@ -39,10 +41,11 @@ std::vector<long> parse(std::istream &is) {
     return result;
 }
 
-long run(std::vector<long> insts, std::function<long(long)> f) {
-    long steps{0};
-    size_t idx{0};
-    auto len{insts.size()};
+long
+run(std::vector<long> insts, std::function<long(long)> f) {
+    long steps {0};
+    size_t idx {0};
+    auto len {insts.size()};
 
     while (idx >= 0 && idx < len) {
         auto offset = insts[idx];
@@ -54,16 +57,18 @@ long run(std::vector<long> insts, std::function<long(long)> f) {
     return steps;
 }
 
-long part1(std::vector<long> const &vn) {
-    std::vector<long> instructions{vn};
-    auto f = [](long n){ return n + 1; };
+long
+part1(std::vector<long> const &vn) {
+    std::vector<long> instructions {vn};
+    auto f = [](long n) { return n + 1; };
 
     return run(instructions, f);
 }
 
-long part2(std::vector<long> const &vn) {
-    std::vector<long> instructions{vn};
-    auto f = [](long n){ return n >= 3 ? n - 1 : n + 1; };
+long
+part2(std::vector<long> const &vn) {
+    std::vector<long> instructions {vn};
+    auto f = [](long n) { return n >= 3 ? n - 1 : n + 1; };
 
     return run(instructions, f);
 }

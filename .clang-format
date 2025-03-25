@@ -1,0 +1,22 @@
+BasedOnStyle: LLVM
+---
+Language: Cpp
+AccessModifierOffset: -2
+AlignAfterOpenBracket: BlockIndent
+AlignArrayOfStructures: None
+AlignEscapedNewlines: Left
+AllowShortFunctionsOnASingleLine: Inline
+BinPackArguments: false
+BinPackParameters: false
+BraceWrapping:
+  BeforeCatch: true
+BreakAfterReturnType: TopLevelDefinitions
+BreakConstructorInitializers: AfterColon
+BreakTemplateDeclarations: Yes
+ColumnLimit: 80
+EmptyLineBeforeAccessModifier: Always
+IndentWidth: 4
+PackConstructorInitializers: NextLine
+# Set `Never` to ReflowComments in clang-format 20 or later
+ReflowComments:  false
+SpaceBeforeCpp11BracedList: true

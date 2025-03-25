@@ -24,36 +24,43 @@ module :private;
 
 namespace day17 {
 
-std::tuple<long, long> solve(std::istream &is) {
+std::tuple<long, long>
+solve(std::istream &is) {
     auto input_data = parse(is);
 
     return {part1(input_data), part2(input_data)};
 }
 
-long parse(std::istream &is) {
+long
+parse(std::istream &is) {
     return std::stoi(util::getLine(is));
 }
 
-long part1(long step) {
-    constexpr long N_INSERTIONS{2017};
-    std::vector<long> buf{0};
+long
+part1(long step) {
+    constexpr long N_INSERTIONS {2017};
+    std::vector<long> buf {0};
     buf.reserve(N_INSERTIONS + 1);
 
-    long pos{0};
+    long pos {0};
     for (long i = 1; i <= N_INSERTIONS; ++i) {
         pos = (pos + step) % static_cast<long>(buf.size()) + 1;
-        buf.insert(buf.begin() + static_cast<std::vector<long>::difference_type>(pos), i);
+        buf.insert(
+            buf.begin() + static_cast<std::vector<long>::difference_type>(pos),
+            i
+        );
     }
 
     return buf[static_cast<std::vector<long>::size_type>(pos + 1) % buf.size()];
 }
 
-long part2(long step) {
-    constexpr long N_INSERTIONS{50'000'000};
-    long buf_size{1};
-    long pos{0};
-    long result{0};
-    long n{0};
+long
+part2(long step) {
+    constexpr long N_INSERTIONS {50'000'000};
+    long buf_size {1};
+    long pos {0};
+    long result {0};
+    long n {0};
 
     while (n < N_INSERTIONS) {
         auto repeat = (buf_size - pos - 1) / step + 1;

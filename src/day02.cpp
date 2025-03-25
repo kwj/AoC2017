@@ -19,20 +19,22 @@ std::vector<std::vector<long>> parse(std::istream &is);
 long part1(std::vector<std::vector<long>> const &vvs);
 long part2(std::vector<std::vector<long>> const &vvs);
 
-}  // namespace day02
+} // namespace day02
 
 // --------
 module :private;
 
 namespace day02 {
 
-std::tuple<long, long> solve(std::istream &is) {
+std::tuple<long, long>
+solve(std::istream &is) {
     auto input_data = parse(is);
 
     return {part1(input_data), part2(input_data)};
 }
 
-std::vector<std::vector<long>> parse(std::istream &is) {
+std::vector<std::vector<long>>
+parse(std::istream &is) {
     std::vector<std::vector<long>> result;
 
     for (std::string line; std::getline(is, line);) {
@@ -44,8 +46,9 @@ std::vector<std::vector<long>> parse(std::istream &is) {
     return result;
 }
 
-long part1(std::vector<std::vector<long>> const &vvs) {
-    int result{0};
+long
+part1(std::vector<std::vector<long>> const &vvs) {
+    int result {0};
 
     // Note: `vs` is a list of int in descending order.
     for (auto const &vs : vvs) {
@@ -56,8 +59,9 @@ long part1(std::vector<std::vector<long>> const &vvs) {
 }
 
 // Note: `vs` is a list of int in descending order.
-long findQuotient(std::vector<long> const &vs) {
-    auto n_elm{vs.size()};
+long
+findQuotient(std::vector<long> const &vs) {
+    auto n_elm {vs.size()};
     for (auto i = 0uz; i < n_elm - 1; ++i) {
         for (auto j = i + 1; j < n_elm; ++j) {
             if (vs[i] % vs[j] == 0) {
@@ -69,8 +73,9 @@ long findQuotient(std::vector<long> const &vs) {
     return 0;
 }
 
-long part2(std::vector<std::vector<long>> const &vvs) {
-    long result{0};
+long
+part2(std::vector<std::vector<long>> const &vvs) {
+    long result {0};
 
     for (auto const &vs : vvs) {
         result += findQuotient(vs);

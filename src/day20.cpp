@@ -116,7 +116,7 @@ export module day20;
 export namespace day20 {
 
 class Particle {
-public:
+  public:
     long id;
     std::vector<long> p;
     std::vector<long> v;
@@ -136,36 +136,49 @@ module :private;
 
 namespace day20 {
 
-std::vector<long> Particle::position(long tick) const {
+std::vector<long>
+Particle::position(long tick) const {
     auto new_p = [](long pos, long vel, long acc, long t) {
         return pos + t * vel + (t * (t + 1)) * acc / 2;
     };
 
-    return {new_p(p[0], v[0], a[0], tick), new_p(p[1], v[1], a[1], tick), new_p(p[2], v[2], a[2], tick)};
+    return {
+        new_p(p[0], v[0], a[0], tick),
+        new_p(p[1], v[1], a[1], tick),
+        new_p(p[2], v[2], a[2], tick)
+    };
 }
 
-std::tuple<long, long> solve(std::istream &is) {
+std::tuple<long, long>
+solve(std::istream &is) {
     auto input_data = parse(is);
 
     return {part1(input_data), part2(input_data)};
 }
 
-std::vector<Particle> parse(std::istream &is) {
+std::vector<Particle>
+parse(std::istream &is) {
     std::vector<Particle> result;
 
-    long id{0};
+    long id {0};
     for (std::string line; std::getline(is, line); ++id) {
         // P2422R1 (views::chunk) is not yet supported in libc++ 19.
         auto nums = util::getNumbers(line);
-        result.push_back(Particle(id, {nums[0], nums[1], nums[2]}, {nums[3], nums[4], nums[5]}, {nums[6], nums[7], nums[8]}));
+        result.push_back(Particle(
+            id,
+            {nums[0], nums[1], nums[2]},
+            {nums[3], nums[4], nums[5]},
+            {nums[6], nums[7], nums[8]}
+        ));
     }
 
     return result;
 }
 
 // manhattan norm (1-norm)
-long norm(std::vector<long> const &vs) {
-    long result{0};
+long
+norm(std::vector<long> const &vs) {
+    long result {0};
     for (auto const &v : vs) {
         result += std::abs(v);
     }
@@ -173,7 +186,8 @@ long norm(std::vector<long> const &vs) {
     return result;
 }
 
-bool isFindClosest(std::deque<std::vector<std::pair<long, long>>> const &dq) {
+bool
+isFindClosest(std::deque<std::vector<std::pair<long, long>>> const &dq) {
     // ensure that the order of IDs is the same at each timing
     std::vector<std::vector<long>> ids;
     for (auto const &pairs : dq) {
@@ -202,7 +216,7 @@ bool isFindClosest(std::deque<std::vector<std::pair<long, long>>> const &dq) {
     std::vector<std::vector<long>> work;
     for (auto i = 0uz; i < n_particles; ++i) {
         std::vector<long> vs;
-        long prev{0};
+        long prev {0};
         for (auto j = 0uz; j < dq.size(); ++j) {
             vs.push_back(dq[j][i].first - prev);
             prev = dq[j][i].first;
@@ -211,11 +225,10 @@ bool isFindClosest(std::deque<std::vector<std::pair<long, long>>> const &dq) {
         work.push_back(vs);
     }
 
-    auto mono_inc1_check = std::all_of(
-        work.begin(),
-        work.end(),
-        [](std::vector<long> const &vs) { return std::is_sorted(vs.begin(), vs.end()); }
-    );
+    auto mono_inc1_check =
+        std::all_of(work.begin(), work.end(), [](std::vector<long> const &vs) {
+            return std::is_sorted(vs.begin(), vs.end());
+        });
     if (!mono_inc1_check) {
         return false;
     }
@@ -236,7 +249,9 @@ bool isFindClosest(std::deque<std::vector<std::pair<long, long>>> const &dq) {
     auto mono_inc2_check = std::all_of(
         trans_work.begin(),
         trans_work.end(),
-        [](std::vector<long> const &vs) { return std::is_sorted(vs.begin(), vs.end()); }
+        [](std::vector<long> const &vs) {
+            return std::is_sorted(vs.begin(), vs.end());
+        }
     );
     if (!mono_inc2_check) {
         return false;
@@ -247,9 +262,11 @@ bool isFindClosest(std::deque<std::vector<std::pair<long, long>>> const &dq) {
 
 // Measure manhattan distance from the origin of each particle at the time of `t`,
 // and sort them in ascending order
-std::vector<std::pair<long, long>> measureDistances(std::vector<Particle> const &ps, long t) {
+std::vector<std::pair<long, long>>
+measureDistances(std::vector<Particle> const &ps, long t) {
     // compare on the first element of a pair, manhattan distance
-    auto pair_cmp = [](std::pair<long, long> const &x, std::pair<long, long> const &y) {
+    auto pair_cmp = [](std::pair<long, long> const &x,
+                       std::pair<long, long> const &y) {
         return x.first < y.first;
     };
 
@@ -262,12 +279,13 @@ std::vector<std::pair<long, long>> measureDistances(std::vector<Particle> const 
     return distances;
 }
 
-long findClosestParticleId(std::vector<Particle> const &ps) {
+long
+findClosestParticleId(std::vector<Particle> const &ps) {
     std::deque<std::vector<std::pair<long, long>>> dq;
 
     // the first N_COUNT times are at 1000, 2000, ... ticks elapsed
-    constexpr long N_COUNT{5};  // it must be equal or larger than 3
-    constexpr long TICK{1'000};
+    constexpr long N_COUNT {5}; // it must be equal or larger than 3
+    constexpr long TICK {1'000};
     long t = TICK;
     while (t <= TICK * N_COUNT) {
         dq.push_back(measureDistances(ps, t));
@@ -284,14 +302,17 @@ long findClosestParticleId(std::vector<Particle> const &ps) {
     return dq[0][0].second;
 }
 
-long part1(std::vector<Particle> const &particles) {
+long
+part1(std::vector<Particle> const &particles) {
     // find candidate particles closest to the origin
     // candidate is the particle with the smallest magnitude of acceleration
-    auto min_acc = norm(
-        (*std::min_element(particles.begin(), particles.end(), [](Particle const &x, Particle const &y) {
-            return norm(x.a) < norm(y.a);
-        })).a
-    );
+    auto min_acc = norm((*std::min_element(
+                             particles.begin(),
+                             particles.end(),
+                             [](Particle const &x, Particle const &y) {
+                                 return norm(x.a) < norm(y.a);
+                             }
+                         )).a);
 
     std::vector<Particle> cands;
     for (auto const &p : particles) {
@@ -309,7 +330,8 @@ long part1(std::vector<Particle> const &particles) {
     }
 }
 
-bool isSquare(long n) {
+bool
+isSquare(long n) {
     if (n < 0) {
         return false;
     } else {
@@ -318,7 +340,8 @@ bool isSquare(long n) {
     }
 }
 
-std::optional<std::vector<long>> solveQuadratic(long a, long b, long c) {
+std::optional<std::vector<long>>
+solveQuadratic(long a, long b, long c) {
     std::vector<long> result;
 
     if (a == 0) {
@@ -345,7 +368,9 @@ std::optional<std::vector<long>> solveQuadratic(long a, long b, long c) {
 
     // delete past collision times
     result.erase(
-        std::remove_if(result.begin(), result.end(), [](auto const n) { return n < 0; }),
+        std::remove_if(
+            result.begin(), result.end(), [](auto const n) { return n < 0; }
+        ),
         result.end()
     );
 
@@ -356,7 +381,8 @@ std::optional<std::vector<long>> solveQuadratic(long a, long b, long c) {
     }
 }
 
-std::optional<long> getCollisionTime(Particle const &p1, Particle const &p2) {
+std::optional<long>
+getCollisionTime(Particle const &p1, Particle const &p2) {
     std::set<long> tmp;
 
     // i: x, y, z axis
@@ -396,7 +422,8 @@ std::optional<long> getCollisionTime(Particle const &p1, Particle const &p2) {
 // <example>
 // key = 7
 // value = (26, 27) (26, 28) (27, 28)
-std::map<long, std::vector<std::pair<size_t, size_t>>> makeCollisionMap(std::vector<Particle> const &particles) {
+std::map<long, std::vector<std::pair<size_t, size_t>>>
+makeCollisionMap(std::vector<Particle> const &particles) {
     std::map<long, std::vector<std::pair<size_t, size_t>>> collisions;
 
     for (auto i = 0uz; i < particles.size() - 1; ++i) {
@@ -411,7 +438,8 @@ std::map<long, std::vector<std::pair<size_t, size_t>>> makeCollisionMap(std::vec
     return collisions;
 }
 
-long part2(std::vector<Particle> const &particles) {
+long
+part2(std::vector<Particle> const &particles) {
     auto collision_map = makeCollisionMap(particles);
     std::vector<bool> survival_tbl(particles.size(), true);
     std::set<size_t> del_particles;
@@ -433,7 +461,9 @@ long part2(std::vector<Particle> const &particles) {
         }
     }
 
-    return static_cast<long>(std::count(survival_tbl.begin(), survival_tbl.end(), true));
+    return static_cast<long>(
+        std::count(survival_tbl.begin(), survival_tbl.end(), true)
+    );
 }
 
 } // namespace day20

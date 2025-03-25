@@ -49,21 +49,25 @@ module :private;
 
 namespace day03 {
 
-std::tuple<long, long> solve(std::istream &is) {
+std::tuple<long, long>
+solve(std::istream &is) {
     auto input_data = parse(is);
 
     return {part1(input_data), part2(input_data)};
 }
 
-long parse(std::istream &is) {
+long
+parse(std::istream &is) {
     return std::stol(util::getLine(is));
 }
 
-inline long ring_max_number(long n) {
+inline long
+ring_max_number(long n) {
     return (2 * n + 1) * (2 * n + 1);
 }
 
-long part1(long target) {
+long
+part1(long target) {
     if (target == 1) {
         return 0;
     } else {
@@ -87,7 +91,8 @@ struct ComplexHash {
 
 using Grid = std::unordered_map<std::complex<int>, long, ComplexHash>;
 
-long fixValue(Grid &m, std::complex<int> const &pos) {
+long
+fixValue(Grid &m, std::complex<int> const &pos) {
     auto dirs = std::to_array<std::complex<int>>({
         {1, 0},
         {1, 1},
@@ -99,7 +104,7 @@ long fixValue(Grid &m, std::complex<int> const &pos) {
         {1, -1},
     });
 
-    long result{0};
+    long result {0};
     for (auto const d : dirs) {
         // If m[pos + d] doesn't exist, it is initialized to 0.
         result += m[pos + d];
@@ -108,14 +113,15 @@ long fixValue(Grid &m, std::complex<int> const &pos) {
     return result;
 }
 
-long part2(long target) {
+long
+part2(long target) {
     // std::complex has the == operator, so use it.
     Grid grid = {{{0, 0}, 1}};
 
     std::complex<int> pos(0, 0);
     std::complex<int> dir(1, 0);
-    int i{0};
-    int dist{1};
+    int i {0};
+    int dist {1};
 
     while (grid[pos] <= target) {
         pos += dir;
@@ -123,7 +129,7 @@ long part2(long target) {
 
         if (++i == dist) {
             i = 0;
-            dir *= std::complex<int>{0, 1};
+            dir *= std::complex<int> {0, 1};
             if (dir.real() != 0) {
                 ++dist;
             }
@@ -134,4 +140,3 @@ long part2(long target) {
 }
 
 } // namespace day03
-

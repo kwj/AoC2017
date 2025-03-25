@@ -2,7 +2,8 @@
 
 import solver;
 
-int main(int argc, char *argv[]) {
+int
+main(int argc, char *argv[]) {
     if (argc == 1) {
         solver::runAllSolver();
     } else {

@@ -27,36 +27,38 @@ std::tuple<unsigned long, unsigned long> parse(std::istream &is);
 unsigned long part1(std::tuple<unsigned long, unsigned long> const &result);
 unsigned long part2(std::tuple<unsigned long, unsigned long> const &result);
 
-}  // namespace day15
+} // namespace day15
 
 // --------
 module :private;
 
 namespace day15 {
 
-std::tuple<unsigned long, unsigned long> solve(std::istream &is) {
+std::tuple<unsigned long, unsigned long>
+solve(std::istream &is) {
     auto input_data = parse(is);
 
     return {part1(input_data), part2(input_data)};
 }
 
-std::tuple<unsigned long, unsigned long> judgement(unsigned long num_a, unsigned long num_b) {
-    constexpr long P1_N_PAIRS{40'000'000};
-    constexpr long P2_N_PAIRS{5'000'000};
-    constexpr unsigned long A{16807};
-    constexpr unsigned long B{48271};
-    constexpr unsigned long M{0x7FFFFFFF};
+std::tuple<unsigned long, unsigned long>
+judgement(unsigned long num_a, unsigned long num_b) {
+    constexpr long P1_N_PAIRS {40'000'000};
+    constexpr long P2_N_PAIRS {5'000'000};
+    constexpr unsigned long A {16807};
+    constexpr unsigned long B {48271};
+    constexpr unsigned long M {0x7FFFFFFF};
 
     std::vector<unsigned long> mul4;
     std::vector<unsigned long> mul8;
     mul4.reserve(P2_N_PAIRS);
     mul8.reserve(P2_N_PAIRS);
 
-    long p1_cnt{0};
-    long m4_cnt{0};
-    long m8_cnt{0};
+    long p1_cnt {0};
+    long m4_cnt {0};
+    long m8_cnt {0};
 
-    long judge_p1{0};
+    long judge_p1 {0};
     while (p1_cnt < P1_N_PAIRS || m4_cnt < P2_N_PAIRS || m4_cnt < P2_N_PAIRS) {
         num_a = (num_a * A) % M;
         num_b = (num_b * B) % M;
@@ -78,7 +80,7 @@ std::tuple<unsigned long, unsigned long> judgement(unsigned long num_a, unsigned
         ++p1_cnt;
     }
 
-    long judge_p2{0};
+    long judge_p2 {0};
     for (auto tpl : std::views::zip(mul4, mul8)) {
         if (std::get<0>(tpl) == std::get<1>(tpl)) {
             ++judge_p2;
@@ -88,7 +90,8 @@ std::tuple<unsigned long, unsigned long> judgement(unsigned long num_a, unsigned
     return {judge_p1, judge_p2};
 }
 
-std::tuple<unsigned long, unsigned long> parse(std::istream &is) {
+std::tuple<unsigned long, unsigned long>
+parse(std::istream &is) {
     std::vector<unsigned long> seeds;
     for (std::string line; std::getline(is, line);) {
         auto nums = util::getNumbers(line);
@@ -98,11 +101,13 @@ std::tuple<unsigned long, unsigned long> parse(std::istream &is) {
     return judgement(seeds[0], seeds[1]);
 }
 
-unsigned long part1(std::tuple<unsigned long, unsigned long> const &result) {
+unsigned long
+part1(std::tuple<unsigned long, unsigned long> const &result) {
     return std::get<0>(result);
 }
 
-unsigned long part2(std::tuple<unsigned long, unsigned long> const &result) {
+unsigned long
+part2(std::tuple<unsigned long, unsigned long> const &result) {
     return std::get<1>(result);
 }
 

@@ -98,13 +98,15 @@ module :private;
 
 namespace day18 {
 
-std::tuple<long, long> solve(std::istream &is) {
+std::tuple<long, long>
+solve(std::istream &is) {
     auto input_data = parse(is);
 
     return {part1(input_data), part2(input_data)};
 }
 
-std::vector<long> parse(std::istream &is) {
+std::vector<long>
+parse(std::istream &is) {
     std::ostringstream oss;
     oss << is.rdbuf();
     std::string content = oss.str();
@@ -114,12 +116,12 @@ std::vector<long> parse(std::istream &is) {
     std::regex_search(content, m, re);
     auto seed = std::stoull(m[1].str());
 
-    constexpr unsigned long long M1{0x7FFFFFFF}; // 2^31 - 1
-    constexpr unsigned long long M2{10000};
-    constexpr unsigned long long A1{8505};
-    constexpr unsigned long long A2{129749};
-    constexpr unsigned long long C{12345};
-    constexpr long N_ELEMENTS{127};
+    constexpr unsigned long long M1 {0x7FFFFFFF}; // 2^31 - 1
+    constexpr unsigned long long M2 {10000};
+    constexpr unsigned long long A1 {8505};
+    constexpr unsigned long long A2 {129749};
+    constexpr unsigned long long C {12345};
+    constexpr long N_ELEMENTS {127};
     std::vector<long> vs;
     vs.reserve(N_ELEMENTS);
     auto x = seed;
@@ -131,14 +133,16 @@ std::vector<long> parse(std::istream &is) {
     return vs;
 }
 
-long part1(std::vector<long> const &vs) {
+long
+part1(std::vector<long> const &vs) {
     return vs.back();
 }
 
-long part2(std::vector<long> const &vs) {
-    std::vector<long> work{vs};
-    auto cont_flag{true};
-    long cnt{0};
+long
+part2(std::vector<long> const &vs) {
+    std::vector<long> work {vs};
+    auto cont_flag {true};
+    long cnt {0};
 
     while (cont_flag) {
         cont_flag = false;
@@ -150,7 +154,8 @@ long part2(std::vector<long> const &vs) {
         }
 
         ++cnt;
-        if (cont_flag == true && std::is_sorted(work.begin(), work.end(), std::greater<long>{})) {
+        if (cont_flag == true &&
+            std::is_sorted(work.begin(), work.end(), std::greater<long> {})) {
             ++cnt;
         }
     }

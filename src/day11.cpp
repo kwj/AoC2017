@@ -35,7 +35,7 @@ struct HexPos {
     long b;
     long c;
     HexPos operator+(HexPos const &other);
-    HexPos& operator+=(HexPos const &other);
+    HexPos &operator+=(HexPos const &other);
     long distance();
 };
 
@@ -44,24 +44,27 @@ std::vector<HexPos> parse(std::istream &is);
 long part1(std::vector<HexPos> const &dirs);
 long part2(std::vector<HexPos> const &dirs);
 
-}  // namespace day11
+} // namespace day11
 
 // --------
 module :private;
 
 namespace day11 {
 
-std::tuple<long, long> solve(std::istream &is) {
+std::tuple<long, long>
+solve(std::istream &is) {
     auto dirs = parse(is);
 
     return {part1(dirs), part2(dirs)};
 }
 
-HexPos HexPos::operator+(HexPos const &other) {
+HexPos
+HexPos::operator+(HexPos const &other) {
     return {a + other.a, b + other.b, c + other.c};
 }
 
-HexPos& HexPos::operator+=(HexPos const &other) {
+HexPos &
+HexPos::operator+=(HexPos const &other) {
     a += other.a;
     b += other.b;
     c += other.c;
@@ -69,13 +72,15 @@ HexPos& HexPos::operator+=(HexPos const &other) {
     return *this;
 }
 
-long HexPos::distance() {
+long
+HexPos::distance() {
     return (std::abs(a) + std::abs(b) + std::abs(c)) / 2;
 }
 
-std::vector<HexPos> parse(std::istream &is) {
+std::vector<HexPos>
+parse(std::istream &is) {
     auto &&line = util::getLine(is);
-    std::string_view s{line};
+    std::string_view s {line};
 
     std::vector<HexPos> dirs;
     for (auto const &subr : std::views::split(s, ',')) {
@@ -98,18 +103,21 @@ std::vector<HexPos> parse(std::istream &is) {
     return dirs;
 }
 
-long part1(std::vector<HexPos> const &dirs) {
-    HexPos origin{0, 0, 0};
-    auto goal = std::ranges::fold_left(dirs, origin, [](HexPos lhs, HexPos const &rhs){
-        return lhs + rhs;
-    });
+long
+part1(std::vector<HexPos> const &dirs) {
+    HexPos origin {0, 0, 0};
+    auto goal =
+        std::ranges::fold_left(dirs, origin, [](HexPos lhs, HexPos const &rhs) {
+            return lhs + rhs;
+        });
 
     return goal.distance();
 }
 
-long part2(std::vector<HexPos> const &dirs) {
-    HexPos pos{0, 0, 0};
-    long max_distance{0};
+long
+part2(std::vector<HexPos> const &dirs) {
+    HexPos pos {0, 0, 0};
+    long max_distance {0};
 
     for (auto const &d : dirs) {
         pos += d;

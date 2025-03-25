@@ -10,7 +10,7 @@ module;
 
 import util;
 
-constexpr long N_BANKS{16};
+constexpr long N_BANKS {16};
 
 // --------
 export module day06;
@@ -22,20 +22,22 @@ std::array<long, N_BANKS> parse(std::istream &is);
 long part1(std::array<long, N_BANKS> const &banks);
 long part2(std::array<long, N_BANKS> const &banks);
 
-}  // namespace day06
+} // namespace day06
 
 // --------
 module :private;
 
 namespace day06 {
 
-std::tuple<long, long> solve(std::istream &is) {
+std::tuple<long, long>
+solve(std::istream &is) {
     auto input_data = parse(is);
 
     return {part1(input_data), part2(input_data)};
 }
 
-std::array<long, N_BANKS> parse(std::istream &is) {
+std::array<long, N_BANKS>
+parse(std::istream &is) {
     std::array<long, N_BANKS> banks;
     std::string line;
 
@@ -46,7 +48,8 @@ std::array<long, N_BANKS> parse(std::istream &is) {
     return banks;
 }
 
-void redistribution(std::array<long, N_BANKS> &banks) {
+void
+redistribution(std::array<long, N_BANKS> &banks) {
     auto iter = std::max_element(banks.begin(), banks.end());
     auto q = *iter / N_BANKS;
 
@@ -57,14 +60,15 @@ void redistribution(std::array<long, N_BANKS> &banks) {
     }
 
     if (q > 0) {
-        std::for_each(banks.begin(), banks.end(), [&](long &n){ n += q; });
+        std::for_each(banks.begin(), banks.end(), [&](long &n) { n += q; });
     }
 
     return;
 }
 
 // https://en.wikipedia.org/wiki/Cycle_detection#Brent's_algorithm
-std::pair<long, long> brent(std::array<long, N_BANKS> const &banks) {
+std::pair<long, long>
+brent(std::array<long, N_BANKS> const &banks) {
     std::array<long, N_BANKS> tortoise;
     std::copy(banks.begin(), banks.end(), tortoise.begin());
 
@@ -72,8 +76,8 @@ std::pair<long, long> brent(std::array<long, N_BANKS> const &banks) {
     std::copy(banks.begin(), banks.end(), hare.begin());
     redistribution(hare);
 
-    long lam{1}; // cycle length
-    long power{1};
+    long lam {1}; // cycle length
+    long power {1};
     while (tortoise != hare) {
         if (power == lam) {
             std::copy(hare.begin(), hare.end(), tortoise.begin());
@@ -89,7 +93,7 @@ std::pair<long, long> brent(std::array<long, N_BANKS> const &banks) {
     for (long i = 0; i < lam; ++i) {
         redistribution(hare);
     }
-    long mu{0}; // start index of cycle
+    long mu {0}; // start index of cycle
     while (tortoise != hare) {
         redistribution(tortoise);
         redistribution(hare);
@@ -99,13 +103,15 @@ std::pair<long, long> brent(std::array<long, N_BANKS> const &banks) {
     return {mu, lam};
 }
 
-long part1(std::array<long, N_BANKS> const &banks) {
+long
+part1(std::array<long, N_BANKS> const &banks) {
     auto [mu, lam] = brent(banks);
 
     return mu + lam;
 }
 
-long part2(std::array<long, N_BANKS> const &banks) {
+long
+part2(std::array<long, N_BANKS> const &banks) {
     auto [_, lam] = brent(banks);
 
     return lam;

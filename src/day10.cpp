@@ -22,31 +22,34 @@ std::string parse(std::istream &is);
 long part1(std::string const &s);
 std::string part2(std::string const &s);
 
-}  // namespace day10
+} // namespace day10
 
 // --------
 module :private;
 
 namespace day10 {
 
-constexpr long KNOTS_LEN{256};
+constexpr long KNOTS_LEN {256};
 
-std::tuple<long, std::string> solve(std::istream &is) {
+std::tuple<long, std::string>
+solve(std::istream &is) {
     auto result = parse(is);
 
     return {part1(result), part2(result)};
 }
 
-std::string parse(std::istream &is) {
+std::string
+parse(std::istream &is) {
     return util::getLine(is);
 }
 
-std::vector<long> knotHash(std::vector<long> lengths, long cnt) {
+std::vector<long>
+knotHash(std::vector<long> lengths, long cnt) {
     auto knots = std::vector<long>(KNOTS_LEN);
     std::iota(knots.begin(), knots.end(), 0);
 
-    long skip{0};
-    long origin{0};
+    long skip {0};
+    long origin {0};
     for (auto round = 0; round < cnt; ++round) {
         for (auto const len : lengths) {
             std::reverse(knots.begin(), knots.begin() + len);
@@ -63,15 +66,17 @@ std::vector<long> knotHash(std::vector<long> lengths, long cnt) {
     return knots;
 }
 
-long part1(std::string const &s) {
+long
+part1(std::string const &s) {
     auto hashed_data = knotHash(util::getNumbers(s), 1);
 
     return hashed_data[0] * hashed_data[1];
 }
 
-std::string part2(std::string const &s) {
+std::string
+part2(std::string const &s) {
     std::vector<long> lengths;
-    std::vector<long> const tail{17, 31, 73, 47, 23};
+    std::vector<long> const tail {17, 31, 73, 47, 23};
     std::istringstream iss(s);
     char ch;
 
@@ -83,7 +88,12 @@ std::string part2(std::string const &s) {
     auto hashed_data = knotHash(lengths, 64);
     std::ostringstream oss;
     for (auto i = 0; i < KNOTS_LEN; i += 16) {
-        auto h = std::ranges::fold_left(hashed_data.begin() + i, hashed_data.begin() + i + 16, 0, std::bit_xor<long>());
+        auto h = std::ranges::fold_left(
+            hashed_data.begin() + i,
+            hashed_data.begin() + i + 16,
+            0,
+            std::bit_xor<long>()
+        );
         oss << std::format("{:02x}", h & 0xFF);
     }
 

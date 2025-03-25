@@ -19,24 +19,26 @@ export module day13;
 export namespace day13 {
 
 std::tuple<long, long> solve(std::istream &is);
-std::map<long, std::set<long>>  parse(std::istream &is);
+std::map<long, std::set<long>> parse(std::istream &is);
 long part1(std::map<long, std::set<long>> const &tbl);
 long part2(std::map<long, std::set<long>> const &tbl);
 
-}  // namespace day13
+} // namespace day13
 
 // --------
 module :private;
 
 namespace day13 {
 
-std::tuple<long, long> solve(std::istream &is) {
+std::tuple<long, long>
+solve(std::istream &is) {
     auto result = parse(is);
 
     return {part1(result), part2(result)};
 }
 
-std::map<long, std::set<long>> parse(std::istream &is) {
+std::map<long, std::set<long>>
+parse(std::istream &is) {
     // Note the use an ordered map to solve part 2.
     // key: range, value: a set of depths
     std::map<long, std::set<long>> result;
@@ -49,12 +51,14 @@ std::map<long, std::set<long>> parse(std::istream &is) {
     return result;
 }
 
-bool isCaught(long period, long depth, long delay = 0) {
+bool
+isCaught(long period, long depth, long delay = 0) {
     return (depth + delay) % period == 0;
 }
 
-long part1(std::map<long, std::set<long>> const &tbl) {
-    long severity{0};
+long
+part1(std::map<long, std::set<long>> const &tbl) {
+    long severity {0};
     for (auto const &[r, depths] : tbl) {
         // period to scan the top of a layer which range is `r`.
         auto period = 2 * (r - 1);
@@ -69,9 +73,10 @@ long part1(std::map<long, std::set<long>> const &tbl) {
     return severity;
 }
 
-long part2(std::map<long, std::set<long>> const &tbl) {
-    long crnt_lcm{1};
-    std::vector<long> delays{1};
+long
+part2(std::map<long, std::set<long>> const &tbl) {
+    long crnt_lcm {1};
+    std::vector<long> delays {1};
     std::vector<long> next_delays;
 
     for (auto const &[r, depths] : tbl) {
@@ -85,7 +90,13 @@ long part2(std::map<long, std::set<long>> const &tbl) {
                 auto next_d = d + gap;
 
                 // assume that initial delay is next_d, check if the packet doesn't caught by each layer whose period is 2(r - 1).
-                if (std::all_of(depths.begin(), depths.end(), [&](auto const &depth){ return !isCaught(period, depth, next_d); })) {
+                if (std::all_of(
+                        depths.begin(),
+                        depths.end(),
+                        [&](auto const &depth) {
+                            return !isCaught(period, depth, next_d);
+                        }
+                    )) {
                     next_delays.push_back(next_d);
                 }
             }

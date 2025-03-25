@@ -41,7 +41,8 @@ module :private;
 
 namespace day22 {
 
-std::tuple<long, long> solve(std::istream &is) {
+std::tuple<long, long>
+solve(std::istream &is) {
     auto input_data = parse(is);
 
     return {part1(input_data), part2(input_data)};
@@ -52,14 +53,15 @@ constexpr int CLEAN = 1;
 [[maybe_unused]] constexpr int WEAK = 2;
 constexpr int INFECTED = 3;
 
-InitialGrid parse(std::istream &is) {
+InitialGrid
+parse(std::istream &is) {
     std::vector<std::vector<char>> work;
     for (std::string line; std::getline(is, line);) {
         work.push_back(line | std::ranges::to<std::vector<char>>());
     }
 
     std::unordered_map<std::complex<int>, int, ComplexHash> grid;
-    int y{0};
+    int y {0};
     for (auto chars : work) {
         for (auto [x, ch] : std::views::zip(std::views::iota(0), chars)) {
             if (ch == '#') {
@@ -69,17 +71,23 @@ InitialGrid parse(std::istream &is) {
         ++y;
     }
 
-    return { grid, std::complex<int>(static_cast<int>(work[0].size()) / 2, y / 2) };
+    return {
+        grid, std::complex<int>(static_cast<int>(work[0].size()) / 2, y / 2)
+    };
 }
 
-long simulate(InitialGrid const &init_grid, long iteration, int delta)  {
-    constexpr std::complex<int> turn_cw(0, 1), turn_ccw(0, -1), turn_180(-1, 0), straight(1, 0);
-    std::vector<std::complex<int>> dir_tbl{turn_180, turn_ccw, straight, turn_cw};
+long
+simulate(InitialGrid const &init_grid, long iteration, int delta) {
+    constexpr std::complex<int> turn_cw(0, 1), turn_ccw(0, -1), turn_180(-1, 0),
+        straight(1, 0);
+    std::vector<std::complex<int>> dir_tbl {
+        turn_180, turn_ccw, straight, turn_cw
+    };
     std::complex<int> dir(0, -1);
 
-    auto grid{init_grid.grid};
-    auto pos{init_grid.pos};
-    long result{0};
+    auto grid {init_grid.grid};
+    auto pos {init_grid.pos};
+    long result {0};
 
     while (iteration-- > 0) {
         auto [it, _] = grid.try_emplace(pos, CLEAN);
@@ -98,11 +106,13 @@ long simulate(InitialGrid const &init_grid, long iteration, int delta)  {
     return result;
 }
 
-long part1(InitialGrid const &init_grid) {
+long
+part1(InitialGrid const &init_grid) {
     return simulate(init_grid, 10'000, 2);
 }
 
-long part2(InitialGrid const &init_grid) {
+long
+part2(InitialGrid const &init_grid) {
     return simulate(init_grid, 10'000'000, 1);
 }
 

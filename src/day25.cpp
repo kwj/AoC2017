@@ -17,9 +17,9 @@ export module day25;
 export namespace day25 {
 
 struct Op {
-    size_t v; // a value to write (it is also used as an index)
+    size_t v;    // a value to write (it is also used as an index)
     size_t next; // next state (it is also used as an index)
-    bool dir; // true: right, false: left
+    bool dir;    // true: right, false: left
 };
 
 struct Head {
@@ -40,7 +40,8 @@ module :private;
 
 namespace day25 {
 
-std::tuple<long> solve(std::istream &is) {
+std::tuple<long>
+solve(std::istream &is) {
     auto input_data = parse(is);
 
     return {part1(input_data)};
@@ -51,23 +52,26 @@ std::tuple<long> solve(std::istream &is) {
 //   even if calling read() on empty queue.
 template <typename T, T N>
 class Tape {
-public:
+  public:
     Tape() { data = std::vector<T>(); };
     void write(T v);
     T read();
-private:
+
+  private:
     std::vector<T> data;
 };
 
 template <typename T, T N>
-void Tape<T, N>::write(T v) {
+void
+Tape<T, N>::write(T v) {
     data.push_back(v);
 
     return;
 }
 
 template <typename T, T N>
-T Tape<T, N>::read() {
+T
+Tape<T, N>::read() {
     if (data.empty()) {
         return N;
     } else {
@@ -78,7 +82,8 @@ T Tape<T, N>::read() {
     }
 }
 
-Head parse(std::istream &is) {
+Head
+parse(std::istream &is) {
     std::vector<std::string> lines;
     for (std::string line; std::getline(is, line);) {
         lines.push_back(line);
@@ -114,11 +119,12 @@ Head parse(std::istream &is) {
     return {start, steps, rules};
 }
 
-unsigned long run(size_t state, long steps, std::vector<std::array<Op, 2>> &rules) {
+unsigned long
+run(size_t state, long steps, std::vector<std::array<Op, 2>> &rules) {
     auto tape_l = Tape<size_t, 0uz>();
     auto tape_r = Tape<size_t, 0uz>();
-    auto counter{0ul};
-    auto curr{0uz};
+    auto counter {0ul};
+    auto curr {0uz};
 
     while (steps-- > 0) {
         auto [v, next_state, dir] = rules[state][curr];
@@ -142,11 +148,13 @@ unsigned long run(size_t state, long steps, std::vector<std::array<Op, 2>> &rule
     return counter;
 }
 
-unsigned long part1(Head &input) {
+unsigned long
+part1(Head &input) {
     return run(input.init_state, input.steps, input.rules);
 }
 
-std::string part2() {
+std::string
+part2() {
     return "There's nothing.";
 }
 

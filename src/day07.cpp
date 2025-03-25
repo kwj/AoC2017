@@ -53,30 +53,32 @@ std::vector<Disc> parse(std::istream &is);
 std::string part1(std::vector<Disc> const &discs);
 long part2(std::vector<Disc> &discs);
 
-}  // namespace day07
+} // namespace day07
 
 // --------
 module :private;
 
 namespace day07 {
 
-std::tuple<std::string, long> solve(std::istream &is) {
+std::tuple<std::string, long>
+solve(std::istream &is) {
     auto input_data = parse(is);
 
     return {part1(input_data), part2(input_data)};
 }
 
-std::vector<Disc> parse(std::istream &is) {
+std::vector<Disc>
+parse(std::istream &is) {
     using namespace std::literals;
 
     std::smatch m;
     std::regex re(R"((\w+) \((\d+)\)( -> ((\w+, )*\w+))?)");
     //                                   ^^^^^^^^^^^^^^ m[4]
 
-    std::vector<Disc> discs{{"dummy", 0, 0, 0, {}, {}}};
+    std::vector<Disc> discs {{"dummy", 0, 0, 0, {}, {}}};
     std::unordered_map<std::string, size_t> idMap;
     std::unordered_map<size_t, std::vector<std::string>> childMap;
-    size_t idx{1};
+    size_t idx {1};
 
     for (std::string line; std::getline(is, line);) {
         if (std::regex_match(line, m, re)) {
@@ -88,7 +90,8 @@ std::vector<Disc> parse(std::istream &is) {
 
             if (m.length(4) > 0) {
                 std::vector<std::string> children;
-                for (auto const &&word : std::views::split(m[4].str(), ", "sv)) {
+                for (auto const &&word :
+                     std::views::split(m[4].str(), ", "sv)) {
                     children.push_back(std::string(std::string_view(word)));
                 }
                 childMap[idx] = children;
@@ -99,19 +102,24 @@ std::vector<Disc> parse(std::istream &is) {
     }
 
     for (auto const &[parent_id, children] : childMap) {
-        std::for_each(children.begin(), children.end(), [&](std::string const &name){
-            auto child_id = idMap[name];
-            discs[parent_id].children.push_back(child_id);
-            discs[parent_id].sub_tower_weight.push_back(0);
-            discs[child_id].parent = parent_id;
-        });
+        std::for_each(
+            children.begin(),
+            children.end(),
+            [&](std::string const &name) {
+                auto child_id = idMap[name];
+                discs[parent_id].children.push_back(child_id);
+                discs[parent_id].sub_tower_weight.push_back(0);
+                discs[child_id].parent = parent_id;
+            }
+        );
     }
 
     return discs;
 }
 
-size_t findRootId(std::vector<Disc> const &discs) {
-    size_t idx{1}; // ignore discs[0] dummy element
+size_t
+findRootId(std::vector<Disc> const &discs) {
+    size_t idx {1}; // ignore discs[0] dummy element
 
     while (discs[idx].parent != 0) {
         idx = discs[idx].parent;
@@ -120,28 +128,38 @@ size_t findRootId(std::vector<Disc> const &discs) {
     return idx;
 }
 
-std::string part1(std::vector<Disc> const &discs) {
+std::string
+part1(std::vector<Disc> const &discs) {
     return discs[findRootId(discs)].name;
 }
 
-long calcWeight(std::vector<Disc> &discs, size_t id) {
+long
+calcWeight(std::vector<Disc> &discs, size_t id) {
     Disc &self = discs[id];
 
     // P2164R9 (views::enumerate) is not yet supported in libc++ 19.
-    for (auto [idx, child] : std::views::zip(std::views::iota(0uz), self.children)) {
+    for (auto [idx, child] :
+         std::views::zip(std::views::iota(0uz), self.children)) {
         self.sub_tower_weight[idx] = calcWeight(discs, child);
     }
 
-    return self.weight + std::accumulate(self.sub_tower_weight.begin(), self.sub_tower_weight.end(), 0);
+    return self.weight +
+           std::accumulate(
+               self.sub_tower_weight.begin(), self.sub_tower_weight.end(), 0
+           );
 }
 
-bool isBalanced(Disc const &disc) {
-    return std::all_of(disc.sub_tower_weight.begin(), disc.sub_tower_weight.end(), [&](long w) {
-        return disc.sub_tower_weight[0] == w;
-    });
+bool
+isBalanced(Disc const &disc) {
+    return std::all_of(
+        disc.sub_tower_weight.begin(),
+        disc.sub_tower_weight.end(),
+        [&](long w) { return disc.sub_tower_weight[0] == w; }
+    );
 }
 
-long findDelta(std::vector<Disc> const &discs, size_t root_id) {
+long
+findDelta(std::vector<Disc> const &discs, size_t root_id) {
     auto &self = discs[root_id];
 
     // assume that self.children.size() >= 2
@@ -153,7 +171,7 @@ long findDelta(std::vector<Disc> const &discs, size_t root_id) {
             return self.sub_tower_weight[1] - self.sub_tower_weight[0];
         }
     } else {
-        std::vector<long> work{self.sub_tower_weight};
+        std::vector<long> work {self.sub_tower_weight};
         std::ranges::sort(work);
         if (work[0] == work[1]) {
             return work[0] - work.back();
@@ -163,7 +181,8 @@ long findDelta(std::vector<Disc> const &discs, size_t root_id) {
     }
 }
 
-std::tuple<size_t, long> findBadDisc(std::vector<Disc> const &discs, size_t id, long delta) {
+std::tuple<size_t, long>
+findBadDisc(std::vector<Disc> const &discs, size_t id, long delta) {
     auto &self = discs[id];
 
     // this leaf disc is the bad disc.
@@ -187,10 +206,18 @@ std::tuple<size_t, long> findBadDisc(std::vector<Disc> const &discs, size_t id, 
     } else {
         auto key = self.sub_tower_weight[0];
 
-        if (std::all_of(self.sub_tower_weight.begin() + 1, self.sub_tower_weight.end(), [&](long w) { return key != w; })) {
+        if (std::all_of(
+                self.sub_tower_weight.begin() + 1,
+                self.sub_tower_weight.end(),
+                [&](long w) { return key != w; }
+            )) {
             return findBadDisc(discs, self.children[0], delta);
         } else {
-            auto it = std::find_if(self.sub_tower_weight.begin() + 1, self.sub_tower_weight.end(), [&](long w) { return key != w; });
+            auto it = std::find_if(
+                self.sub_tower_weight.begin() + 1,
+                self.sub_tower_weight.end(),
+                [&](long w) { return key != w; }
+            );
             auto idx = static_cast<size_t>(it - self.sub_tower_weight.begin());
 
             return findBadDisc(discs, self.children[idx], delta);
@@ -198,7 +225,8 @@ std::tuple<size_t, long> findBadDisc(std::vector<Disc> const &discs, size_t id, 
     }
 }
 
-long part2(std::vector<Disc> &discs) {
+long
+part2(std::vector<Disc> &discs) {
     auto root = findRootId(discs);
 
     calcWeight(discs, root);

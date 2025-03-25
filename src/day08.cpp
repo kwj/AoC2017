@@ -27,19 +27,21 @@ std::vector<Instruction> parse(std::istream &is);
 long part1(std::vector<Instruction> const &insts);
 long part2(std::vector<Instruction> const &insts);
 
-}  // namespace day08
+} // namespace day08
 
 // --------
 module :private;
 
 namespace day08 {
 
-std::tuple<long, long> solve(std::istream &is) {
+std::tuple<long, long>
+solve(std::istream &is) {
     auto input_data = parse(is);
 
     return {part1(input_data), part2(input_data)};
 }
 
+// clang-format off
 long opInc(long lhs, long rhs) { return lhs + rhs; }
 
 bool cmpGt(long lhs, long rhs) { return lhs > rhs; }
@@ -48,8 +50,10 @@ bool cmpLt(long lhs, long rhs) { return lhs < rhs; }
 bool cmpLe(long lhs, long rhs) { return lhs <= rhs; }
 bool cmpEq(long lhs, long rhs) { return lhs == rhs; }
 bool cmpNe(long lhs, long rhs) { return lhs != rhs; }
+// clang-format on
 
-std::vector<Instruction> parse(std::istream &is) {
+std::vector<Instruction>
+parse(std::istream &is) {
     std::vector<Instruction> insts;
     std::smatch m;
     std::regex re(R"((\w+) (\w+) (-?\d+) if (\w+) (\S+) (-?\d+))");
@@ -58,7 +62,8 @@ std::vector<Instruction> parse(std::istream &is) {
         if (std::regex_match(line, m, re)) {
             auto r1 = m[1].str();
             auto r2 = m[4].str();
-            auto op1 = m[2].str() == "inc" ? std::stol(m[3].str()) : -std::stol(m[3].str());
+            auto op1 = m[2].str() == "inc" ? std::stol(m[3].str())
+                                           : -std::stol(m[3].str());
             auto op2 = std::stol(m[6].str());
             auto cond = m[5].str();
 
@@ -86,7 +91,8 @@ std::vector<Instruction> parse(std::istream &is) {
     return insts;
 }
 
-long part1(std::vector<Instruction> const &insts) {
+long
+part1(std::vector<Instruction> const &insts) {
     std::unordered_map<std::string, long> regs;
 
     for (auto &[r1, r2, op_fn, cond_fn] : insts) {
@@ -95,7 +101,7 @@ long part1(std::vector<Instruction> const &insts) {
         }
     }
 
-    long max_value{LONG_MIN};
+    long max_value {LONG_MIN};
     for (auto const &[_, v] : regs) {
         max_value = std::max(max_value, v);
     }
@@ -103,9 +109,10 @@ long part1(std::vector<Instruction> const &insts) {
     return max_value;
 }
 
-long part2(std::vector<Instruction> const &insts) {
+long
+part2(std::vector<Instruction> const &insts) {
     std::unordered_map<std::string, long> regs;
-    long max_value{LONG_MIN};
+    long max_value {LONG_MIN};
 
     for (auto &[r1, r2, op_fn, cond_fn] : insts) {
         if (cond_fn(regs[r2])) {
