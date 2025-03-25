@@ -9,7 +9,7 @@ URL: https://adventofcode.com/2017
 * [CMake](https://cmake.org/) (confimed to work with CMake 3.30.1)
 * [Ninja](https://ninja-build.org/) (confimed to work with Ninja 1.12.1)
 
-## Solutions (work in progress)
+## Solutions
 
 * [Day 1: Inverse Captcha](./src/day01.cpp)
 * [Day 2: Corruption Checksum](./src/day02.cpp)
