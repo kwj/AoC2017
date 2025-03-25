@@ -117,10 +117,12 @@ struct TransGrid {
     std::vector<std::pair<size_t, long>> next_grids;
 };
 
+using TransTbl = std::map<size_t, TransGrid>;
+
 std::tuple<long, long> solve(std::istream &is);
-std::map<size_t, TransGrid> parse(std::istream &is);
-long part1(std::map<size_t, TransGrid> const &trans_tbl);
-long part2(std::map<size_t, TransGrid> const &trans_tbl);
+TransTbl parse(std::istream &is);
+long part1(TransTbl const &trans_tbl);
+long part2(TransTbl const &trans_tbl);
 
 } // namespace day21
 
@@ -328,7 +330,7 @@ makeTransGrid(
     return result;
 }
 
-std::map<size_t, TransGrid>
+TransTbl
 parse(std::istream &is) {
     // The indices of these arrays are also used as the ID of these structures.
     std::array<Map_2x2to3x3, 16> m_2to3;  // 16 = 2 ^ 4
@@ -350,18 +352,16 @@ parse(std::istream &is) {
         }
     }
 
-    std::map<size_t, TransGrid> result;
+    TransTbl tbl;
     for (auto const id : id_group) {
-        result[id] = makeTransGrid(m_2to3, m_3to4, id);
+        tbl[id] = makeTransGrid(m_2to3, m_3to4, id);
     }
 
-    return result;
+    return tbl;
 }
 
 long
-countUpPixels(
-    std::map<size_t, TransGrid> const &trans_tbl, size_t id, size_t depth
-) {
+countUpPixels(TransTbl const &trans_tbl, size_t id, size_t depth) {
     if (depth <= 3) {
         return trans_tbl.at(id).pop_count[depth];
     }
@@ -375,12 +375,12 @@ countUpPixels(
 }
 
 long
-part1(std::map<size_t, TransGrid> const &trans_tbl) {
+part1(TransTbl const &trans_tbl) {
     return countUpPixels(trans_tbl, bitsToId(start_grid), 5);
 }
 
 long
-part2(std::map<size_t, TransGrid> const &trans_tbl) {
+part2(TransTbl const &trans_tbl) {
     return countUpPixels(trans_tbl, bitsToId(start_grid), 18);
 }
 
