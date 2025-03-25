@@ -1,0 +1,13 @@
+{
+    "version": 9,
+    "configurePresets": [
+        {
+            "name": "AoC2017",
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/build/",
+            "environment": {
+                "CXX": "/usr/bin/clang++"
+            }
+        }
+    ]
+}
