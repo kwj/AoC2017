@@ -48,7 +48,7 @@ std::tuple<long> solve(std::istream &is) {
 
 // virtual tape:
 //   it acts like as a stack except it returns a value N
-//   when calling read() on empty queue.
+//   even if calling read() on empty queue.
 template <typename T, T N>
 class Tape {
 public:
