@@ -10,6 +10,11 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libc++")
 set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -stdlib=libc++")
 
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
+include(clang-format)
+
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
 add_compile_options(
     -O2
     -Wall
@@ -20,8 +25,5 @@ add_compile_options(
     -Wdouble-promotion
     -Werror
 )
-
-list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
-include(clang-format)
 
 add_subdirectory(src)
