@@ -51,7 +51,7 @@ struct Disc {
 std::tuple<std::string, long> solve(std::istream &is);
 std::vector<Disc> parse(std::istream &is);
 std::string part1(std::vector<Disc> const &discs);
-long part2(std::vector<Disc> &discs);
+long part2(std::vector<Disc> const &discs);
 
 } // namespace day07
 
@@ -226,12 +226,14 @@ findBadDisc(std::vector<Disc> const &discs, size_t id, long delta) {
 }
 
 long
-part2(std::vector<Disc> &discs) {
-    auto root = findRootId(discs);
+part2(std::vector<Disc> const &discs) {
+    auto tmp_discs {discs};
+    auto root = findRootId(tmp_discs);
 
-    calcWeight(discs, root);
-    auto bad_disc = findBadDisc(discs, root, findDelta(discs, root));
+    calcWeight(tmp_discs, root);
+    auto bad_disc = findBadDisc(tmp_discs, root, findDelta(tmp_discs, root));
 
+    // { disk_id, corrected weight }
     return std::get<1>(bad_disc);
 }
 
