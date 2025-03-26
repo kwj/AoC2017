@@ -89,11 +89,12 @@ struct ComplexHash {
     }
 };
 
-using Grid = std::unordered_map<std::complex<int>, long, ComplexHash>;
+using Pos = std::complex<int>;
+using Grid = std::unordered_map<Pos, long, ComplexHash>;
 
 long
-fixValue(Grid &m, std::complex<int> const &pos) {
-    constexpr auto dirs = std::to_array<std::complex<int>>({
+fixValue(Grid &m, Pos const &pos) {
+    constexpr auto dirs = std::to_array<Pos>({
         {1, 0},
         {1, 1},
         {0, 1},
@@ -115,28 +116,28 @@ fixValue(Grid &m, std::complex<int> const &pos) {
 
 long
 part2(long target) {
-    // std::complex has the == operator, so use it.
-    Grid grid = {{{0, 0}, 1}};
+    auto turnLeft90 = [](Pos const &d) { return d * Pos {0, 1}; };
 
-    std::complex<int> pos(0, 0);
-    std::complex<int> dir(1, 0);
+    Grid grid = {{{0, 0}, 1}};
+    Pos curr_pos {0, 0};
+    Pos dir {1, 0};
     int i {0};
     int dist {1};
 
-    while (grid[pos] <= target) {
-        pos += dir;
-        grid[pos] = fixValue(grid, pos);
+    while (grid[curr_pos] <= target) {
+        curr_pos += dir;
+        grid[curr_pos] = fixValue(grid, curr_pos);
 
         if (++i == dist) {
             i = 0;
-            dir *= std::complex<int> {0, 1};
+            dir = turnLeft90(dir);
             if (dir.real() != 0) {
                 ++dist;
             }
         }
     }
 
-    return grid[pos];
+    return grid[curr_pos];
 }
 
 } // namespace day03
