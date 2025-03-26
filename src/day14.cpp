@@ -5,7 +5,6 @@ module;
 #include <functional>
 #include <istream>
 #include <numeric>
-#include <ranges>
 #include <sstream>
 #include <string>
 #include <string_view>
@@ -66,7 +65,10 @@ knotHash(std::vector<long> lengths, long cnt) {
 
 std::vector<long>
 makeGrid(std::string_view prefix) {
+    // 0: free square
+    // not 0: used square
     std::vector<long> grid;
+
     std::vector<long> lengths;
     std::vector<long> const tail {17, 31, 73, 47, 23};
 
@@ -84,14 +86,10 @@ makeGrid(std::string_view prefix) {
         auto row = knotHash(lengths, 64);
         for (auto i = 0; i < KNOTS_LEN; i += 16) {
             auto h = std::ranges::fold_left(
-                row.begin() + i, row.begin() + i + 16, 0, std::bit_xor<long>()
+                row.begin() + i, row.begin() + i + 16, 0, std::bit_xor<long> {}
             );
             for (long mask = 0b10000000; mask > 0; mask >>= 1) {
-                if ((h & mask) != 0) {
-                    grid.push_back(1);
-                } else {
-                    grid.push_back(0);
-                }
+                grid.push_back(h & mask);
             }
         }
     }
@@ -154,12 +152,12 @@ checkSpacesInRegion(std::vector<long> &squares, size_t idx) {
 long
 part2(std::vector<long> const &grid) {
     // 0: free space, or checked used space
-    // 1: unchecked used space
+    // not 0: unchecked used space
     std::vector<long> squares {grid};
 
     long n_regions {0};
-    for (auto [idx, sq] : std::views::zip(std::views::iota(0uz), squares)) {
-        if (sq != 0) {
+    for (auto idx = 0uz; idx < squares.size(); ++idx) {
+        if (squares[idx] != 0) {
             squares[idx] = 0;
             checkSpacesInRegion(squares, idx);
             ++n_regions;
