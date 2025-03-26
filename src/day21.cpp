@@ -343,6 +343,7 @@ parse(std::istream &is) {
         switch (line.size()) {
         case 20:
             // 2x2 grid to 3x3 grid
+            // note grid IDs of 3x3 grids that be produced from 2x2 grids for later use
             id_group.push_back(configMap(m_2to3, line)); // function overloading
             break;
         case 34:
