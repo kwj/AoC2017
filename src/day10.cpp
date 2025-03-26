@@ -7,6 +7,7 @@ module;
 #include <numeric>
 #include <sstream>
 #include <string>
+#include <string_view>
 #include <tuple>
 #include <vector>
 
@@ -19,7 +20,7 @@ export namespace day10 {
 
 std::tuple<long, std::string> solve(std::istream &is);
 std::string parse(std::istream &is);
-long part1(std::string const &s);
+long part1(std::string_view s);
 std::string part2(std::string const &s);
 
 } // namespace day10
@@ -67,7 +68,7 @@ knotHash(std::vector<long> lengths, long cnt) {
 }
 
 long
-part1(std::string const &s) {
+part1(std::string_view s) {
     auto hashed_data = knotHash(util::getNumbers(s), 1);
 
     return hashed_data[0] * hashed_data[1];
@@ -77,7 +78,7 @@ std::string
 part2(std::string const &s) {
     std::vector<long> lengths;
     std::vector<long> const tail {17, 31, 73, 47, 23};
-    std::istringstream iss(s);
+    std::istringstream iss(s); // istringstream accepts string_view SINCE C++26
     char ch;
 
     while (iss.get(ch)) {
@@ -92,7 +93,7 @@ part2(std::string const &s) {
             hashed_data.begin() + i,
             hashed_data.begin() + i + 16,
             0,
-            std::bit_xor<long>()
+            std::bit_xor<long> {}
         );
         oss << std::format("{:02x}", h & 0xFF);
     }
