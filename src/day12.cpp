@@ -68,9 +68,9 @@ parse(std::istream &is) {
         );
     }
 
-    // Each element is a number of programs in a group. The first element result[0]
-    // indicates the group containing the program 0, however, the rest elements are
-    // unknown. It cuts corners.
+    // Each element is a number of programs in a group. The group containing the program 0
+    // is the first element result[0]. But, it is not known that the remaining elements
+    // contain what programs.
     std::vector<long> result;
 
     // All elements are initialized to default value `false`.
