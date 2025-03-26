@@ -154,8 +154,7 @@ part2(std::vector<long> const &vs) {
         }
 
         ++cnt;
-        if (cont_flag == true &&
-            std::is_sorted(work.begin(), work.end(), std::greater<long> {})) {
+        if (cont_flag && std::ranges::is_sorted(work, std::greater<long> {})) {
             ++cnt;
         }
     }
