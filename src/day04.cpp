@@ -16,8 +16,8 @@ using Passphrase = std::vector<std::string>;
 
 std::tuple<long, long> solve(std::istream &is);
 std::vector<Passphrase> parse(std::istream &is);
-long part1(std::vector<Passphrase> &ps);
-long part2(std::vector<Passphrase> &ps);
+long part1(std::vector<Passphrase> const &ps);
+long part2(std::vector<Passphrase> const &ps);
 
 } // namespace day04
 
@@ -61,22 +61,24 @@ isValid(Passphrase const &ps) {
 }
 
 long
-part1(std::vector<Passphrase> &ps) {
+part1(std::vector<Passphrase> const &ps) {
     return static_cast<long>(std::count_if(ps.begin(), ps.end(), isValid));
 }
 
 long
-part2(std::vector<Passphrase> &ps) {
-    std::vector<Passphrase> tmp_ps {ps};
-    for (auto &passphrase : tmp_ps) {
+part2(std::vector<Passphrase> const &ps) {
+    long result {0};
+
+    for (auto passphrase : ps) {
         for (auto &word : passphrase) {
             std::ranges::sort(word);
         }
+        if (isValid(passphrase)) {
+            ++result;
+        }
     }
 
-    return static_cast<long>(
-        std::count_if(tmp_ps.begin(), tmp_ps.end(), isValid)
-    );
+    return result;
 }
 
 } // namespace day04

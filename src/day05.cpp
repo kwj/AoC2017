@@ -45,12 +45,12 @@ long
 run(std::vector<long> insts, std::function<long(long)> f) {
     long steps {0};
     size_t idx {0};
-    auto len {insts.size()};
+    auto const len {insts.size()};
 
-    while (idx >= 0 && idx < len) {
+    while (idx < len) {
         auto offset = insts[idx];
         insts[idx] = f(insts[idx]);
-        idx = static_cast<size_t>(static_cast<long>(idx) + offset);
+        idx += static_cast<size_t>(offset);
         ++steps;
     }
 
