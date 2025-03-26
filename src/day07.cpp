@@ -32,6 +32,7 @@ module;
 #include <string>
 #include <tuple>
 #include <unordered_map>
+#include <utility>
 #include <vector>
 
 // --------
@@ -181,19 +182,19 @@ findDelta(std::vector<Disc> const &discs, size_t root_id) {
     }
 }
 
-std::tuple<size_t, long>
+std::pair<size_t, long>
 findBadDisc(std::vector<Disc> const &discs, size_t id, long delta) {
     auto &self = discs[id];
 
     // this leaf disc is the bad disc.
     if (self.children.size() == 0) {
-        return std::make_tuple(id, self.weight + delta);
+        return std::make_pair(id, self.weight + delta);
     }
 
     // if each child disc has same sub-total weight, the disc `discs[id]` is
     // the bad disc.
     if (isBalanced(discs[id])) {
-        return std::make_tuple(id, self.weight + delta);
+        return std::make_pair(id, self.weight + delta);
     }
 
     // otherwise (assume that self.children.size() >= 2)
@@ -231,10 +232,9 @@ part2(std::vector<Disc> const &discs) {
     auto root = findRootId(tmp_discs);
 
     calcWeight(tmp_discs, root);
-    auto bad_disc = findBadDisc(tmp_discs, root, findDelta(tmp_discs, root));
 
     // { disk_id, corrected weight }
-    return std::get<1>(bad_disc);
+    return findBadDisc(tmp_discs, root, findDelta(tmp_discs, root)).second;
 }
 
 } // namespace day07
