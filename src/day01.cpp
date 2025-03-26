@@ -43,9 +43,9 @@ captcha(std::string const &s1, long offset) {
     std::rotate(s2.begin(), s2.begin() + offset, s2.end());
 
     long result {0};
-    for (auto tpl : std::views::zip(s1, s2)) {
-        if (std::get<0>(tpl) == std::get<1>(tpl)) {
-            result += std::get<0>(tpl) - '0';
+    for (auto const [x, y] : std::views::zip(s1, s2)) {
+        if (x == y) {
+            result += x - '0';
         }
     }
 
