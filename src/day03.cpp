@@ -93,7 +93,7 @@ using Grid = std::unordered_map<std::complex<int>, long, ComplexHash>;
 
 long
 fixValue(Grid &m, std::complex<int> const &pos) {
-    auto dirs = std::to_array<std::complex<int>>({
+    constexpr auto dirs = std::to_array<std::complex<int>>({
         {1, 0},
         {1, 1},
         {0, 1},
