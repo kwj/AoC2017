@@ -9,8 +9,6 @@ module;
 #include <tuple>
 #include <vector>
 
-#include <print>
-
 import util;
 
 // --------
@@ -63,9 +61,9 @@ part1(std::map<long, std::set<long>> const &tbl) {
         // period to scan the top of a layer which range is `r`.
         auto period = 2 * (r - 1);
 
-        for (auto const &depth : depths) {
-            if (isCaught(period, depth)) {
-                severity += depth * r;
+        for (auto const &d : depths) {
+            if (isCaught(period, d)) {
+                severity += d * r;
             }
         }
     }
@@ -85,24 +83,25 @@ part2(std::map<long, std::set<long>> const &tbl) {
 
         auto next_lcm = std::lcm(crnt_lcm, period);
         next_delays.clear();
-        for (auto const &d : delays) {
+        for (auto const &dly : delays) {
             for (long gap = 0; gap < next_lcm; gap += crnt_lcm) {
-                auto next_d = d + gap;
+                auto next_dly = dly + gap;
 
-                // assume that initial delay is next_d, check if the packet doesn't caught by each layer whose period is 2(r - 1).
+                // assume that initial delay is next_dly, check if the packet doesn't
+                // caught by each layer whose period is 2(r - 1).
                 if (std::all_of(
                         depths.begin(),
                         depths.end(),
                         [&](auto const &depth) {
-                            return !isCaught(period, depth, next_d);
+                            return !isCaught(period, depth, next_dly);
                         }
                     )) {
-                    next_delays.push_back(next_d);
+                    next_delays.push_back(next_dly);
                 }
             }
         }
 
-        delays = next_delays;
+        std::swap(delays, next_delays);
         crnt_lcm = next_lcm;
     }
 
