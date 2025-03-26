@@ -162,7 +162,6 @@ parse(std::istream &is) {
 
     long id {0};
     for (std::string line; std::getline(is, line); ++id) {
-        // P2422R1 (views::chunk) is not yet supported in libc++ 19.
         auto nums = util::getNumbers(line);
         result.push_back(Particle(
             id,
@@ -179,7 +178,7 @@ parse(std::istream &is) {
 long
 norm(std::vector<long> const &vs) {
     long result {0};
-    for (auto const &v : vs) {
+    for (auto const v : vs) {
         result += std::abs(v);
     }
 
