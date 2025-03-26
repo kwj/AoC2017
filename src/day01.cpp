@@ -4,6 +4,7 @@ module;
 #include <istream>
 #include <ranges>
 #include <string>
+#include <string_view>
 #include <tuple>
 
 import util;
@@ -15,8 +16,8 @@ export namespace day01 {
 
 std::tuple<long, long> solve(std::istream &is);
 std::string parse(std::istream &is);
-long part1(std::string const &s);
-long part2(std::string const &s);
+long part1(std::string_view s);
+long part2(std::string_view s);
 
 } // namespace day01
 
@@ -38,7 +39,7 @@ parse(std::istream &is) {
 }
 
 long
-captcha(std::string const &s1, long offset) {
+captcha(std::string_view s1, long offset) {
     std::string s2 {s1};
     std::rotate(s2.begin(), s2.begin() + offset, s2.end());
 
@@ -53,12 +54,12 @@ captcha(std::string const &s1, long offset) {
 }
 
 long
-part1(std::string const &s) {
+part1(std::string_view s) {
     return captcha(s, 1);
 }
 
 long
-part2(std::string const &s) {
+part2(std::string_view s) {
     return captcha(s, s.size() / 2);
 }
 
