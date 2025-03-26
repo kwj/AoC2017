@@ -89,7 +89,7 @@ If two particles collide at time T:
   (a1 - a2) * T^2 + (2*v1 + a1 - 2*v2 - a2) * T + 2 * (p1 -p2) = 0
   ^^^(A)^^^         ^^^^^^^^^^^(B)^^^^^^^^^       ^^^^^(C)^^^^
 
-  discriminant D = B^2 - 4AC == 0
+  discriminant D = B^2 - 4AC
 */
 
 module;
