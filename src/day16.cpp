@@ -48,10 +48,16 @@ constexpr size_t N_PROGRAMS {16};
 
 Choreography::Choreography() {
     by_pos_tbl.resize(N_PROGRAMS);
-    std::iota(by_pos_tbl.begin(), by_pos_tbl.end(), 0);
-
     by_ltr_tbl.resize(N_PROGRAMS);
+
+// P2440R1 (ranges::iota) is not yet supported in libc++ 19.
+#if __cpp_lib_ranges_iota
+    std::ranges::iota(by_pos_tbl, 0);
+    std::ranges::iota(by_ltr_tbl, 0);
+#else
+    std::iota(by_pos_tbl.begin(), by_pos_tbl.end(), 0);
     std::iota(by_ltr_tbl.begin(), by_ltr_tbl.end(), 0);
+#endif
 
     return;
 }
@@ -105,8 +111,15 @@ parse(std::istream &is) {
     // 'a', 'b' ... --> 0, 1, ...
     std::vector<size_t> op_pos(N_PROGRAMS);
     std::vector<size_t> op_ltr(N_PROGRAMS);
+
+// P2440R1 (ranges::iota) is not yet supported in libc++ 19.
+#if __cpp_lib_ranges_iota
+    std::ranges::iota(op_pos, 0);
+    std::ranges::iota(op_ltr, 0);
+#else
     std::iota(op_pos.begin(), op_pos.end(), 0);
     std::iota(op_ltr.begin(), op_ltr.end(), 0);
+#endif
 
     auto num_it = nums.begin();
     for (auto const &cmd : cmds) {

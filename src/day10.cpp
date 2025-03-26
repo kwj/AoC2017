@@ -47,7 +47,13 @@ parse(std::istream &is) {
 std::vector<long>
 knotHash(std::vector<long> lengths, long cnt) {
     auto knots = std::vector<long>(KNOTS_LEN);
+
+// P2440R1 (ranges::iota) is not yet supported in libc++ 19.
+#if __cpp_lib_ranges_iota
+    std::ranges::iota(knots, 0);
+#else
     std::iota(knots.begin(), knots.end(), 0);
+#endif
 
     long skip {0};
     long origin {0};
