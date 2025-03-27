@@ -90,12 +90,11 @@ parse(std::istream &is) {
             idMap[name] = idx;
 
             if (m.length(4) > 0) {
-                std::vector<std::string> children;
-                for (auto const &&word :
-                     std::views::split(m[4].str(), ", "sv)) {
-                    children.push_back(std::string(std::string_view(word)));
+                std::vector<std::string> names;
+                for (auto const &subr : std::views::split(m[4].str(), ", "sv)) {
+                    names.emplace_back(subr.begin(), subr.end());
                 }
-                childMap[idx] = children;
+                childMap[idx] = names;
             }
 
             ++idx;
