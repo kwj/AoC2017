@@ -196,10 +196,10 @@ size_t
 configMap(std::array<Map_2x2to3x3, 16> &m, std::string_view sv) {
     std::array<size_t, 4> src = {0, 1, 3, 4};
     std::array<size_t, 9> dst = {9, 10, 11, 13, 14, 15, 17, 18, 19};
-    auto f = [&sv](size_t idx) { return sv[idx] == '#' ? 1uz : 0uz; };
 
-    std::ranges::for_each(src, [&f](size_t &n) { n = f(n); });
-    std::ranges::for_each(dst, [&f](size_t &n) { n = f(n); });
+    auto f = [&sv](size_t &n) { n = sv[n] == '#' ? 1uz : 0uz; };
+    std::ranges::for_each(src, f);
+    std::ranges::for_each(dst, f);
 
     auto cnt = std::popcount(bitsToId(src));
     for (auto id : getVariants_2x2(src)) {
@@ -243,10 +243,10 @@ configMap(std::array<Map_3x3to4x4, 512> &m, std::string_view sv) {
     std::array<size_t, 16> dst = {
         15, 16, 17, 18, 20, 21, 22, 23, 25, 26, 27, 28, 30, 31, 32, 33
     };
-    auto f = [&sv](size_t idx) { return sv[idx] == '#' ? 1uz : 0uz; };
 
-    std::ranges::for_each(src, [&f](size_t &n) { n = f(n); });
-    std::ranges::for_each(dst, [&f](size_t &n) { n = f(n); });
+    auto f = [&sv](size_t &n) { n = sv[n] == '#' ? 1uz : 0uz; };
+    std::ranges::for_each(src, f);
+    std::ranges::for_each(dst, f);
 
     auto cnt = std::popcount(bitsToId(src));
     for (auto id : getVariants_3x3(src)) {
