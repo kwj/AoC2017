@@ -198,8 +198,8 @@ configMap(std::array<Map_2x2to3x3, 16> &m, std::string_view sv) {
     std::array<size_t, 9> dst = {9, 10, 11, 13, 14, 15, 17, 18, 19};
     auto f = [&sv](size_t idx) { return sv[idx] == '#' ? 1uz : 0uz; };
 
-    std::for_each(src.begin(), src.end(), [&f](size_t &n) { n = f(n); });
-    std::for_each(dst.begin(), dst.end(), [&f](size_t &n) { n = f(n); });
+    std::ranges::for_each(src, [&f](size_t &n) { n = f(n); });
+    std::ranges::for_each(dst, [&f](size_t &n) { n = f(n); });
 
     auto cnt = std::popcount(bitsToId(src));
     for (auto id : getVariants_2x2(src)) {
@@ -245,8 +245,8 @@ configMap(std::array<Map_3x3to4x4, 512> &m, std::string_view sv) {
     };
     auto f = [&sv](size_t idx) { return sv[idx] == '#' ? 1uz : 0uz; };
 
-    std::for_each(src.begin(), src.end(), [&f](size_t &n) { n = f(n); });
-    std::for_each(dst.begin(), dst.end(), [&f](size_t &n) { n = f(n); });
+    std::ranges::for_each(src, [&f](size_t &n) { n = f(n); });
+    std::ranges::for_each(dst, [&f](size_t &n) { n = f(n); });
 
     auto cnt = std::popcount(bitsToId(src));
     for (auto id : getVariants_3x3(src)) {
@@ -275,7 +275,7 @@ makeTransGrid(
 
     // step 1
     grid_16 = m_3to4[start].bits;
-    result.pop_count[1] = std::count(grid_16.begin(), grid_16.end(), 1);
+    result.pop_count[1] = std::ranges::count(grid_16, 1);
 
     // step 2
     std::vector<std::pair<size_t, size_t>> idxmap_1 = {
@@ -292,7 +292,7 @@ makeTransGrid(
             grid_36[j + 6 * k + 2] = *it++;
         }
     }
-    result.pop_count[2] = std::count(grid_36.begin(), grid_36.end(), 1);
+    result.pop_count[2] = std::ranges::count(grid_36, 1);
 
     // step 3
     std::map<size_t, long> counter;
@@ -321,7 +321,7 @@ makeTransGrid(
         auto next_id = bitsToId(m_2to3[id].bits);
         counter[next_id] += 1;
     }
-    result.pop_count[3] = std::count(grid_81.begin(), grid_81.end(), 1);
+    result.pop_count[3] = std::ranges::count(grid_81, 1);
 
     for (auto const [id, cnt] : counter) {
         result.next_grids.push_back({id, cnt});
