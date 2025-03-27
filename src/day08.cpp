@@ -102,8 +102,8 @@ part1(std::vector<Instruction> const &insts) {
     }
 
     long max_value {LONG_MIN};
-    for (auto const &[_, v] : regs) {
-        max_value = std::max(max_value, v);
+    for (auto const &r : regs) {
+        max_value = std::max(max_value, r.second);
     }
 
     return max_value;
@@ -112,7 +112,7 @@ part1(std::vector<Instruction> const &insts) {
 long
 part2(std::vector<Instruction> const &insts) {
     std::unordered_map<std::string, long> regs;
-    long max_value {LONG_MIN};
+    long max_value {0};
 
     for (auto &[r1, r2, op_fn, cond_fn] : insts) {
         if (cond_fn(regs[r2])) {
@@ -121,7 +121,7 @@ part2(std::vector<Instruction> const &insts) {
         }
     }
 
-    return std::max(max_value, 0L);
+    return max_value;
 }
 
 } // namespace day08
