@@ -45,8 +45,7 @@ struct Disc {
     size_t id;
     size_t parent;
     long weight;
-    std::vector<size_t> children;
-    std::vector<long> sub_tower_weight; // each child tower's total weight
+    std::vector<std::pair<size_t, long>> children; // { id, sub tower's weight }
 };
 
 std::tuple<std::string, long> solve(std::istream &is);
@@ -76,17 +75,17 @@ parse(std::istream &is) {
     std::regex re(R"((\w+) \((\d+)\)( -> ((\w+, )*\w+))?)");
     //                                   ^^^^^^^^^^^^^^ m[4]
 
-    std::vector<Disc> discs {{"dummy", 0, 0, 0, {}, {}}};
+    std::vector<Disc> discs {{"sentinel", 0, 0, 0, {}}};
     std::unordered_map<std::string, size_t> idMap;
     std::unordered_map<size_t, std::vector<std::string>> childMap;
-    size_t idx {1};
 
+    size_t idx {1};
     for (std::string line; std::getline(is, line);) {
         if (std::regex_match(line, m, re)) {
             auto name = m[1].str();
             auto weight = std::stol(m[2].str());
 
-            discs.push_back({name, idx, 0, weight, {}, {}});
+            discs.push_back({name, idx, 0, weight, {}});
             idMap[name] = idx;
 
             if (m.length(4) > 0) {
@@ -102,16 +101,11 @@ parse(std::istream &is) {
     }
 
     for (auto const &[parent_id, children] : childMap) {
-        std::for_each(
-            children.begin(),
-            children.end(),
-            [&](std::string const &name) {
-                auto child_id = idMap[name];
-                discs[parent_id].children.push_back(child_id);
-                discs[parent_id].sub_tower_weight.push_back(0);
-                discs[child_id].parent = parent_id;
-            }
-        );
+        std::ranges::for_each(children, [&](std::string const &name) {
+            auto child_id = idMap[name];
+            discs[parent_id].children.emplace_back(child_id, 0);
+            discs[child_id].parent = parent_id;
+        });
     }
 
     return discs;
@@ -119,7 +113,7 @@ parse(std::istream &is) {
 
 size_t
 findRootId(std::vector<Disc> const &discs) {
-    size_t idx {1}; // ignore discs[0] dummy element
+    size_t idx {1}; // skip discs[0] since it is the sentinel element
 
     while (discs[idx].parent != 0) {
         idx = discs[idx].parent;
@@ -137,31 +131,21 @@ long
 calcWeight(std::vector<Disc> &discs, size_t id) {
     Disc &self = discs[id];
 
-// P2164R9 (views::enumerate) is not yet supported in libc++ 19.
-#if __cpp_lib_ranges_enumerate
-    for (auto [idx, child] : std::views::enumerate(self.children)) {
-        self.sub_tower_weight[idx] = calcWeight(discs, child);
+    for (auto &child : self.children) {
+        child.second = calcWeight(discs, child.first);
     }
-#else
-    for (auto [idx, child] :
-         std::views::zip(std::views::iota(0uz), self.children)) {
-        self.sub_tower_weight[idx] = calcWeight(discs, child);
-    }
-#endif
 
     return self.weight +
-           std::accumulate(
-               self.sub_tower_weight.begin(), self.sub_tower_weight.end(), 0
+           std::ranges::fold_left(
+               self.children | std::views::values, 0, std::plus<long> {}
            );
 }
 
 bool
 isBalanced(Disc const &disc) {
-    return std::all_of(
-        disc.sub_tower_weight.begin(),
-        disc.sub_tower_weight.end(),
-        [&](long w) { return disc.sub_tower_weight[0] == w; }
-    );
+    return std::ranges::all_of(disc.children | std::views::values, [&](long w) {
+        return disc.children[0].second == w;
+    });
 }
 
 long
@@ -171,18 +155,20 @@ findDelta(std::vector<Disc> const &discs, size_t root_id) {
     // assume that self.children.size() >= 2
     // since the root disc has two or more child discs.
     if (self.children.size() == 2) {
-        if (isBalanced(discs[self.children[0]])) {
-            return self.sub_tower_weight[0] - self.sub_tower_weight[1];
+        if (isBalanced(discs[self.children[0].first])) {
+            return self.children[0].second - self.children[1].second;
         } else {
-            return self.sub_tower_weight[1] - self.sub_tower_weight[0];
+            return self.children[1].second - self.children[0].second;
         }
     } else {
-        std::vector<long> work {self.sub_tower_weight};
-        std::ranges::sort(work);
-        if (work[0] == work[1]) {
-            return work[0] - work.back();
+        auto work {self.children};
+        std::ranges::sort(work, [](auto &a, auto &b) {
+            return a.second < b.second;
+        });
+        if (work[0].second == work[1].second) {
+            return work[0].second - work.back().second;
         } else {
-            return work.back() - work[0];
+            return work.back().second - work[0].second;
         }
     }
 }
@@ -204,29 +190,26 @@ findBadDisc(std::vector<Disc> const &discs, size_t id, long delta) {
 
     // otherwise (assume that self.children.size() >= 2)
     if (self.children.size() == 2) {
-        if (self.sub_tower_weight[0] + delta == self.sub_tower_weight[1]) {
-            return findBadDisc(discs, self.children[0], delta);
+        if (self.children[0].second + delta == self.children[1].second) {
+            return findBadDisc(discs, self.children[0].first, delta);
         } else {
-            return findBadDisc(discs, self.children[1], delta);
+            return findBadDisc(discs, self.children[1].first, delta);
         }
     } else {
-        auto key = self.sub_tower_weight[0];
+        auto key = self.children[0].second;
 
-        if (std::all_of(
-                self.sub_tower_weight.begin() + 1,
-                self.sub_tower_weight.end(),
-                [&](long w) { return key != w; }
+        if (std::ranges::all_of(
+                self.children | std::views::drop(1),
+                [&](auto &p) { return key != p.second; }
             )) {
-            return findBadDisc(discs, self.children[0], delta);
+            return findBadDisc(discs, self.children[0].first, delta);
         } else {
-            auto it = std::find_if(
-                self.sub_tower_weight.begin() + 1,
-                self.sub_tower_weight.end(),
-                [&](long w) { return key != w; }
+            auto it = std::ranges::find_if(
+                self.children | std::views::drop(1),
+                [&](auto &p) { return key != p.second; }
             );
-            auto idx = static_cast<size_t>(it - self.sub_tower_weight.begin());
 
-            return findBadDisc(discs, self.children[idx], delta);
+            return findBadDisc(discs, it->first, delta);
         }
     }
 }
