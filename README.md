@@ -2,7 +2,7 @@
 
 URL: https://adventofcode.com/2017
 
-## Requirements
+## Prerequisites
 
 * [Clang](https://clang.llvm.org/) (confirmed to work with Clang 19.1.1)
 * [libc++](https://libcxx.llvm.org/) (confirmed to work with libc++ 19.1.1)
