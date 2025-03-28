@@ -39,14 +39,14 @@ parse(std::istream &is) {
 }
 
 long
-captcha(std::string_view s1, long offset) {
-    std::string s2 {s1};
-    std::rotate(s2.begin(), s2.begin() + offset, s2.end());
-
+captcha(std::string_view s, size_t offset) {
     long result {0};
-    for (auto const [x, y] : std::views::zip(s1, s2)) {
-        if (x == y) {
-            result += x - '0';
+    for (auto x = 0uz, y = (x + offset) % s.size(); x < s.size(); ++x, ++y) {
+        if (y >= s.size()) {
+            y -= s.size();
+        }
+        if (s[x] == s[y]) {
+            result += s[x] - '0';
         }
     }
 
