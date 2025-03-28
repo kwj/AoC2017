@@ -1,9 +1,11 @@
 module;
 
 #include <algorithm>
+#include <array>
 #include <format>
 #include <functional>
 #include <istream>
+#include <iterator>
 #include <numeric>
 #include <sstream>
 #include <string>
@@ -30,7 +32,7 @@ module :private;
 
 namespace day14 {
 
-constexpr long KNOTS_LEN {256};
+constexpr unsigned long KNOTS_LEN {256};
 constexpr size_t EDGE_LEN {128};
 
 std::tuple<long, long>
@@ -40,9 +42,9 @@ solve(std::istream &is) {
     return {part1(result), part2(result)};
 }
 
-std::vector<long>
-knotHash(std::vector<long> lengths, long cnt) {
-    auto knots = std::vector<long>(KNOTS_LEN);
+std::array<long, KNOTS_LEN>
+knotHash(std::vector<unsigned long> lengths, long round) {
+    std::array<long, KNOTS_LEN> knots;
 
 // P2440R1 (ranges::iota) is not yet supported in libc++ 19.
 #if __cpp_lib_ranges_iota
@@ -51,20 +53,24 @@ knotHash(std::vector<long> lengths, long cnt) {
     std::iota(knots.begin(), knots.end(), 0);
 #endif
 
-    long skip {0};
-    long origin {0};
-    for (auto round = 0; round < cnt; ++round) {
+    unsigned long skip {0};
+    unsigned long pos {0};
+    while (round-- > 0) {
         for (auto const len : lengths) {
-            std::reverse(knots.begin(), knots.begin() + len);
+            // reverse the order by swapping elements
+            auto x = pos;
+            auto y = (pos + len - 1) % KNOTS_LEN;
+            for (unsigned long cnt = 0; cnt < len / 2; ++cnt) {
+                std::swap(knots[x], knots[y]);
+                x = (x + 1) % KNOTS_LEN;
+                y = y > 0 ? y - 1 : KNOTS_LEN - 1;
+            }
 
-            auto offset = (len + skip) % KNOTS_LEN;
-            std::rotate(knots.begin(), knots.begin() + offset, knots.end());
-            origin += offset;
+            // move position
+            pos = (pos + len + skip) % KNOTS_LEN;
             ++skip;
         }
     }
-
-    std::rotate(knots.begin(), knots.end() - (origin % KNOTS_LEN), knots.end());
 
     return knots;
 }
@@ -75,8 +81,8 @@ makeGrid(std::string_view prefix) {
     // not 0: used square
     std::vector<long> grid;
 
-    std::vector<long> lengths;
-    std::vector<long> const tail {17, 31, 73, 47, 23};
+    std::vector<unsigned long> lengths;
+    std::vector<unsigned long> const tail {17, 31, 73, 47, 23};
 
     for (auto k = 0uz; k < EDGE_LEN; ++k) {
         lengths.clear();
@@ -85,14 +91,14 @@ makeGrid(std::string_view prefix) {
         char ch;
 
         while (iss.get(ch)) {
-            lengths.push_back(static_cast<long>(ch));
+            lengths.push_back(static_cast<unsigned long>(ch));
         }
         lengths.append_range(tail);
 
-        auto row = knotHash(lengths, 64);
-        for (auto i = 0; i < KNOTS_LEN; i += 16) {
+        auto hash = knotHash(lengths, 64);
+        for (auto it = hash.cbegin(); it < hash.cend(); std::advance(it, 16)) {
             auto h = std::ranges::fold_left(
-                row.begin() + i, row.begin() + i + 16, 0, std::bit_xor<long> {}
+                std::ranges::subrange(it, it + 16), 0, std::bit_xor<long> {}
             );
             for (long mask = 0b10000000; mask > 0; mask >>= 1) {
                 grid.push_back(h & mask);
