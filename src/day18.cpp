@@ -148,7 +148,7 @@ part2(std::vector<long> const &vs) {
         cont_flag = false;
         for (auto it = work.begin(); it < work.end() - 1; ++it) {
             if (*it < *(it + 1)) {
-                std::iter_swap(it, it + 1);
+                std::ranges::iter_swap(it, it + 1);
                 cont_flag = true;
             }
         }

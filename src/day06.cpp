@@ -44,24 +44,24 @@ parse(std::istream &is) {
 
     std::getline(is, line);
     auto vn = util::getNumbers(line);
-    std::copy(vn.begin(), vn.begin() + N_BANKS, banks.begin());
+    std::ranges::copy(vn.cbegin(), vn.cbegin() + N_BANKS, banks.begin());
 
     return banks;
 }
 
 void
 redistribute(MemoryBanks &banks) {
-    auto iter = std::max_element(banks.begin(), banks.end());
-    auto q = *iter / N_BANKS;
+    auto it = std::ranges::max_element(banks);
+    auto q = *it / N_BANKS;
 
-    for (auto r = std::exchange(*iter, 0) % N_BANKS; r-- > 0; (*iter)++) {
-        if (++iter == banks.end()) {
-            iter = banks.begin();
+    for (auto r = std::exchange(*it, 0) % N_BANKS; r-- > 0; (*it)++) {
+        if (++it == banks.end()) {
+            it = banks.begin();
         }
     }
 
     if (q > 0) {
-        std::for_each(banks.begin(), banks.end(), [&](long &n) { n += q; });
+        std::ranges::for_each(banks, [&](long &n) { n += q; });
     }
 
     return;

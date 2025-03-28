@@ -62,7 +62,7 @@ isValid(Passphrase const &ps) {
 
 long
 part1(std::vector<Passphrase> const &ps) {
-    return static_cast<long>(std::count_if(ps.begin(), ps.end(), isValid));
+    return std::ranges::count_if(ps, isValid);
 }
 
 long

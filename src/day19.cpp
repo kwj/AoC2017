@@ -35,12 +35,12 @@ solve(std::istream &is) {
     return {part1(input_data), part2(input_data)};
 }
 
-/* What a terrible code... */
+/* What an ugly code */
 std::pair<std::string, long>
 followPath(std::vector<std::vector<char>> &grid) {
     // find the start position and set the initial direction (down[dx=0,dy=1])
     auto x = static_cast<size_t>(
-        std::find(grid[0].begin(), grid[0].end(), '|') - grid[0].begin()
+        std::ranges::distance(grid[0].begin(), std::ranges::find(grid[0], '|'))
     );
     auto y {0uz};
     int dx {0}, dy {1};
@@ -49,7 +49,7 @@ followPath(std::vector<std::vector<char>> &grid) {
     long cnt {0};
     while (grid[y][x] != ' ') {
         if (grid[y][x] == '+') {
-            std::swap(dx, dy);
+            std::ranges::swap(dx, dy);
             auto rev_dx {-dx}, rev_dy {-dy};
             if (grid[y + static_cast<size_t>(rev_dy)]
                     [x + static_cast<size_t>(rev_dx)] != ' ') {

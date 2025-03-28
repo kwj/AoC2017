@@ -198,11 +198,9 @@ isFindClosest(std::deque<std::vector<std::pair<long, long>>> const &dq) {
     }
 
     auto first_elmnt = ids[0];
-    auto order_check = std::all_of(
-        ids.begin() + 1,
-        ids.end(),
-        [&](std::vector<long> const &vs) { return first_elmnt == vs; }
-    );
+    auto order_check = std::ranges::all_of(ids, [&](auto const &vs) {
+        return first_elmnt == vs;
+    });
     if (!order_check) {
         return false;
     }
@@ -224,10 +222,9 @@ isFindClosest(std::deque<std::vector<std::pair<long, long>>> const &dq) {
         work.push_back(vs);
     }
 
-    auto mono_inc1_check =
-        std::all_of(work.begin(), work.end(), [](std::vector<long> const &vs) {
-            return std::is_sorted(vs.begin(), vs.end());
-        });
+    auto mono_inc1_check = std::ranges::all_of(work, [](auto const &vs) {
+        return std::ranges::is_sorted(vs);
+    });
     if (!mono_inc1_check) {
         return false;
     }
@@ -245,13 +242,9 @@ isFindClosest(std::deque<std::vector<std::pair<long, long>>> const &dq) {
         trans_work.push_back(vs);
     }
 
-    auto mono_inc2_check = std::all_of(
-        trans_work.begin(),
-        trans_work.end(),
-        [](std::vector<long> const &vs) {
-            return std::is_sorted(vs.begin(), vs.end());
-        }
-    );
+    auto mono_inc2_check = std::ranges::all_of(trans_work, [](auto const &vs) {
+        return std::ranges::is_sorted(vs);
+    });
     if (!mono_inc2_check) {
         return false;
     }
@@ -305,9 +298,8 @@ long
 part1(std::vector<Particle> const &particles) {
     // find candidate particles closest to the origin
     // candidate is the particle with the smallest magnitude of acceleration
-    auto min_acc = norm((*std::min_element(
-                             particles.begin(),
-                             particles.end(),
+    auto min_acc = norm((*std::ranges::min_element(
+                             particles,
                              [](Particle const &x, Particle const &y) {
                                  return norm(x.a) < norm(y.a);
                              }
@@ -365,13 +357,8 @@ solveQuadratic(long a, long b, long c) {
         }
     }
 
-    // delete past collision times
-    result.erase(
-        std::remove_if(
-            result.begin(), result.end(), [](auto const n) { return n < 0; }
-        ),
-        result.end()
-    );
+    // remove past collision times
+    std::erase_if(result, [](auto const n) { return n < 0; });
 
     if (result.size() > 0) {
         return result;
@@ -411,7 +398,7 @@ getCollisionTime(Particle const &p1, Particle const &p2) {
         return std::nullopt;
     } else {
         // choose the earliest timing
-        return *std::min_element(tmp.begin(), tmp.end());
+        return *std::ranges::min_element(tmp);
     }
 }
 
@@ -460,9 +447,7 @@ part2(std::vector<Particle> const &particles) {
         }
     }
 
-    return static_cast<long>(
-        std::count(survival_tbl.begin(), survival_tbl.end(), true)
-    );
+    return std::ranges::count(survival_tbl, true);
 }
 
 } // namespace day20

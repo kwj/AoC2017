@@ -45,13 +45,10 @@ part1(long step) {
     long pos {0};
     for (long i = 1; i <= N_INSERTIONS; ++i) {
         pos = (pos + step) % static_cast<long>(buf.size()) + 1;
-        buf.insert(
-            buf.begin() + static_cast<std::vector<long>::difference_type>(pos),
-            i
-        );
+        buf.insert(buf.begin() + pos, i);
     }
 
-    return buf[static_cast<std::vector<long>::size_type>(pos + 1) % buf.size()];
+    return buf[static_cast<size_t>(pos + 1) % buf.size()];
 }
 
 long

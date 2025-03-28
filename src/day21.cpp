@@ -285,7 +285,7 @@ makeTransGrid(
         auto id = bitsToId(std::vector<size_t> {
             grid_16[i], grid_16[i + 1], grid_16[i + 4], grid_16[i + 5]
         });
-        auto it = m_2to3[id].bits.begin();
+        auto it = m_2to3[id].bits.cbegin();
         for (auto k = 0uz; k < 3; ++k) {
             grid_36[j + 6 * k] = *it++;
             grid_36[j + 6 * k + 1] = *it++;
@@ -311,7 +311,7 @@ makeTransGrid(
         auto id = bitsToId(std::vector<size_t> {
             grid_36[i], grid_36[i + 1], grid_36[i + 6], grid_36[i + 7]
         });
-        auto it = m_2to3[id].bits.begin();
+        auto it = m_2to3[id].bits.cbegin();
         for (auto k = 0uz; k < 3; ++k) {
             grid_81[j + 9 * k] = *it++;
             grid_81[j + 9 * k + 1] = *it++;

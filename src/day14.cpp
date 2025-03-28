@@ -61,7 +61,7 @@ knotHash(std::vector<unsigned long> lengths, long round) {
             auto x = pos;
             auto y = (pos + len - 1) % KNOTS_LEN;
             for (unsigned long cnt = 0; cnt < len / 2; ++cnt) {
-                std::swap(knots[x], knots[y]);
+                std::ranges::swap(knots[x], knots[y]);
                 x = (x + 1) % KNOTS_LEN;
                 y = y == 0 ? KNOTS_LEN - 1 : y - 1;
             }
@@ -118,9 +118,7 @@ parse(std::istream &is) {
 
 long
 part1(std::vector<long> const &grid) {
-    return std::count_if(grid.begin(), grid.end(), [](auto x) {
-        return x != 0;
-    });
+    return std::ranges::count_if(grid, [](auto x) { return x != 0; });
 }
 
 std::vector<size_t>

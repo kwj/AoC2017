@@ -89,23 +89,19 @@ part2(std::map<long, std::set<long>> const &tbl) {
 
                 // assume that initial delay is next_dly, check if the packet doesn't
                 // caught by each layer whose period is 2(r - 1).
-                if (std::all_of(
-                        depths.begin(),
-                        depths.end(),
-                        [&](auto const &depth) {
-                            return !isCaught(period, depth, next_dly);
-                        }
-                    )) {
+                if (std::ranges::all_of(depths, [&](auto const &depth) {
+                        return !isCaught(period, depth, next_dly);
+                    })) {
                     next_delays.push_back(next_dly);
                 }
             }
         }
 
-        std::swap(delays, next_delays);
+        std::ranges::swap(delays, next_delays);
         crnt_lcm = next_lcm;
     }
 
-    return *std::min_element(delays.begin(), delays.end());
+    return *std::ranges::min_element(delays);
 }
 
 } // namespace day13

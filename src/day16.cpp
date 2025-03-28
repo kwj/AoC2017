@@ -121,24 +121,24 @@ parse(std::istream &is) {
     std::iota(op_ltr.begin(), op_ltr.end(), 0);
 #endif
 
-    auto num_it = nums.begin();
+    auto num_it = nums.cbegin();
     for (auto const &cmd : cmds) {
         if (cmd[0] == 's') {
             // Spin
             auto offset = *num_it++;
-            std::rotate(op_pos.begin(), op_pos.end() - offset, op_pos.end());
+            std::ranges::rotate(
+                op_pos.begin(), op_pos.end() - offset, op_pos.end()
+            );
         } else if (cmd[0] == 'x') {
             // Exchange
             auto p1 = *num_it++;
             auto p2 = *num_it++;
-            std::iter_swap(op_pos.begin() + p1, op_pos.begin() + p2);
+            std::ranges::iter_swap(op_pos.begin() + p1, op_pos.begin() + p2);
         } else {
             // Partner
-            auto ltr_it1 =
-                std::find(op_ltr.begin(), op_ltr.end(), cmd[1] - 'a');
-            auto ltr_it2 =
-                std::find(op_ltr.begin(), op_ltr.end(), cmd[3] - 'a');
-            std::iter_swap(ltr_it1, ltr_it2);
+            auto ltr_it1 = std::ranges::find(op_ltr, cmd[1] - 'a');
+            auto ltr_it2 = std::ranges::find(op_ltr, cmd[3] - 'a');
+            std::ranges::iter_swap(ltr_it1, ltr_it2);
         }
     }
 
