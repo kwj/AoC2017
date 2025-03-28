@@ -84,7 +84,7 @@ part2(std::map<long, std::set<long>> const &tbl) {
         auto next_lcm = std::lcm(crnt_lcm, period);
         next_delays.clear();
         for (auto const &dly : delays) {
-            for (long gap = 0; gap < next_lcm; gap += crnt_lcm) {
+            for (auto gap = 0l; gap < next_lcm; gap += crnt_lcm) {
                 auto next_dly = dly + gap;
 
                 // assume that initial delay is next_dly, check if the packet doesn't

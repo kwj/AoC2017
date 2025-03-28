@@ -88,7 +88,7 @@ brent(MemoryBanks const &banks) {
 
     tortoise = banks;
     hare = banks;
-    for (long i = 0; i < lam; ++i) {
+    for (auto i = 0l; i < lam; ++i) {
         redistribute(hare);
     }
     long mu {0}; // start index of cycle

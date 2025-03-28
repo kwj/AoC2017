@@ -43,7 +43,7 @@ part1(long step) {
     buf.reserve(N_INSERTIONS + 1);
 
     long pos {0};
-    for (long i = 1; i <= N_INSERTIONS; ++i) {
+    for (auto i = 1l; i <= N_INSERTIONS; ++i) {
         pos = (pos + step) % static_cast<long>(buf.size()) + 1;
         buf.insert(buf.begin() + pos, i);
     }
