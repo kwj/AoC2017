@@ -106,7 +106,7 @@ fixValue(Grid &m, Pos const &pos) {
     });
 
     long result {0};
-    for (auto const d : dirs) {
+    for (auto const &d : dirs) {
         // If m[pos + d] doesn't exist, it is initialized to 0.
         result += m[pos + d];
     }

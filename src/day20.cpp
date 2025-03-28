@@ -431,7 +431,7 @@ part2(std::vector<Particle> const &particles) {
     std::set<size_t> del_particles;
 
     // since collision_map is a std::map, it can be checked in order of time elapsed
-    for (auto const &[_, pairs] : collision_map) {
+    for (auto const &pairs : std::views::values(collision_map)) {
         del_particles.clear();
         for (auto const &p : pairs) {
             // collision possible if both particles exist in the survival table
@@ -441,7 +441,7 @@ part2(std::vector<Particle> const &particles) {
             }
         }
 
-        // remove collided particles from the survival table
+        // clear suvival flags of collided particles
         for (auto const idx : del_particles) {
             survival_tbl[idx] = false;
         }

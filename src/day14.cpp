@@ -93,7 +93,13 @@ makeGrid(std::string_view prefix) {
         while (iss.get(ch)) {
             lengths.push_back(static_cast<unsigned long>(ch));
         }
+
+// P1206R7 (range to container conversion) is not yet fully supported in GCC 14.
+#if __cpp_lib_containers_ranges
         lengths.append_range(tail);
+#else
+        lengths.insert(lengths.end(), tail.cbegin(), tail.cend());
+#endif
 
         auto hash = knotHash(lengths, 64);
         for (auto it = hash.cbegin(); it < hash.cend(); std::advance(it, 16)) {
@@ -149,7 +155,7 @@ getNbrs(size_t idx) {
 
 void
 checkSpacesInRegion(std::vector<long> &squares, size_t idx) {
-    for (auto const &nbrs_idx : getNbrs(idx)) {
+    for (auto const nbrs_idx : getNbrs(idx)) {
         if (squares[nbrs_idx] != 0) {
             squares[nbrs_idx] = 0;
             checkSpacesInRegion(squares, nbrs_idx);

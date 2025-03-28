@@ -95,7 +95,7 @@ long
 part1(std::vector<Instruction> const &insts) {
     std::unordered_map<std::string, long> regs;
 
-    for (auto &[r1, r2, op_fn, cond_fn] : insts) {
+    for (auto const &[r1, r2, op_fn, cond_fn] : insts) {
         if (cond_fn(regs[r2])) {
             regs[r1] = op_fn(regs[r1]);
         }
@@ -114,7 +114,7 @@ part2(std::vector<Instruction> const &insts) {
     std::unordered_map<std::string, long> regs;
     long max_value {0};
 
-    for (auto &[r1, r2, op_fn, cond_fn] : insts) {
+    for (auto const &[r1, r2, op_fn, cond_fn] : insts) {
         if (cond_fn(regs[r2])) {
             regs[r1] = op_fn(regs[r1]);
             max_value = std::max(max_value, regs[r1]);

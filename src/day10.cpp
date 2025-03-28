@@ -99,7 +99,13 @@ part2(std::string const &s) {
     while (iss.get(ch)) {
         lengths.push_back(static_cast<unsigned long>(ch));
     }
+
+// P1206R7 (range to container conversion) is not yet fully supported in GCC 14.
+#if __cpp_lib_containers_ranges
     lengths.append_range(tail);
+#else
+    lengths.insert(lengths.end(), tail.cbegin(), tail.cend());
+#endif
 
     auto hash = knotHash(lengths, 64);
     std::ostringstream oss;

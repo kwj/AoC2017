@@ -62,8 +62,8 @@ parse(std::istream &is) {
 
     std::unordered_map<std::complex<int>, int, ComplexHash> grid;
     int y {0};
-    for (auto chars : work) {
-        for (auto [x, ch] : std::views::zip(std::views::iota(0), chars)) {
+    for (auto const &chars : work) {
+        for (auto const [x, ch] : std::views::zip(std::views::iota(0), chars)) {
             if (ch == '#') {
                 grid[{x, y}] = INFECTED;
             }

@@ -6,6 +6,7 @@ module;
 #include <istream>
 #include <iterator>
 #include <map>
+#include <ranges>
 #include <span>
 #include <string>
 #include <tuple>
@@ -119,9 +120,14 @@ parse(std::istream &is) {
         tmp[state] = actions;
     }
 
-    for (auto &[_, acts] : tmp) {
+// P1206R7 (range to container conversion) is not yet fully supported in GCC 14.
+#if __cpp_lib_containers_ranges
+    rules.append_range(std::views::values(tmp));
+#else
+    for (auto &acts : std::views::values(tmp)) {
         rules.push_back(acts);
     }
+#endif
 
     return {start, steps, rules};
 }

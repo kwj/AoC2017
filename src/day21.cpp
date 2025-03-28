@@ -323,9 +323,14 @@ makeTransGrid(
     }
     result.pop_count[3] = std::ranges::count(grid_81, 1);
 
-    for (auto const [id, cnt] : counter) {
-        result.next_grids.push_back({id, cnt});
-    }
+// P1206R7 (range to container conversion) is not yet fully supported in GCC 14.
+#if __cpp_lib_containers_ranges
+    result.next_grids.append_range(counter);
+#else
+    result.next_grids.insert(
+        result.next_grids.end(), counter.cbegin(), counter.cend()
+    );
+#endif
 
     return result;
 }
