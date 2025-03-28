@@ -62,7 +62,7 @@ knotHash(std::vector<unsigned long> lengths, long round) {
     unsigned long pos {0};
     while (round-- > 0) {
         for (auto const len : lengths) {
-            // reverse
+            // reverse the order by swapping elements
             auto x = pos;
             auto y = (pos + len - 1) % KNOTS_LEN;
             for (unsigned long cnt = 0; cnt < len / 2; ++cnt) {
