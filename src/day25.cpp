@@ -2,7 +2,9 @@ module;
 
 #include <algorithm>
 #include <array>
+#include <deque>
 #include <istream>
+#include <iterator>
 #include <map>
 #include <span>
 #include <string>
@@ -47,39 +49,44 @@ solve(std::istream &is) {
     return {part1(input_data)};
 }
 
-// virtual tape:
-//   it acts like as a stack except it returns a value N
-//   even if calling read() on empty queue.
+// virtual tape
 template <typename T, T N>
 class Tape {
   public:
-    Tape() { data = std::vector<T>(); };
-    void write(T v);
-    T read();
+    Tape() {
+        data = std::deque<T>(1, N);
+        it = data.begin();
+    }
+    T write(T v, bool dir);
 
   private:
-    std::vector<T> data;
+    std::deque<T> data;
+    std::deque<T>::iterator it;
 };
 
 template <typename T, T N>
-void
-Tape<T, N>::write(T v) {
-    data.push_back(v);
-
-    return;
-}
-
-template <typename T, T N>
 T
-Tape<T, N>::read() {
-    if (data.empty()) {
-        return N;
+Tape<T, N>::write(T v, bool dir) {
+    *it = v;
+    if (dir) {
+        // right
+        if (std::next(it) == data.end()) {
+            data.push_back(N);
+            it = std::prev(data.end());
+        } else {
+            ++it;
+        }
     } else {
-        auto v = data.back();
-        data.pop_back();
-
-        return v;
+        // left
+        if (it == data.begin()) {
+            data.push_front(N);
+            it = data.begin();
+        } else {
+            --it;
+        }
     }
+
+    return *it;
 }
 
 Head
@@ -121,8 +128,7 @@ parse(std::istream &is) {
 
 unsigned long
 run(size_t state, long steps, std::vector<std::array<Op, 2>> &rules) {
-    auto tape_l = Tape<size_t, 0uz>();
-    auto tape_r = Tape<size_t, 0uz>();
+    auto tape = Tape<size_t, 0uz>();
     auto counter {0ul};
     auto curr {0uz};
 
@@ -131,16 +137,8 @@ run(size_t state, long steps, std::vector<std::array<Op, 2>> &rules) {
         counter += v - curr;
 
         // write a new value on the tape, move the cursor to the right/left and
-        // read a next value from the tape
-        if (dir) {
-            // right
-            tape_l.write(v);
-            curr = tape_r.read();
-        } else {
-            // left
-            tape_r.write(v);
-            curr = tape_l.read();
-        }
+        // return a next value from the tape
+        curr = tape.write(v, dir);
 
         state = next_state;
     }
