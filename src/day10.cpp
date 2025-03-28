@@ -1,6 +1,7 @@
 module;
 
 #include <algorithm>
+#include <array>
 #include <format>
 #include <functional>
 #include <istream>
@@ -46,9 +47,9 @@ parse(std::istream &is) {
     return util::getLine(is);
 }
 
-std::vector<long>
+std::array<long, KNOTS_LEN>
 knotHash(std::vector<unsigned long> lengths, long round) {
-    auto knots = std::vector<long>(KNOTS_LEN);
+    std::array<long, KNOTS_LEN> knots;
 
 // P2440R1 (ranges::iota) is not yet supported in libc++ 19.
 #if __cpp_lib_ranges_iota
@@ -62,12 +63,12 @@ knotHash(std::vector<unsigned long> lengths, long round) {
     while (round-- > 0) {
         for (auto const len : lengths) {
             // reverse
-            auto i1 = pos;
-            auto i2 = (pos + len - 1) % KNOTS_LEN;
+            auto x = pos;
+            auto y = (pos + len - 1) % KNOTS_LEN;
             for (unsigned long cnt = 0; cnt < len / 2; ++cnt) {
-                std::swap(knots[i1], knots[i2]);
-                i1 = (i1 + 1) % KNOTS_LEN;
-                i2 = i2 > 0 ? i2 - 1 : KNOTS_LEN - 1;
+                std::swap(knots[x], knots[y]);
+                x = (x + 1) % KNOTS_LEN;
+                y = y > 0 ? y - 1 : KNOTS_LEN - 1;
             }
 
             // move position
