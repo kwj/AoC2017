@@ -68,7 +68,7 @@ knotHash(std::vector<unsigned long> lengths, long round) {
             for (unsigned long cnt = 0; cnt < len / 2; ++cnt) {
                 std::swap(knots[x], knots[y]);
                 x = (x + 1) % KNOTS_LEN;
-                y = y > 0 ? y - 1 : KNOTS_LEN - 1;
+                y = y == 0 ? KNOTS_LEN - 1 : y - 1;
             }
 
             // move position
