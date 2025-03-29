@@ -16,8 +16,10 @@ export module day22;
 
 export namespace day22 {
 
+using Pos = std::complex<int>;
+
 struct ComplexHash {
-    std::size_t operator()(std::complex<int> const &key) const {
+    std::size_t operator()(Pos const &key) const {
         auto h = std::hash<long> {};
         auto r = static_cast<long>(key.real());
         auto i = static_cast<long>(key.imag());
@@ -26,15 +28,12 @@ struct ComplexHash {
     }
 };
 
-struct InitialGrid {
-    std::unordered_map<std::complex<int>, int, ComplexHash> grid;
-    std::complex<int> pos;
-};
+using Grid = std::unordered_map<Pos, int, ComplexHash>;
 
 std::tuple<long, long> solve(std::istream &is);
-InitialGrid parse(std::istream &is);
-long part1(InitialGrid const &init_grid);
-long part2(InitialGrid const &init_grid);
+std::pair<Grid, Pos> parse(std::istream &is);
+long part1(std::pair<Grid, Pos> const &init);
+long part2(std::pair<Grid, Pos> const &init);
 
 } // namespace day22
 
@@ -55,14 +54,14 @@ constexpr int CLEAN = 1;
 [[maybe_unused]] constexpr int WEAK = 2;
 constexpr int INFECTED = 3;
 
-InitialGrid
+std::pair<Grid, Pos>
 parse(std::istream &is) {
     std::vector<std::vector<char>> work;
     for (std::string line; std::getline(is, line);) {
         work.push_back(line | std::ranges::to<std::vector<char>>());
     }
 
-    std::unordered_map<std::complex<int>, int, ComplexHash> grid;
+    std::unordered_map<Pos, int, ComplexHash> grid;
     int y {0};
     for (auto const &chars : work) {
         for (auto const [x, ch] : std::views::zip(std::views::iota(0), chars)) {
@@ -73,23 +72,15 @@ parse(std::istream &is) {
         ++y;
     }
 
-    return {
-        .grid = grid,
-        .pos = std::complex<int>(static_cast<int>(work[0].size()) / 2, y / 2)
-    };
+    return {grid, Pos(static_cast<int>(work[0].size()) / 2, y / 2)};
 }
 
 long
-simulate(InitialGrid const &init_grid, long iteration, int delta) {
-    constexpr std::complex<int> turn_cw(0, 1), turn_ccw(0, -1), turn_180(-1, 0),
+simulate(Grid grid, Pos pos, long iteration, int delta) {
+    constexpr Pos turn_cw(0, 1), turn_ccw(0, -1), turn_180(-1, 0),
         straight(1, 0);
-    std::vector<std::complex<int>> dir_tbl {
-        turn_180, turn_ccw, straight, turn_cw
-    };
-    std::complex<int> dir(0, -1);
-
-    auto grid {init_grid.grid};
-    auto pos {init_grid.pos};
+    std::vector<Pos> dir_tbl {turn_180, turn_ccw, straight, turn_cw};
+    Pos dir(0, -1);
     long result {0};
 
     while (iteration-- > 0) {
@@ -110,13 +101,13 @@ simulate(InitialGrid const &init_grid, long iteration, int delta) {
 }
 
 long
-part1(InitialGrid const &init_grid) {
-    return simulate(init_grid, 10'000, 2);
+part1(std::pair<Grid, Pos> const &init) {
+    return simulate(init.first, init.second, 10'000, 2);
 }
 
 long
-part2(InitialGrid const &init_grid) {
-    return simulate(init_grid, 10'000'000, 1);
+part2(std::pair<Grid, Pos> const &init) {
+    return simulate(init.first, init.second, 10'000'000, 1);
 }
 
 } // namespace day22
