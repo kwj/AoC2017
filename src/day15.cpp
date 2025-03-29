@@ -8,7 +8,6 @@ https://en.wikipedia.org/wiki/Lehmer_random_number_generator
 
 module;
 
-#include <algorithm>
 #include <istream>
 #include <ranges>
 #include <string>
@@ -60,7 +59,7 @@ judgement(unsigned long num_a, unsigned long num_b) {
     long m8_cnt {0};
 
     long judge_p1 {0};
-    while (p1_cnt < P1_N_PAIRS || m4_cnt < P2_N_PAIRS || m4_cnt < P2_N_PAIRS) {
+    while (p1_cnt < P1_N_PAIRS || m4_cnt < P2_N_PAIRS || m8_cnt < P2_N_PAIRS) {
         num_a = (num_a * A) % M;
         num_b = (num_b * B) % M;
 

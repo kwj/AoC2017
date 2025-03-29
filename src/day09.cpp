@@ -1,7 +1,6 @@
 module;
 
 #include <istream>
-#include <string>
 #include <tuple>
 #include <utility>
 
@@ -56,6 +55,7 @@ parse(std::istream &is) {
         case '}':
             --depth;
             break;
+        default:; // no-op
         }
     }
 

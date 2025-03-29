@@ -56,7 +56,7 @@ std::vector<Instruction>
 parse(std::istream &is) {
     std::vector<Instruction> insts;
     std::smatch m;
-    std::regex re(R"((\w+) (\w+) (-?\d+) if (\w+) (\S+) (-?\d+))");
+    std::regex const re(R"((\w+) (\w+) (-?\d+) if (\w+) (\S+) (-?\d+))");
 
     for (std::string line; std::getline(is, line);) {
         if (std::regex_match(line, m, re)) {

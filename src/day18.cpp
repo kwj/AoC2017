@@ -74,7 +74,9 @@ data files which I saw on GitHub had same values.
 module;
 
 #include <algorithm>
+#include <functional>
 #include <istream>
+#include <iterator>
 #include <regex>
 #include <sstream>
 #include <string>
@@ -109,9 +111,9 @@ std::vector<long>
 parse(std::istream &is) {
     std::ostringstream oss;
     oss << is.rdbuf();
-    std::string content = oss.str();
+    std::string const content = oss.str();
 
-    std::regex re(R"(set p (\d+))");
+    std::regex const re(R"(set p (\d+))");
     std::smatch m;
     std::regex_search(content, m, re);
     auto seed = std::stoull(m[1].str());

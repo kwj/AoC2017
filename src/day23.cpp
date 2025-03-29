@@ -94,9 +94,9 @@ long
 parse(std::istream &is) {
     std::ostringstream oss;
     oss << is.rdbuf();
-    std::string content = oss.str();
+    std::string const content = oss.str();
 
-    std::regex re(R"(set b (\d+))");
+    std::regex const re(R"(set b (\d+))");
     std::smatch m;
     std::regex_search(content, m, re);
     auto seed = std::stol(m[1].str());
@@ -115,7 +115,7 @@ isPrime(long n) {
     }
 
     auto sq_n = static_cast<long>(std::sqrt(n));
-    for (auto i = 5l; i <= sq_n; i += 6) {
+    for (auto i = 5L; i <= sq_n; i += 6) {
         if (n % i == 0 || n % (i + 2) == 0) {
             return false;
         }
@@ -132,7 +132,7 @@ part1(long b) {
 long
 part2(long b) {
     b = 100000 + 100 * b;
-    long c = b + 17000;
+    long const c = b + 17000;
     long result {0};
 
     for (; b <= c; b += 17) {

@@ -1,7 +1,7 @@
 module;
 
-#include <algorithm>
 #include <array>
+#include <cstddef>
 #include <deque>
 #include <istream>
 #include <iterator>

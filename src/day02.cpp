@@ -2,7 +2,6 @@ module;
 
 #include <algorithm>
 #include <istream>
-#include <ranges>
 #include <string>
 #include <tuple>
 #include <vector>
@@ -48,9 +47,9 @@ parse(std::istream &is) {
 
 long
 part1(std::vector<std::vector<long>> const &vvs) {
-    int result {0};
+    long result {0};
 
-    // Note: `vs` is a list of int in descending order.
+    // Note: `vs` is a list of long in descending order.
     for (auto const &vs : vvs) {
         result += vs.front() - vs.back();
     }

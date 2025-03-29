@@ -2,13 +2,15 @@ module;
 
 #include <algorithm>
 #include <array>
+#include <concepts>
+#include <cstddef>
 #include <format>
 #include <functional>
 #include <istream>
 #include <iterator>
 #include <numeric>
+#include <ranges>
 #include <sstream>
-#include <string>
 #include <string_view>
 #include <tuple>
 #include <vector>

@@ -38,7 +38,8 @@ allNumbers(std::string_view sv, std::regex re) {
         sv.cbegin(), sv.cend(), re
     };
 
-    for (decltype(it) last; it != last; ++it) {
+    // Default std::regex_token_iterator constructor creates the end-of-sequence iterator
+    for (decltype(it) const last; it != last; ++it) {
         result.push_back(std::stol(*it));
     }
 
@@ -47,14 +48,14 @@ allNumbers(std::string_view sv, std::regex re) {
 
 std::vector<long>
 getNumbers(std::string_view sv) {
-    std::regex re(R"(-?\d+)");
+    std::regex const re(R"(-?\d+)");
 
     return allNumbers(sv, re);
 }
 
 std::vector<long>
 getUNumbers(std::string_view sv) {
-    std::regex re(R"(\d+)");
+    std::regex const re(R"(\d+)");
 
     return allNumbers(sv, re);
 }

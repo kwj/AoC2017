@@ -1,7 +1,11 @@
 module;
 
+#include <algorithm>
 #include <cctype>
+#include <concepts>
+#include <cstddef>
 #include <istream>
+#include <iterator>
 #include <ranges>
 #include <sstream>
 #include <string>

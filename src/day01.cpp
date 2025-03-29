@@ -1,8 +1,7 @@
 module;
 
-#include <algorithm>
+#include <cstddef>
 #include <istream>
-#include <ranges>
 #include <string>
 #include <string_view>
 #include <tuple>

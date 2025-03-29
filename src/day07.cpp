@@ -24,12 +24,13 @@ input data.
 module;
 
 #include <algorithm>
+#include <cstddef>
+#include <functional>
 #include <istream>
-#include <iterator>
-#include <numeric>
 #include <ranges>
 #include <regex>
 #include <string>
+#include <string_view>
 #include <tuple>
 #include <unordered_map>
 #include <utility>
@@ -72,8 +73,8 @@ parse(std::istream &is) {
     using namespace std::literals;
 
     std::smatch m;
-    std::regex re(R"((\w+) \((\d+)\)( -> ((\w+, )*\w+))?)");
-    //                                   ^^^^^^^^^^^^^^ m[4]
+    std::regex const re(R"((\w+) \((\d+)\)( -> ((\w+, )*\w+))?)");
+    //                                         ^^^^^^^^^^^^^^ m[4]
 
     std::vector<Disc> discs {{"sentinel", 0, 0, 0, {}}};
     std::unordered_map<std::string, size_t> idMap;

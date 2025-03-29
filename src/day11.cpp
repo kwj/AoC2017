@@ -18,7 +18,6 @@ module;
 #include <cmath>
 #include <istream>
 #include <ranges>
-#include <string>
 #include <string_view>
 #include <tuple>
 #include <vector>
@@ -31,12 +30,17 @@ export module day11;
 export namespace day11 {
 
 struct HexPos {
-    long a;
-    long b;
-    long c;
+  public:
+    HexPos(long init_a, long init_b, long init_c) :
+        a(init_a), b(init_b), c(init_c) {};
     HexPos operator+(HexPos const &other);
     HexPos &operator+=(HexPos const &other);
     long distance();
+
+  private:
+    long a;
+    long b;
+    long c;
 };
 
 std::tuple<long, long> solve(std::istream &is);
@@ -80,7 +84,7 @@ HexPos::distance() {
 std::vector<HexPos>
 parse(std::istream &is) {
     auto &&line = util::getLine(is);
-    std::string_view s {line};
+    std::string_view const s {line};
 
     std::vector<HexPos> dirs;
     for (auto const &subr : std::views::split(s, ',')) {
@@ -105,7 +109,7 @@ parse(std::istream &is) {
 
 long
 part1(std::vector<HexPos> const &dirs) {
-    HexPos origin {0, 0, 0};
+    HexPos const origin {0, 0, 0};
     auto goal =
         std::ranges::fold_left(dirs, origin, [](HexPos lhs, HexPos const &rhs) {
             return lhs + rhs;

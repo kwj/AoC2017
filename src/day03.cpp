@@ -25,6 +25,8 @@ module;
 #include <array>
 #include <cmath>
 #include <complex>
+#include <cstddef>
+#include <functional>
 #include <istream>
 #include <string>
 #include <tuple>

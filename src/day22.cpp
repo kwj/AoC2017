@@ -1,6 +1,8 @@
 module;
 
 #include <complex>
+#include <cstddef>
+#include <functional>
 #include <istream>
 #include <ranges>
 #include <string>

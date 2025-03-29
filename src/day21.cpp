@@ -98,6 +98,7 @@ module;
 #include <algorithm>
 #include <array>
 #include <bit>
+#include <cstddef>
 #include <istream>
 #include <map>
 #include <set>
@@ -142,7 +143,7 @@ solve(std::istream &is) {
 //    .#.
 //    ..# --> {0, 1, 0, 0, 0, 1, 1, 1, 1}
 //    ###
-std::vector<size_t> start_grid = {0, 1, 0, 0, 0, 1, 1, 1, 1};
+std::array<size_t, 9> const start_grid = {0, 1, 0, 0, 0, 1, 1, 1, 1};
 
 struct Map_2x2to3x3 {
     std::array<size_t, 9> bits; // 3x3 grid after transition
@@ -278,7 +279,7 @@ makeTransGrid(
     result.pop_count[1] = std::ranges::count(grid_16, 1);
 
     // step 2
-    std::vector<std::pair<size_t, size_t>> idxmap_1 = {
+    std::vector<std::pair<size_t, size_t>> const idxmap_1 = {
         {0, 0}, {2, 3}, {8, 18}, {10, 21}
     };
     for (auto const [i, j] : idxmap_1) {
@@ -296,7 +297,7 @@ makeTransGrid(
 
     // step 3
     std::map<size_t, long> counter;
-    std::vector<std::pair<size_t, size_t>> idxmap_2 = {
+    std::vector<std::pair<size_t, size_t>> const idxmap_2 = {
         {0, 0},
         {2, 3},
         {4, 6},
@@ -355,6 +356,7 @@ parse(std::istream &is) {
             // 3x3 grid to 4x4 grid
             configMap(m_3to4, line); // function overloading
             break;
+        default:; // no-op
         }
     }
 

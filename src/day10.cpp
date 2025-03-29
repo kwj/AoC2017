@@ -2,6 +2,7 @@ module;
 
 #include <algorithm>
 #include <array>
+#include <concepts>
 #include <format>
 #include <functional>
 #include <istream>

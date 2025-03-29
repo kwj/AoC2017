@@ -96,6 +96,7 @@ module;
 
 #include <algorithm>
 #include <cmath>
+#include <cstddef>
 #include <deque>
 #include <istream>
 #include <map>
@@ -326,7 +327,7 @@ isSquare(long n) {
     if (n < 0) {
         return false;
     } else {
-        long sq_n = static_cast<long>(std::sqrt(n));
+        long const sq_n = static_cast<long>(std::sqrt(n));
         return sq_n * sq_n == n;
     }
 }
@@ -343,11 +344,11 @@ solveQuadratic(long a, long b, long c) {
             result.push_back(-c / b);
         }
     } else {
-        auto D = b * b - 4 * a * c;
+        auto const D = b * b - 4 * a * c;
         if (!isSquare(D)) {
             return std::nullopt;
         }
-        long sq_D = static_cast<long>(std::sqrt(D));
+        long const sq_D = static_cast<long>(std::sqrt(D));
 
         if ((-b + sq_D) % (2 * a) == 0) {
             result.push_back((-b + sq_D) / (2 * a));

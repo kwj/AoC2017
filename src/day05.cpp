@@ -1,5 +1,6 @@
 module;
 
+#include <cstddef>
 #include <functional>
 #include <istream>
 #include <string>
@@ -13,8 +14,8 @@ export namespace day05 {
 
 std::tuple<long, long> solve(std::istream &is);
 std::vector<long> parse(std::istream &is);
-long part1(std::vector<long> const &vvs);
-long part2(std::vector<long> const &vvs);
+long part1(std::vector<long> const &insts);
+long part2(std::vector<long> const &insts);
 
 } // namespace day05
 
@@ -58,19 +59,17 @@ run(std::vector<long> insts, std::function<long(long)> f) {
 }
 
 long
-part1(std::vector<long> const &vn) {
-    std::vector<long> instructions {vn};
+part1(std::vector<long> const &insts) {
     auto f = [](long n) { return n + 1; };
 
-    return run(instructions, f);
+    return run(insts, f);
 }
 
 long
-part2(std::vector<long> const &vn) {
-    std::vector<long> instructions {vn};
+part2(std::vector<long> const &insts) {
     auto f = [](long n) { return n >= 3 ? n - 1 : n + 1; };
 
-    return run(instructions, f);
+    return run(insts, f);
 }
 
 } // namespace day05

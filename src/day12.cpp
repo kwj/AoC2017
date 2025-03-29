@@ -5,6 +5,7 @@ greater than one before it in the given input data, and they are started from 0.
 
 module;
 
+#include <cstddef>
 #include <istream>
 #include <ranges>
 #include <string>
