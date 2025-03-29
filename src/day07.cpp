@@ -76,7 +76,9 @@ parse(std::istream &is) {
     std::regex const re(R"((\w+) \((\d+)\)( -> ((\w+, )*\w+))?)");
     //                                         ^^^^^^^^^^^^^^ m[4]
 
-    std::vector<Disc> discs {{"sentinel", 0, 0, 0, {}}};
+    std::vector<Disc> discs {
+        {.name = "sentinel", .id = 0, .parent = 0, .weight = 0, .children = {}}
+    };
     std::unordered_map<std::string, size_t> idMap;
     std::unordered_map<size_t, std::vector<std::string>> childMap;
 
@@ -86,7 +88,9 @@ parse(std::istream &is) {
             auto name = m[1].str();
             auto weight = std::stol(m[2].str());
 
-            discs.push_back({name, idx, 0, weight, {}});
+            discs.emplace_back(
+                name, idx, 0, weight, std::vector<std::pair<size_t, long>> {}
+            );
             idMap[name] = idx;
 
             if (m.length(4) > 0) {
@@ -104,6 +108,7 @@ parse(std::istream &is) {
     for (auto const &[parent_id, children] : childMap) {
         std::ranges::for_each(children, [&](std::string const &name) {
             auto child_id = idMap[name];
+            // NOLINTNEXTLINE (clang-analyzer-core.NullDereference)
             discs[parent_id].children.emplace_back(child_id, 0);
             discs[child_id].parent = parent_id;
         });

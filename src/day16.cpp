@@ -53,7 +53,7 @@ Choreography::Choreography() {
     by_ltr_tbl.resize(N_PROGRAMS);
 
 // P2440R1 (ranges::iota) is not yet supported in libc++ 19.
-#if __cpp_lib_ranges_iota
+#if __cpp_lib_ranges_iota >= 202202L
     std::ranges::iota(by_pos_tbl, 0);
     std::ranges::iota(by_ltr_tbl, 0);
 #else
@@ -115,7 +115,7 @@ parse(std::istream &is) {
     std::vector<size_t> op_ltr(N_PROGRAMS);
 
 // P2440R1 (ranges::iota) is not yet supported in libc++ 19.
-#if __cpp_lib_ranges_iota
+#if __cpp_lib_ranges_iota >= 202202L
     std::ranges::iota(op_pos, 0);
     std::ranges::iota(op_ltr, 0);
 #else

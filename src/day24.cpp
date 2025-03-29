@@ -74,7 +74,7 @@ parse(std::istream &is) {
     std::vector<Component> cmpnts;
     for (std::string line; std::getline(is, line);) {
         auto nums = util::getNumbers(line);
-        cmpnts.push_back({false, nums[0], nums[1], nums[0] + nums[1]});
+        cmpnts.emplace_back(false, nums[0], nums[1], nums[0] + nums[1]);
     }
 
     long max_strength {0};

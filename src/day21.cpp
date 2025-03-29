@@ -204,7 +204,7 @@ configMap(std::array<Map_2x2to3x3, 16> &m, std::string_view sv) {
 
     auto cnt = std::popcount(bitsToId(src));
     for (auto id : getVariants_2x2(src)) {
-        m[id] = Map_2x2to3x3 {dst, cnt};
+        m[id] = Map_2x2to3x3 {.bits = dst, .pop_count = cnt};
     }
 
     return bitsToId(dst);
@@ -251,7 +251,7 @@ configMap(std::array<Map_3x3to4x4, 512> &m, std::string_view sv) {
 
     auto cnt = std::popcount(bitsToId(src));
     for (auto id : getVariants_3x3(src)) {
-        m[id] = Map_3x3to4x4 {dst, cnt};
+        m[id] = Map_3x3to4x4 {.bits = dst, .pop_count = cnt};
     }
 
     return;
@@ -325,7 +325,7 @@ makeTransGrid(
     result.pop_count[3] = std::ranges::count(grid_81, 1);
 
 // P1206R7 (range to container conversion) is not yet fully supported in GCC 14.
-#if __cpp_lib_containers_ranges
+#if __cpp_lib_containers_ranges >= 202202L
     result.next_grids.append_range(counter);
 #else
     result.next_grids.insert(

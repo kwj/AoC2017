@@ -90,17 +90,17 @@ parse(std::istream &is) {
     for (auto const &subr : std::views::split(s, ',')) {
         auto dir = std::string_view(subr);
         if (dir == "n") {
-            dirs.push_back({0, 1, -1});
+            dirs.emplace_back(0, 1, -1);
         } else if (dir == "ne") {
-            dirs.push_back({1, 0, -1});
+            dirs.emplace_back(1, 0, -1);
         } else if (dir == "se") {
-            dirs.push_back({1, -1, 0});
+            dirs.emplace_back(1, -1, 0);
         } else if (dir == "s") {
-            dirs.push_back({0, -1, 1});
+            dirs.emplace_back(0, -1, 1);
         } else if (dir == "sw") {
-            dirs.push_back({-1, 0, 1});
+            dirs.emplace_back(-1, 0, 1);
         } else if (dir == "nw") {
-            dirs.push_back({-1, 1, 0});
+            dirs.emplace_back(-1, 1, 0);
         }
     }
 

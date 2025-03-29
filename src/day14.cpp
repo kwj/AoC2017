@@ -49,7 +49,7 @@ knotHash(std::vector<unsigned long> lengths, long round) {
     std::array<long, KNOTS_LEN> knots;
 
 // P2440R1 (ranges::iota) is not yet supported in libc++ 19.
-#if __cpp_lib_ranges_iota
+#if __cpp_lib_ranges_iota >= 202202L
     std::ranges::iota(knots, 0);
 #else
     std::iota(knots.begin(), knots.end(), 0);
@@ -97,7 +97,7 @@ makeGrid(std::string_view prefix) {
         }
 
 // P1206R7 (range to container conversion) is not yet fully supported in GCC 14.
-#if __cpp_lib_containers_ranges
+#if __cpp_lib_containers_ranges >= 202202L
         lengths.append_range(tail);
 #else
         lengths.insert(lengths.end(), tail.cbegin(), tail.cend());

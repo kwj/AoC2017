@@ -74,7 +74,8 @@ parse(std::istream &is) {
     }
 
     return {
-        grid, std::complex<int>(static_cast<int>(work[0].size()) / 2, y / 2)
+        .grid = grid,
+        .pos = std::complex<int>(static_cast<int>(work[0].size()) / 2, y / 2)
     };
 }
 

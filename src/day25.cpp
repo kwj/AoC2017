@@ -115,13 +115,13 @@ parse(std::istream &is) {
             auto dir = block[4 * i + 3][27] == 'r';
             auto next = static_cast<size_t>(block[4 * i + 4][26] - 'A');
 
-            actions[crnt] = {v, next, dir};
+            actions[crnt] = {.v = v, .next = next, .dir = dir};
         }
         tmp[state] = actions;
     }
 
 // P1206R7 (range to container conversion) is not yet fully supported in GCC 14.
-#if __cpp_lib_containers_ranges
+#if __cpp_lib_containers_ranges >= 202202L
     rules.append_range(std::views::values(tmp));
 #else
     for (auto &acts : std::views::values(tmp)) {
@@ -129,7 +129,7 @@ parse(std::istream &is) {
     }
 #endif
 
-    return {start, steps, rules};
+    return {.init_state = start, .steps = steps, .rules = rules};
 }
 
 unsigned long

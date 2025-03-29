@@ -11,7 +11,6 @@ module;
 #include <print>
 #include <ranges>
 #include <sstream>
-#include <string_view>
 #include <tuple>
 
 import day01;
@@ -57,7 +56,7 @@ namespace solver {
 
 std::stringstream
 getInput(std::string const &fpath) {
-    std::ifstream fin(fpath);
+    std::ifstream const fin(fpath);
     if (!fin) {
         throw std::ios_base::failure {"File opening failed"};
     }
@@ -112,6 +111,7 @@ solver(std::string fpath) {
     return;
 }
 
+// NOLINTNEXTLINE (cert-err58-cpp)
 std::map<int, std::function<void(std::string)>> const Solvers {
     {1, solver<day01::solve, 1>},   {2, solver<day02::solve, 2>},
     {3, solver<day03::solve, 3>},   {4, solver<day04::solve, 4>},

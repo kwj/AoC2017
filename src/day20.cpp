@@ -100,7 +100,6 @@ module;
 #include <deque>
 #include <istream>
 #include <map>
-#include <numeric>
 #include <optional>
 #include <ranges>
 #include <set>
@@ -122,7 +121,7 @@ class Particle {
     std::vector<long> p;
     std::vector<long> v;
     std::vector<long> a;
-    std::vector<long> position(long tick = 0) const;
+    [[nodiscard]] std::vector<long> position(long tick = 0) const;
 };
 
 std::tuple<long, long> solve(std::istream &is);
@@ -215,9 +214,9 @@ isFindClosest(std::deque<std::vector<std::pair<long, long>>> const &dq) {
     for (auto i = 0uz; i < n_particles; ++i) {
         std::vector<long> vs;
         long prev {0};
-        for (auto j = 0uz; j < dq.size(); ++j) {
-            vs.push_back(dq[j][i].first - prev);
-            prev = dq[j][i].first;
+        for (auto const &dist_info : dq) {
+            vs.push_back(dist_info[i].first - prev);
+            prev = dist_info[i].first;
         }
         vs.erase(vs.begin());
         work.push_back(vs);
@@ -265,7 +264,7 @@ measureDistances(std::vector<Particle> const &ps, long t) {
 
     std::vector<std::pair<long, long>> distances;
     for (auto const &p : ps) {
-        distances.push_back({norm(p.position(t)), p.id});
+        distances.emplace_back(norm(p.position(t)), p.id);
     }
     std::ranges::sort(distances, pair_cmp);
 
@@ -417,7 +416,7 @@ makeCollisionMap(std::vector<Particle> const &particles) {
         for (auto j = i + 1; j < particles.size(); ++j) {
             auto t = getCollisionTime(particles[i], particles[j]);
             if (t) {
-                collisions[t.value()].push_back({i, j});
+                collisions[t.value()].emplace_back(i, j);
             }
         }
     }

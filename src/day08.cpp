@@ -8,6 +8,7 @@ module;
 #include <string>
 #include <tuple>
 #include <unordered_map>
+#include <utility>
 #include <vector>
 
 // --------
@@ -44,12 +45,12 @@ solve(std::istream &is) {
 // clang-format off
 long opInc(long lhs, long rhs) { return lhs + rhs; }
 
-bool cmpGt(long lhs, long rhs) { return lhs > rhs; }
-bool cmpGe(long lhs, long rhs) { return lhs >= rhs; }
-bool cmpLt(long lhs, long rhs) { return lhs < rhs; }
-bool cmpLe(long lhs, long rhs) { return lhs <= rhs; }
+bool cmpGT(long lhs, long rhs) { return lhs > rhs; }
+bool cmpGE(long lhs, long rhs) { return lhs >= rhs; }
+bool cmpLT(long lhs, long rhs) { return lhs < rhs; }
+bool cmpLE(long lhs, long rhs) { return lhs <= rhs; }
 bool cmpEq(long lhs, long rhs) { return lhs == rhs; }
-bool cmpNe(long lhs, long rhs) { return lhs != rhs; }
+bool cmpNE(long lhs, long rhs) { return lhs != rhs; }
 // clang-format on
 
 std::vector<Instruction>
@@ -67,24 +68,38 @@ parse(std::istream &is) {
             auto op2 = std::stol(m[6].str());
             auto cond = m[5].str();
 
-            auto op_fn = std::bind(opInc, std::placeholders::_1, op1);
+            auto op_fn = [op1](auto &&ph1) {
+                return opInc(std::forward<decltype(ph1)>(ph1), op1);
+            };
 
             std::function<bool(long)> cond_fn;
             if (cond == ">") {
-                cond_fn = std::bind(cmpGt, std::placeholders::_1, op2);
+                cond_fn = [op2](auto &&ph1) {
+                    return cmpGT(std::forward<decltype(ph1)>(ph1), op2);
+                };
             } else if (cond == ">=") {
-                cond_fn = std::bind(cmpGe, std::placeholders::_1, op2);
+                cond_fn = [op2](auto &&ph1) {
+                    return cmpGE(std::forward<decltype(ph1)>(ph1), op2);
+                };
             } else if (cond == "<") {
-                cond_fn = std::bind(cmpLt, std::placeholders::_1, op2);
+                cond_fn = [op2](auto &&ph1) {
+                    return cmpLT(std::forward<decltype(ph1)>(ph1), op2);
+                };
             } else if (cond == "<=") {
-                cond_fn = std::bind(cmpLe, std::placeholders::_1, op2);
+                cond_fn = [op2](auto &&ph1) {
+                    return cmpLE(std::forward<decltype(ph1)>(ph1), op2);
+                };
             } else if (cond == "==") {
-                cond_fn = std::bind(cmpEq, std::placeholders::_1, op2);
+                cond_fn = [op2](auto &&ph1) {
+                    return cmpEq(std::forward<decltype(ph1)>(ph1), op2);
+                };
             } else if (cond == "!=") {
-                cond_fn = std::bind(cmpNe, std::placeholders::_1, op2);
+                cond_fn = [op2](auto &&ph1) {
+                    return cmpNE(std::forward<decltype(ph1)>(ph1), op2);
+                };
             }
 
-            insts.push_back({r1, r2, op_fn, cond_fn});
+            insts.emplace_back(r1, r2, op_fn, cond_fn);
         }
     }
 
