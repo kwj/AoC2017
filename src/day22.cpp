@@ -18,7 +18,7 @@ export namespace day22 {
 
 using Pos = std::complex<int>;
 
-struct ComplexHash {
+struct PosHash {
     std::size_t operator()(Pos const &key) const {
         auto h = std::hash<long> {};
         auto r = static_cast<long>(key.real());
@@ -28,7 +28,7 @@ struct ComplexHash {
     }
 };
 
-using Grid = std::unordered_map<Pos, int, ComplexHash>;
+using Grid = std::unordered_map<Pos, int, PosHash>;
 
 std::tuple<long, long> solve(std::istream &is);
 std::pair<Grid, Pos> parse(std::istream &is);
@@ -61,7 +61,7 @@ parse(std::istream &is) {
         work.push_back(line | std::ranges::to<std::vector<char>>());
     }
 
-    std::unordered_map<Pos, int, ComplexHash> grid;
+    Grid grid;
     int y {0};
     for (auto const &chars : work) {
         for (auto const [x, ch] : std::views::zip(std::views::iota(0), chars)) {
