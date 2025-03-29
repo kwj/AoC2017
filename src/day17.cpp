@@ -45,7 +45,7 @@ part1(long step) {
 
     long pos {0};
     for (auto i = 1L; i <= N_INSERTIONS; ++i) {
-        pos = (pos + step) % static_cast<long>(buf.size()) + 1;
+        pos = (pos + step) % std::ssize(buf) + 1;
         buf.insert(buf.begin() + pos, i);
     }
 

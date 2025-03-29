@@ -72,7 +72,7 @@ parse(std::istream &is) {
         ++y;
     }
 
-    return {grid, Pos(static_cast<int>(work[0].size()) / 2, y / 2)};
+    return {grid, Pos(static_cast<int>(std::ssize(work[0])) / 2, y / 2)};
 }
 
 long

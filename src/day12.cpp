@@ -95,7 +95,7 @@ part1(std::vector<long> const &grps) {
 
 long
 part2(std::vector<long> const &grps) {
-    return static_cast<long>(grps.size());
+    return std::ssize(grps);
 }
 
 } // namespace day12
