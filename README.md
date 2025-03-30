@@ -11,6 +11,7 @@ URL: https://adventofcode.com/2017
   - [libstdc++](https://gcc.gnu.org/onlinedocs/libstdc++/) (confirmed to work with the version included in GCC 14.2)
 * [CMake](https://cmake.org/) (confimed to work with CMake 3.30.1)
 * [Ninja](https://ninja-build.org/) (confimed to work with Ninja 1.12.1)
+* [GoogleTest](https://github.com/google/googletest) (confimed to work with GoogleTest v1.16.0)
 
 ## Solutions
 
@@ -41,9 +42,10 @@ URL: https://adventofcode.com/2017
 * [Day 25: The Halting Problem](./src/day25.cpp)
 
 ## How to build
+If you want to use libstdc++ instead of libc++, please modify the CMakeLists.txt in the top level of source tree.
+
 ```console
-$ mkdir build
-$ env CXX=/usr/bin/clang++ cmake -S . -B ./build -G Ninja
+$ cmake --preset AoC2017
 $ cmake --build ./build
 ```
 
@@ -51,7 +53,7 @@ $ cmake --build ./build
 
 ### Place puzzle input data files into each resource folder in advance
 
-The default file name of the puzzle input data is `input`:
+The default file name of the puzzle input data is `input`.
 
 ```console
 $ ls ./inputs/*/input
@@ -63,20 +65,36 @@ $ ls ./inputs/*/input
 $
 ```
 
-## Run solver
+### Run solver
 If you want to run the solver for Day 1, please do the following:
+
 ```console
 $ sh solve.sh 1
 ```
 
 The output will be as follows.
+
 ```console
 [Day 1]
 ****
 ****
 Elapsed time: #.###ms
-
 ```
+
+You can also run all solutions at once.
+
+```console
+$ ./build/src/aoc2017
+```
+
+### Unit test
+If you want to run unit tests:
+
+```console
+$ ctest --test-dir ./build
+```
+
+Please read the `./test/README.md` in advance. You ought to need to modify unit test files.
 
 ## Note
 

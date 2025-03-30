@@ -44,6 +44,7 @@ export module solver;
 
 export namespace solver {
 
+std::stringstream getInput(std::string const &fpath);
 void runAllSolver();
 void runSolver(int day, std::string fpath = "");
 

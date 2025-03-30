@@ -26,4 +26,7 @@ add_compile_options(
     -Werror
 )
 
+enable_testing()
+
 add_subdirectory(src)
+add_subdirectory(test)
