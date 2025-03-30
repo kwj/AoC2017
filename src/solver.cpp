@@ -72,7 +72,7 @@ std::tuple<int, int, std::string>
 convertTime(std::chrono::steady_clock::rep &&x) {
     constexpr std::array units {"s", "ms", "μs", "ns"};
 
-    std::size_t idx {units.size() - 1};
+    size_t idx {units.size() - 1};
     while (idx > 1 && x >= 1'000'000) {
         --idx;
         x /= 1'000;
