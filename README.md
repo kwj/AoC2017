@@ -5,7 +5,10 @@ URL: https://adventofcode.com/2017
 ## Prerequisites
 
 * [Clang](https://clang.llvm.org/) (confirmed to work with Clang 19.1.1)
-* [libc++](https://libcxx.llvm.org/) (confirmed to work with libc++ 19.1.1)
+  - I used C++20 private module fragment this time, however, [GCC 14 didn't support it yet](https://gcc.gnu.org/onlinedocs/gcc-14.2.0/gcc/C_002b_002b-Modules.html).
+* C++ Standard Library (one of the following)
+  - [libc++](https://libcxx.llvm.org/) (confirmed to work with libc++ 19.1.1)
+  - [libstdc++](https://gcc.gnu.org/onlinedocs/libstdc++/) (confirmed to work with the version included in GCC 14.2)
 * [CMake](https://cmake.org/) (confimed to work with CMake 3.30.1)
 * [Ninja](https://ninja-build.org/) (confimed to work with Ninja 1.12.1)
 
