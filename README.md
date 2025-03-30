@@ -94,7 +94,7 @@ If you want to run unit tests:
 $ ctest --test-dir ./build
 ```
 
-Please read the `./test/README.md` in advance. You ought to need to modify unit test files.
+Please read the [./test/README.md](./test/README.md) in advance. You ought to need to modify unit test files.
 
 ## Note
 
