@@ -3,6 +3,7 @@ find_program(CLANG_FORMAT_EXE clang-format)
 if(CLANG_FORMAT_EXE)
     file(GLOB_RECURSE SOURCES
         "src/*.cpp"
+        "test/*.cpp"
     )
 
     add_custom_target(format
