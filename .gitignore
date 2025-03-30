@@ -1,2 +1,2 @@
 build/
-inputs/
+inputs/[0-9]*

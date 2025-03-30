@@ -42,17 +42,9 @@ URL: https://adventofcode.com/2017
 * [Day 25: The Halting Problem](./src/day25.cpp)
 
 ## How to build
-If you want to use libstdc++ instead of libc++, please modify the CMakeLists.txt in the top level of source tree.
 
-```console
-$ cmake --preset AoC2017
-$ cmake --build ./build
-```
-
-## How to use
-
-### Place puzzle input data files into each resource folder in advance
-
+### Input files
+Place puzzle input data files into each resource folder in advance.
 The default file name of the puzzle input data is `input`.
 
 ```console
@@ -64,6 +56,16 @@ $ ls ./inputs/*/input
 ./inputs/25/input
 $
 ```
+
+### Build
+If you want to use libstdc++ instead of libc++, please modify the CMakeLists.txt in the top level of source tree.
+
+```console
+$ cmake --preset AoC2017
+$ cmake --build ./build
+```
+
+## How to use
 
 ### Run solver
 If you want to run the solver for Day 1, please do the following:
