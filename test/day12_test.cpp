@@ -26,4 +26,3 @@ TEST_F(Day12Test, Part2) {
     auto result = day12::part2(Day12Test::data);
     EXPECT_EQ(result, 195);
 }
-
