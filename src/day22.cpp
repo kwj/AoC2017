@@ -19,13 +19,7 @@ export namespace day22 {
 using Pos = std::complex<int>;
 
 struct PosHash {
-    std::size_t operator()(Pos const &key) const {
-        auto h = std::hash<long> {};
-        auto r = static_cast<long>(key.real());
-        auto i = static_cast<long>(key.imag());
-
-        return h((r & 0xFFFF) << 16 | (i & 0xFFFF));
-    }
+    size_t operator()(Pos const &key) const;
 };
 
 using Grid = std::unordered_map<Pos, int, PosHash>;
@@ -41,6 +35,15 @@ long part2(std::pair<Grid, Pos> const &init);
 module :private;
 
 namespace day22 {
+
+size_t
+PosHash::operator()(Pos const &key) const {
+    auto h = std::hash<long> {};
+    auto r = static_cast<long>(key.real());
+    auto i = static_cast<long>(key.imag());
+
+    return h((r & 0xFFFF) << 16 | (i & 0xFFFF));
+}
 
 std::tuple<long, long>
 solve(std::istream &is) {
