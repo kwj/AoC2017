@@ -6,7 +6,7 @@ module;
 #include <cstddef>
 #include <istream>
 #include <iterator>
-#if __cpp_lib_mdspan >= 202207L
+#if __has_include(<mdspan>) // <mdspan> is not supported in GCC 14.
 #include <mdspan>
 #endif
 #include <ranges>
