@@ -47,23 +47,25 @@ solve(std::istream &is) {
 #if __cpp_lib_mdspan >= 202207L
 std::pair<std::string, long>
 followPath(std::vector<char> const &grid_data, long rows, long cols) {
-    std::mdspan<const char, std::dextents<size_t, 2>> grid(
+    // Note
+    // Use signed integer for the index type here because casting is troublesome.
+    // The indexes therefore must be 0 or more. This implementation depends on the outer
+    // edges of the input data are all blank, ' ', except for the starting point.
+    std::mdspan<const char, std::dextents<long, 2>> grid(
         grid_data.data(), rows, cols
     );
-    auto r {0uz};
-    auto c = static_cast<size_t>(std::ranges::distance(
+    long r {0};
+    long c = std::ranges::distance(
         grid_data.cbegin(), std::ranges::find(grid_data, '|')
-    ));
-    int dr {1}, dc {0};
+    );
+    long dr {1}, dc {0};
 
     std::ostringstream oss;
     long cnt {0};
     while (grid[r, c] != ' ') {
         if (grid[r, c] == '+') {
             std::ranges::swap(dr, dc);
-            if (grid
-                    [r + static_cast<size_t>(-dr),
-                     c + static_cast<size_t>(-dc)] != ' ') {
+            if (grid[r - dr, c - dc] != ' ') {
                 dr = -dr;
                 dc = -dc;
             }
@@ -71,8 +73,8 @@ followPath(std::vector<char> const &grid_data, long rows, long cols) {
             oss << grid[r, c];
         }
 
-        r += static_cast<size_t>(dr);
-        c += static_cast<size_t>(dc);
+        r += dr;
+        c += dc;
         ++cnt;
     }
 
