@@ -1,3 +1,4 @@
+#include <exception>
 #include <iostream>
 #include <string>
 
@@ -16,8 +17,8 @@ main(int argc, char *argv[]) {
                 solver::runSolver(day, argv[2]);
             }
         }
-    } catch (...) {
-        std::cout << "Unexpected exception was thrown." << std::endl;
+    } catch (const std::exception &e) {
+        std::cout << e.what() << std::endl;
 
         return -1;
     }
