@@ -25,9 +25,9 @@ class Choreography {
         std::vector<size_t> const &op_pos, std::vector<size_t> const &op_ltr
     ) :
         by_pos_tbl(op_pos), by_ltr_tbl(op_ltr) {}
-    Choreography dance(Choreography const &other);
-    Choreography merge(Choreography const &other);
-    std::string show();
+    Choreography dance(Choreography const &other) const;
+    Choreography merge(Choreography const &other) const;
+    std::string show() const;
 
   private:
     std::vector<size_t> by_pos_tbl;
@@ -65,12 +65,12 @@ Choreography::Choreography() {
 }
 
 Choreography
-Choreography::dance(Choreography const &other) {
+Choreography::dance(Choreography const &other) const {
     return merge(other);
 }
 
 Choreography
-Choreography::merge(Choreography const &other) {
+Choreography::merge(Choreography const &other) const {
     decltype(by_pos_tbl) new_p;
     decltype(by_ltr_tbl) new_c;
 
@@ -85,7 +85,7 @@ Choreography::merge(Choreography const &other) {
 }
 
 std::string
-Choreography::show() {
+Choreography::show() const {
     std::ostringstream oss;
 
     for (auto const i : by_pos_tbl) {
