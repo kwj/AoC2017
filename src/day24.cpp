@@ -14,7 +14,7 @@ export module day24;
 
 export namespace day24 {
 
-struct Component {
+struct [[nodiscard]] Component {
     bool used;
     long port1;
     long port2;

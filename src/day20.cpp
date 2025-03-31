@@ -115,13 +115,13 @@ export module day20;
 
 export namespace day20 {
 
-class Particle {
+class [[nodiscard]] Particle {
   public:
     long id;
     std::vector<long> p;
     std::vector<long> v;
     std::vector<long> a;
-    [[nodiscard]] std::vector<long> position(long tick = 0) const;
+    std::vector<long> position(long tick = 0) const;
 };
 
 std::tuple<long, long> solve(std::istream &is);

@@ -113,7 +113,7 @@ export module day21;
 
 export namespace day21 {
 
-struct TransGrid {
+struct [[nodiscard]] TransGrid {
     std::array<long, 4> pop_count;
     std::vector<std::pair<size_t, long>> next_grids;
 };
@@ -145,12 +145,12 @@ solve(std::istream &is) {
 //    ###
 std::array<size_t, 9> const start_grid = {0, 1, 0, 0, 0, 1, 1, 1, 1};
 
-struct Map_2x2to3x3 {
+struct [[nodiscard]] Map_2x2to3x3 {
     std::array<size_t, 9> bits; // 3x3 grid after transition
     long pop_count;             // number of lit pixels in 2x2 grid
 };
 
-struct Map_3x3to4x4 {
+struct [[nodiscard]] Map_3x3to4x4 {
     std::array<size_t, 16> bits; // 4x4 grid after transition
     long pop_count;              // number of lit pixels in 3x3 grid
 };

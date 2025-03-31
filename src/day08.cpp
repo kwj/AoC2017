@@ -16,7 +16,7 @@ export module day08;
 
 export namespace day08 {
 
-struct Instruction {
+struct [[nodiscard]] Instruction {
     std::string r1;
     std::string r2;
     std::function<long(long)> op_fn;

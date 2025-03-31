@@ -19,13 +19,13 @@ export module day25;
 
 export namespace day25 {
 
-struct Op {
+struct [[nodiscard]] Op {
     size_t v;    // a value to write (it is also used as an index)
     size_t next; // next state (it is also used as an index)
     bool dir;    // true: right, false: left
 };
 
-struct Head {
+struct [[nodiscard]] Head {
     size_t init_state;
     long steps;
     std::vector<std::array<Op, 2>> rules;
@@ -52,7 +52,7 @@ solve(std::istream &is) {
 
 // virtual tape
 template <typename T, T N>
-class Tape {
+class [[nodiscard]] Tape {
   public:
     Tape() {
         data = std::deque<T>(1, N);

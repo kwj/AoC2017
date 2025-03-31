@@ -18,7 +18,7 @@ export module day16;
 
 export namespace day16 {
 
-class Choreography {
+class [[nodiscard]] Choreography {
   public:
     Choreography();
     Choreography(

@@ -18,7 +18,7 @@ export namespace day22 {
 
 using Pos = std::complex<int>;
 
-struct PosHash {
+struct [[nodiscard]] PosHash {
     size_t operator()(Pos const &key) const;
 };
 

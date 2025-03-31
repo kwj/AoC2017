@@ -81,7 +81,7 @@ part1(long target) {
     }
 }
 
-struct ComplexHash {
+struct [[nodiscard]] ComplexHash {
     size_t operator()(std::complex<int> const &key) const {
         auto h = std::hash<long> {};
         auto r = static_cast<long>(key.real());

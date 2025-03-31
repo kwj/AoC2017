@@ -41,7 +41,7 @@ export module day07;
 
 export namespace day07 {
 
-struct Disc {
+struct [[nodiscard]] Disc {
     std::string name;
     size_t id;
     size_t parent;

@@ -30,7 +30,7 @@ export module day11;
 
 export namespace day11 {
 
-class HexPos {
+class [[nodiscard]] HexPos {
   public:
     HexPos(long init_a, long init_b, long init_c) :
         a(init_a), b(init_b), c(init_c) {};
