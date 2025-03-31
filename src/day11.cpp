@@ -16,6 +16,7 @@ module;
 
 #include <algorithm>
 #include <cmath>
+#include <functional>
 #include <istream>
 #include <ranges>
 #include <string_view>
@@ -29,13 +30,13 @@ export module day11;
 
 export namespace day11 {
 
-struct HexPos {
+class HexPos {
   public:
     HexPos(long init_a, long init_b, long init_c) :
         a(init_a), b(init_b), c(init_c) {};
-    HexPos operator+(HexPos const &other);
+    HexPos operator+(HexPos const &other) const;
     HexPos &operator+=(HexPos const &other);
-    long distance();
+    long distance() const;
 
   private:
     long a;
@@ -63,7 +64,7 @@ solve(std::istream &is) {
 }
 
 HexPos
-HexPos::operator+(HexPos const &other) {
+HexPos::operator+(HexPos const &other) const {
     return {a + other.a, b + other.b, c + other.c};
 }
 
@@ -77,7 +78,7 @@ HexPos::operator+=(HexPos const &other) {
 }
 
 long
-HexPos::distance() {
+HexPos::distance() const {
     return (std::abs(a) + std::abs(b) + std::abs(c)) / 2;
 }
 
@@ -110,10 +111,7 @@ parse(std::istream &is) {
 long
 part1(std::vector<HexPos> const &dirs) {
     HexPos const origin {0, 0, 0};
-    auto goal =
-        std::ranges::fold_left(dirs, origin, [](HexPos lhs, HexPos const &rhs) {
-            return lhs + rhs;
-        });
+    auto goal = std::ranges::fold_left(dirs, origin, std::plus<HexPos> {});
 
     return goal.distance();
 }
