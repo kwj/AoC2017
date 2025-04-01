@@ -38,7 +38,7 @@ solve(std::istream &is) {
 
 std::map<long, std::set<long>>
 parse(std::istream &is) {
-    // Note the use an ordered map to solve part 2.
+    // Note: Use an ordered map to solve part 2.
     // key: range, value: a set of depths
     std::map<long, std::set<long>> result;
 
