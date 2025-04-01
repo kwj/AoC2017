@@ -44,14 +44,15 @@ solve(std::istream &is) {
     return {part1(input_data), part2(input_data)};
 }
 
+// Note:
+// Must keep indexes of the grid in the correct range. This implementation depends on
+// the outer edges of the input data are all blank ' ' except for the starting point.
+// I therefore skipped to check if the indexes are out of range.
 #if __cpp_lib_mdspan >= 202207L
 std::pair<std::string, long>
 followPath(std::vector<char> const &grid_data, long rows, long cols) {
-    // Note
-    // Use signed integer for the index type here because casting is troublesome.
-    // The indexes therefore must be 0 or more. This implementation depends on the outer
-    // edges of the input data are all blank, ' ', except for the starting point.
-    std::mdspan<const char, std::dextents<long, 2>> grid(
+    // Use signed integer instead of size_t for the index type because casting is troublesome.
+    std::mdspan<const char, std::dextents<long, 2>> const grid(
         grid_data.data(), rows, cols
     );
     long r {0};
