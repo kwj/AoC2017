@@ -59,7 +59,7 @@ parse(std::istream &is) {
         }
     }
 
-    return std::make_pair(grp_score, n_chars);
+    return {grp_score, n_chars};
 }
 
 long

@@ -185,13 +185,13 @@ findBadDisc(std::vector<Disc> const &discs, size_t id, long delta) {
 
     // this leaf disc is the bad disc.
     if (self.children.size() == 0) {
-        return std::make_pair(id, self.weight + delta);
+        return {id, self.weight + delta};
     }
 
     // if each child disc has same sub-total weight, the disc `discs[id]` is
     // the bad disc.
     if (isBalanced(discs[id])) {
-        return std::make_pair(id, self.weight + delta);
+        return {id, self.weight + delta};
     }
 
     // otherwise (assume that self.children.size() >= 2)

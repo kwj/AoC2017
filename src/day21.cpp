@@ -204,7 +204,7 @@ configMap(std::array<Map_2x2to3x3, 16> &m, std::string_view sv) {
 
     auto cnt = std::popcount(bitsToId(src));
     for (auto id : getVariants_2x2(src)) {
-        m[id] = Map_2x2to3x3 {.bits = dst, .pop_count = cnt};
+        m[id] = {.bits = dst, .pop_count = cnt};
     }
 
     return bitsToId(dst);
@@ -251,7 +251,7 @@ configMap(std::array<Map_3x3to4x4, 512> &m, std::string_view sv) {
 
     auto cnt = std::popcount(bitsToId(src));
     for (auto id : getVariants_3x3(src)) {
-        m[id] = Map_3x3to4x4 {.bits = dst, .pop_count = cnt};
+        m[id] = {.bits = dst, .pop_count = cnt};
     }
 
     return;
