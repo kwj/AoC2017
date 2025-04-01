@@ -121,7 +121,7 @@ class [[nodiscard]] Particle {
     std::vector<long> p;
     std::vector<long> v;
     std::vector<long> a;
-    std::vector<long> position(long tick = 0) const;
+    [[nodiscard]] std::vector<long> position(long tick = 0) const;
 };
 
 std::tuple<long, long> solve(std::istream &is);

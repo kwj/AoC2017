@@ -36,7 +36,7 @@ class [[nodiscard]] HexPos {
         a(init_a), b(init_b), c(init_c) {};
     HexPos operator+(HexPos const &other) const;
     HexPos &operator+=(HexPos const &other);
-    long distance() const;
+    [[nodiscard]] long distance() const;
 
   private:
     long a;

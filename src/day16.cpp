@@ -27,7 +27,7 @@ class [[nodiscard]] Choreography {
         by_pos_tbl(op_pos), by_ltr_tbl(op_ltr) {}
     Choreography dance(Choreography const &other) const;
     Choreography merge(Choreography const &other) const;
-    std::string show() const;
+    [[nodiscard]] std::string show() const;
 
   private:
     std::vector<size_t> by_pos_tbl;
