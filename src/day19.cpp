@@ -14,7 +14,7 @@ module;
 #include <stdexcept>
 #include <string>
 #include <tuple>
-#include <unordered_set>
+#include <set>
 #include <utility>
 #include <vector>
 
@@ -124,7 +124,7 @@ followPath(std::vector<char> const &grid_data, long cols) {
 std::pair<std::string, long>
 parse(std::istream &is) {
     std::vector<char> data;
-    std::unordered_set<long> cols;
+    std::set<long> cols;
     [[maybe_unused]] long rows {0};
 
     for (std::string line; std::getline(is, line);) {

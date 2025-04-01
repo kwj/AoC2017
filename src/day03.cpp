@@ -63,16 +63,13 @@ parse(std::istream &is) {
     return std::stol(util::getLine(is));
 }
 
-inline long
-ring_max_number(long n) {
-    return (2 * n + 1) * (2 * n + 1);
-}
-
 long
 part1(long target) {
     if (target == 1) {
         return 0;
     } else {
+        auto ring_max_number = [](long n) { return (2 * n + 1) * (2 * n + 1); };
+
         auto ring = std::lround(std::ceil(std::sqrt(target))) / 2;
         auto base = ring_max_number(ring - 1);
         auto offset = (target - base) % (2 * ring);

@@ -52,10 +52,12 @@ solve(std::istream &is) {
     return {part1(input_data), part2(input_data)};
 }
 
-[[maybe_unused]] constexpr int FLAGGED = 0;
-constexpr int CLEAN = 1;
-[[maybe_unused]] constexpr int WEAK = 2;
-constexpr int INFECTED = 3;
+// Part 1: 0 -> 2 -> 0 -> 2 -> 0 -> ...
+// Part 2: 0 -> 1 -> 2 -> 3 -> 0 -> 1 -> 2 -> ...
+constexpr int CLEAN = 0;
+[[maybe_unused]] constexpr int WEAK = 1;
+constexpr int INFECTED = 2;
+[[maybe_unused]] constexpr int FLAGGED = 3;
 
 std::pair<Grid, Pos>
 parse(std::istream &is) {
@@ -82,7 +84,7 @@ long
 simulate(Grid grid, Pos pos, long iteration, int delta) {
     constexpr Pos turn_cw(0, 1), turn_ccw(0, -1), turn_180(-1, 0),
         straight(1, 0);
-    std::vector<Pos> dir_tbl {turn_180, turn_ccw, straight, turn_cw};
+    std::vector<Pos> dir_tbl {turn_ccw, straight, turn_cw, turn_180};
     Pos dir(0, -1);
     long result {0};
 

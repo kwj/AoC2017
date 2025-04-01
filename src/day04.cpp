@@ -47,10 +47,8 @@ parse(std::istream &is) {
 }
 
 bool
-isValid(Passphrase const &ps) {
-    Passphrase words {ps};
+isValid(Passphrase words) {
     std::ranges::sort(words);
-
     for (auto i = 0uz; i < words.size() - 1; ++i) {
         if (words[i] == words[i + 1]) {
             return false;
