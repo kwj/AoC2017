@@ -5,6 +5,7 @@ module;
 #include <format>
 #include <functional>
 #include <istream>
+#include <ranges>
 #include <regex>
 #include <stdexcept>
 #include <string>
@@ -46,8 +47,6 @@ solve(std::istream &is) {
 }
 
 // clang-format off
-long opInc(long lhs, long rhs) { return lhs + rhs; }
-
 bool cmpGT(long lhs, long rhs) { return lhs > rhs; }
 bool cmpGE(long lhs, long rhs) { return lhs >= rhs; }
 bool cmpLT(long lhs, long rhs) { return lhs < rhs; }
@@ -103,16 +102,11 @@ part1(std::vector<Instruction> const &insts) {
 
     for (auto const &[r1, r2, op1, op2, cond_fn] : insts) {
         if (cond_fn(regs[r2], op2)) {
-            regs[r1] = opInc(regs[r1], op1);
+            regs[r1] += op1;
         }
     }
 
-    long max_value {LONG_MIN};
-    for (auto const &r : regs) {
-        max_value = std::max(max_value, r.second);
-    }
-
-    return max_value;
+    return *std::ranges::max_element(regs | std::views::values);
 }
 
 long
@@ -122,7 +116,7 @@ part2(std::vector<Instruction> const &insts) {
 
     for (auto const &[r1, r2, op1, op2, cond_fn] : insts) {
         if (cond_fn(regs[r2], op2)) {
-            regs[r1] = opInc(regs[r1], op1);
+            regs[r1] += op1;
             max_value = std::max(max_value, regs[r1]);
         }
     }
