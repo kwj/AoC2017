@@ -357,7 +357,7 @@ solveQuadratic(long a, long b, long c) {
         }
     }
 
-    // remove past collision times
+    // only collision times after start are needed
     std::erase_if(result, [](auto const n) { return n < 0; });
 
     if (result.size() > 0) {

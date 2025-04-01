@@ -77,6 +77,7 @@ parse(std::istream &is) {
         cmpnts.emplace_back(false, nums[0], nums[1], nums[0] + nums[1]);
     }
 
+    // call back function `f` updates the following three max_* variables
     long max_strength {0};
     long max_strength_when_longest {0};
     long max_length {0};
@@ -88,6 +89,7 @@ parse(std::istream &is) {
             max_length = len;
         }
     };
+
     checkBridges(cmpnts, 0, 0, 0, f);
 
     return {max_strength, max_strength_when_longest};
