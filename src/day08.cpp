@@ -2,9 +2,11 @@ module;
 
 #include <algorithm>
 #include <climits>
+#include <format>
 #include <functional>
 #include <istream>
 #include <regex>
+#include <stdexcept>
 #include <string>
 #include <tuple>
 #include <unordered_map>
@@ -19,8 +21,9 @@ export namespace day08 {
 struct [[nodiscard]] Instruction {
     std::string r1;
     std::string r2;
-    std::function<long(long)> op_fn;
-    std::function<bool(long)> cond_fn;
+    long op1;
+    long op2;
+    std::function<bool(long, long)> cond_fn;
 };
 
 std::tuple<long, long> solve(std::istream &is);
@@ -49,7 +52,7 @@ bool cmpGT(long lhs, long rhs) { return lhs > rhs; }
 bool cmpGE(long lhs, long rhs) { return lhs >= rhs; }
 bool cmpLT(long lhs, long rhs) { return lhs < rhs; }
 bool cmpLE(long lhs, long rhs) { return lhs <= rhs; }
-bool cmpEq(long lhs, long rhs) { return lhs == rhs; }
+bool cmpEQ(long lhs, long rhs) { return lhs == rhs; }
 bool cmpNE(long lhs, long rhs) { return lhs != rhs; }
 // clang-format on
 
@@ -68,38 +71,26 @@ parse(std::istream &is) {
             auto op2 = std::stol(m[6].str());
             auto cond = m[5].str();
 
-            auto op_fn = [op1](auto &&ph1) {
-                return opInc(std::forward<decltype(ph1)>(ph1), op1);
-            };
-
-            std::function<bool(long)> cond_fn;
+            std::function<bool(long, long)> cond_fn;
             if (cond == ">") {
-                cond_fn = [op2](auto &&ph1) {
-                    return cmpGT(std::forward<decltype(ph1)>(ph1), op2);
-                };
+                cond_fn = cmpGT;
             } else if (cond == ">=") {
-                cond_fn = [op2](auto &&ph1) {
-                    return cmpGE(std::forward<decltype(ph1)>(ph1), op2);
-                };
+                cond_fn = cmpGE;
             } else if (cond == "<") {
-                cond_fn = [op2](auto &&ph1) {
-                    return cmpLT(std::forward<decltype(ph1)>(ph1), op2);
-                };
+                cond_fn = cmpLT;
             } else if (cond == "<=") {
-                cond_fn = [op2](auto &&ph1) {
-                    return cmpLE(std::forward<decltype(ph1)>(ph1), op2);
-                };
+                cond_fn = cmpLE;
             } else if (cond == "==") {
-                cond_fn = [op2](auto &&ph1) {
-                    return cmpEq(std::forward<decltype(ph1)>(ph1), op2);
-                };
+                cond_fn = cmpEQ;
             } else if (cond == "!=") {
-                cond_fn = [op2](auto &&ph1) {
-                    return cmpNE(std::forward<decltype(ph1)>(ph1), op2);
-                };
+                cond_fn = cmpNE;
+            } else {
+                throw std::runtime_error(
+                    std::format("Invalid comparison operator: {}", cond)
+                );
             }
 
-            insts.emplace_back(r1, r2, op_fn, cond_fn);
+            insts.emplace_back(r1, r2, op1, op2, cond_fn);
         }
     }
 
@@ -110,9 +101,9 @@ long
 part1(std::vector<Instruction> const &insts) {
     std::unordered_map<std::string, long> regs;
 
-    for (auto const &[r1, r2, op_fn, cond_fn] : insts) {
-        if (cond_fn(regs[r2])) {
-            regs[r1] = op_fn(regs[r1]);
+    for (auto const &[r1, r2, op1, op2, cond_fn] : insts) {
+        if (cond_fn(regs[r2], op2)) {
+            regs[r1] = opInc(regs[r1], op1);
         }
     }
 
@@ -129,9 +120,9 @@ part2(std::vector<Instruction> const &insts) {
     std::unordered_map<std::string, long> regs;
     long max_value {0};
 
-    for (auto const &[r1, r2, op_fn, cond_fn] : insts) {
-        if (cond_fn(regs[r2])) {
-            regs[r1] = op_fn(regs[r1]);
+    for (auto const &[r1, r2, op1, op2, cond_fn] : insts) {
+        if (cond_fn(regs[r2], op2)) {
+            regs[r1] = opInc(regs[r1], op1);
             max_value = std::max(max_value, regs[r1]);
         }
     }
