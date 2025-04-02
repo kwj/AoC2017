@@ -38,7 +38,7 @@ parse(std::istream &is) {
 
     for (std::string line; std::getline(is, line);) {
         auto nums = util::getNumbers(line);
-        std::ranges::sort(nums, std::ranges::greater());
+        std::ranges::sort(nums, std::ranges::greater {});
         result.push_back(nums);
     }
 

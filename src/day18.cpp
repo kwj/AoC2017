@@ -34,12 +34,13 @@ and proc/1.
       | <------ (7) ------- |         [98, 83, 66, 27, 25, 13, 8]
       |                     |
 
-    ===> Number of times a number is sent in the proc/1 is 7 * 4 = 28.
+    ===> The number of numbers sent by the proc/1 was 7 * 4 = 28.
 
 Each process enters a deadlock state after sending sorted sequences with no elements
 swapping occurring.
 
-By the way, there are cases where the proc/0 completes the sort instead of the proc/1.
+In the above example, the proc/1 did the last sorting. On the other hand, the proc/0
+may do it depending on the input data.
 
     proc/0                proc/1      (example: 7-elements)
       |                     |
@@ -58,11 +59,11 @@ By the way, there are cases where the proc/0 completes the sort instead of the p
       | ------- (6) ------> |         [98, 83, 66, 27, 25, 13, 8]
       |                     |
 
-    ===> Number of times a number is sent in the proc/1 is 7 * 3 = 21.
+    ===> The number of numbers sent by the proc/1 was 7 * 3 = 21.
 
-I had to consider both cases where the proc/1 completes the sort or not. Because I was
-too lazy to implement a simulator and translated the given program into an program using
-another algorithm.
+I translated the given program into an program using another algorithm
+because I was too lazy to implement a simulator. I therefore needed to
+consider both cases where the proc/1 completed the last sorting or not.
 
 -------------------------
 
@@ -156,12 +157,13 @@ part2(std::vector<long> const &vs) {
         }
 
         ++cnt;
-        if (cont_flag && std::ranges::is_sorted(work, std::greater<long> {})) {
+        if (cont_flag &&
+            std::ranges::is_sorted(work, std::ranges::greater {})) {
             ++cnt;
         }
     }
 
-    return static_cast<long>(work.size()) * ((cnt + 1) / 2);
+    return std::ssize(work) * ((cnt + 1) / 2);
 }
 
 } // namespace day18

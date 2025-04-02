@@ -46,8 +46,8 @@ countProgramsInGroup(
 ) {
     long cnt {1};
     for (auto const &nbr_id : connections[id]) {
-        if (!id_tbl[nbr_id]) {
-            id_tbl[nbr_id] = true;
+        if (id_tbl[nbr_id]) {
+            id_tbl[nbr_id] = false;
             cnt += countProgramsInGroup(connections, id_tbl, nbr_id);
         }
     }
@@ -74,13 +74,13 @@ parse(std::istream &is) {
     // contain what programs.
     std::vector<long> result;
 
-    // All elements are initialized to default value `false`.
+    // All elements are initialized to `true`.
     // It means that the ID does not checked yet.
-    std::vector<bool> id_tbl(connections.size());
+    std::vector<bool> id_tbl(connections.size(), true);
 
     for (auto id = 0uz; id < connections.size(); ++id) {
-        if (!id_tbl[id]) {
-            id_tbl[id] = true;
+        if (id_tbl[id]) {
+            id_tbl[id] = false;
             result.push_back(countProgramsInGroup(connections, id_tbl, id));
         }
     }

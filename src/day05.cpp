@@ -46,9 +46,8 @@ long
 run(std::vector<long> insts, std::function<long(long)> f) {
     long steps {0};
     size_t idx {0};
-    auto const len {insts.size()};
 
-    while (idx < len) {
+    while (idx < insts.size()) {
         auto offset = insts[idx];
         insts[idx] = f(insts[idx]);
         idx += static_cast<size_t>(offset);

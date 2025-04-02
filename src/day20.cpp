@@ -163,12 +163,13 @@ parse(std::istream &is) {
     long id {0};
     for (std::string line; std::getline(is, line); ++id) {
         auto nums = util::getNumbers(line);
-        result.push_back(Particle(
+        auto it = nums.cbegin();
+        result.emplace_back(
             id,
-            {nums[0], nums[1], nums[2]},
-            {nums[3], nums[4], nums[5]},
-            {nums[6], nums[7], nums[8]}
-        ));
+            std::vector(it, it + 3),
+            std::vector(it + 3, it + 6),
+            std::vector(it + 6, it + 9)
+        );
     }
 
     return result;
