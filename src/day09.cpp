@@ -55,7 +55,8 @@ parse(std::istream &is) {
         case '}':
             --depth;
             break;
-        default:; // no-op
+        default:
+            break; // no-op
         }
     }
 

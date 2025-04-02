@@ -356,7 +356,8 @@ parse(std::istream &is) {
             // 3x3 grid to 4x4 grid
             configMap(m_3to4, line); // function overloading
             break;
-        default:; // no-op
+        default:
+            break; // no-op
         }
     }
 
