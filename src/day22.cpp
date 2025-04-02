@@ -89,8 +89,11 @@ simulate(Grid grid, Pos pos, long iteration, int delta) {
     long result {0};
 
     while (iteration-- > 0) {
+        // The following two lines can be replaced by 'auto crnt_state = grid[pos];'
+        // because CLEAN is equal to 0. However, I left it as is to clarify the intent.
         auto [it, _] = grid.try_emplace(pos, CLEAN);
         auto crnt_state = it->second;
+
         auto new_state = (crnt_state + delta) & 0b11;
 
         grid[pos] = new_state;

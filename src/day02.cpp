@@ -37,6 +37,7 @@ parse(std::istream &is) {
     std::vector<std::vector<long>> result;
 
     for (std::string line; std::getline(is, line);) {
+        // sort each list in descending order
         auto nums = util::getNumbers(line);
         std::ranges::sort(nums, std::ranges::greater {});
         result.push_back(nums);
@@ -49,7 +50,6 @@ long
 part1(std::vector<std::vector<long>> const &vvs) {
     long result {0};
 
-    // Note: `vs` is a list of long in descending order.
     for (auto const &vs : vvs) {
         result += vs.front() - vs.back();
     }
@@ -57,7 +57,6 @@ part1(std::vector<std::vector<long>> const &vvs) {
     return result;
 }
 
-// Note: `vs` is a list of int in descending order.
 long
 findQuotient(std::vector<long> const &vs) {
     for (auto i = 0uz; i < vs.size() - 1; ++i) {
