@@ -42,7 +42,7 @@ solve(std::istream &is) {
 }
 
 std::pair<long, long>
-judgement(unsigned long num_a, unsigned long num_b) {
+judgement(unsigned long a, unsigned long b) {
     constexpr long P1_N_PAIRS {40'000'000};
     constexpr long P2_N_PAIRS {5'000'000};
     constexpr unsigned long A {16807};
@@ -60,20 +60,20 @@ judgement(unsigned long num_a, unsigned long num_b) {
 
     long judge_p1 {0};
     while (p1_cnt < P1_N_PAIRS || m4_cnt < P2_N_PAIRS || m8_cnt < P2_N_PAIRS) {
-        num_a = (num_a * A) % M;
-        num_b = (num_b * B) % M;
+        a = (a * A) % M;
+        b = (b * B) % M;
 
-        auto a = static_cast<unsigned short>(num_a & 0xFFFF);
-        auto b = static_cast<unsigned short>(num_b & 0xFFFF);
-        if (p1_cnt < P1_N_PAIRS && a == b) {
+        auto a_16 = a & 0xFFFF;
+        auto b_16 = b & 0xFFFF;
+        if (p1_cnt < P1_N_PAIRS && a_16 == b_16) {
             ++judge_p1;
         }
-        if (m4_cnt < P2_N_PAIRS && (a & 0b11) == 0) {
-            mul4.push_back(a);
+        if (m4_cnt < P2_N_PAIRS && (a_16 & 0b11) == 0) {
+            mul4.push_back(static_cast<unsigned short>(a_16));
             ++m4_cnt;
         }
-        if (m8_cnt < P2_N_PAIRS && (b & 0b111) == 0) {
-            mul8.push_back(b);
+        if (m8_cnt < P2_N_PAIRS && (b_16 & 0b111) == 0) {
+            mul8.push_back(static_cast<unsigned short>(b_16));
             ++m8_cnt;
         }
 
