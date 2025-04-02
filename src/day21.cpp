@@ -62,11 +62,11 @@ nine 3x3 grids:
 
 [Part 1 and 2]
 Three iterations from a 3x3 grid will transition to a state with nine 3x3 grids.
-I therefore decided to create a transition table based on three iterations and
+I therefore decided to create a transition map based on three iterations and
 used recursion to find the answer.
 
-std::map<size_t, TransGrid> trans_tbl;
-  Transition table with a 3x3 grids as a key. A key is obtained as follows.
+std::map<size_t, TransGrid> trans_map;
+  Transition map with a 3x3 grids as a key. A key is obtained as follows.
 
     .#.
     ..# --> {0, 1, 0, 0, 0, 1, 1, 1, 1} --> 0b010001111 -> 143
@@ -87,7 +87,7 @@ struct TransGrid {
 
 In the above example, it would look like this:
 
-  trans_tbl[143] = {
+  trans_map[143] = {
       .pop_count = {5, 10, 17, 39},
       .next_grids = {{236, 2}, {297, 3}, {166, 3}, {341, 1}}
   };
@@ -118,12 +118,12 @@ struct [[nodiscard]] TransGrid {
     std::vector<std::pair<size_t, long>> next_grids;
 };
 
-using TransTbl = std::map<size_t, TransGrid>;
+using TransMap = std::map<size_t, TransGrid>;
 
 std::tuple<long, long> solve(std::istream &is);
-TransTbl parse(std::istream &is);
-long part1(TransTbl const &trans_tbl);
-long part2(TransTbl const &trans_tbl);
+TransMap parse(std::istream &is);
+long part1(TransMap const &trans_map);
+long part2(TransMap const &trans_map);
 
 } // namespace day21
 
@@ -336,7 +336,7 @@ makeTransGrid(
     return result;
 }
 
-TransTbl
+TransMap
 parse(std::istream &is) {
     // The indices of these arrays are also used as the ID of these structures.
     std::array<Map_2x2to3x3, 16> m_2to3;  // 16 = 2 ^ 4
@@ -361,36 +361,36 @@ parse(std::istream &is) {
         }
     }
 
-    TransTbl tbl;
+    TransMap trans_map;
     for (auto const id : id_group) {
-        tbl[id] = makeTransGrid(m_2to3, m_3to4, id);
+        trans_map[id] = makeTransGrid(m_2to3, m_3to4, id);
     }
 
-    return tbl;
+    return trans_map;
 }
 
 long
-countUpPixels(TransTbl const &trans_tbl, size_t id, size_t depth) {
+countUpPixels(TransMap const &trans_map, size_t id, size_t depth) {
     if (depth <= 3) {
-        return trans_tbl.at(id).pop_count[depth];
+        return trans_map.at(id).pop_count[depth];
     }
 
     long acc {0};
-    for (auto const [next_id, cnt] : trans_tbl.at(id).next_grids) {
-        acc += cnt * countUpPixels(trans_tbl, next_id, depth - 3);
+    for (auto const [next_id, cnt] : trans_map.at(id).next_grids) {
+        acc += cnt * countUpPixels(trans_map, next_id, depth - 3);
     }
 
     return acc;
 }
 
 long
-part1(TransTbl const &trans_tbl) {
-    return countUpPixels(trans_tbl, bitsToId(start_grid), 5);
+part1(TransMap const &trans_map) {
+    return countUpPixels(trans_map, bitsToId(start_grid), 5);
 }
 
 long
-part2(TransTbl const &trans_tbl) {
-    return countUpPixels(trans_tbl, bitsToId(start_grid), 18);
+part2(TransMap const &trans_map) {
+    return countUpPixels(trans_map, bitsToId(start_grid), 18);
 }
 
 } // namespace day21

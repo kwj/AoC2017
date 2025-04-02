@@ -12,10 +12,10 @@ class Day21Test : public ::testing::Test {
         return;
     }
 
-    static day21::TransTbl data;
+    static day21::TransMap data;
 };
 
-day21::TransTbl Day21Test::data;
+day21::TransMap Day21Test::data;
 
 TEST_F(Day21Test, Part1) {
     auto result = day21::part1(Day21Test::data);
