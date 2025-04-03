@@ -157,11 +157,8 @@ part2(std::vector<long> const &vs) {
         }
 
         ++cnt;
-        if (cont_flag &&
-            std::ranges::is_sorted(work, std::ranges::greater {})) {
-            ++cnt;
-        }
     }
+    ++cnt;
 
     return std::ssize(work) * ((cnt + 1) / 2);
 }
