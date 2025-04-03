@@ -25,7 +25,7 @@ export namespace day10 {
 std::tuple<long, std::string> solve(std::istream &is);
 std::string parse(std::istream &is);
 long part1(std::string_view s);
-std::string part2(std::string const &s);
+std::string part2(std::string_view s);
 
 } // namespace day10
 
@@ -91,20 +91,18 @@ part1(std::string_view s) {
 }
 
 std::string
-part2(std::string const &s) {
-    std::vector<unsigned long> lengths;
+part2(std::string_view s) {
     std::vector<unsigned long> const tail {17, 31, 73, 47, 23};
-    std::istringstream iss(s); // istringstream accepts string_view SINCE C++26
-    char ch;
-
-    while (iss.get(ch)) {
-        lengths.push_back(static_cast<unsigned long>(ch));
-    }
+    auto input_view = std::views::transform(s, [](auto &ch) {
+        return static_cast<unsigned long>(ch);
+    });
 
 // P1206R7 (range to container conversion) is not yet fully supported in GCC 14.
 #if __cpp_lib_containers_ranges >= 202202L
+    std::vector<unsigned long> lengths(std::from_range, input_view);
     lengths.append_range(tail);
 #else
+    std::vector<unsigned long> lengths(input_view.begin(), input_view.end());
     lengths.insert(lengths.end(), tail.cbegin(), tail.cend());
 #endif
 
