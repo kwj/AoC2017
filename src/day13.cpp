@@ -75,7 +75,7 @@ part1(std::map<long, std::set<long>> const &tbl) {
 long
 part2(std::map<long, std::set<long>> const &tbl) {
     long crnt_lcm {1};
-    std::vector<long> delays {1};
+    std::vector<long> delays {0};
     std::vector<long> next_delays;
 
     for (auto const &[r, depths] : tbl) {
