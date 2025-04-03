@@ -99,7 +99,7 @@ solve(std::istream &is) {
 
 long
 parse(std::istream &is) {
-    return std::stoi(util::getLine(is));
+    return std::stol(util::getLine(is));
 }
 
 long
