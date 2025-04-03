@@ -1,6 +1,7 @@
 /*
 Example rules
 -------------
+../.. => ##./##./.##
 #./.. => .#./#../##.
 ##/#. => #../.##/#..
 ##/.. => #../#.#/..#
@@ -65,25 +66,26 @@ Three iterations from a 3x3 grid will transition to a state with nine 3x3 grids.
 I therefore decided to create a transition map based on three iterations and
 used recursion to find the answer.
 
-std::map<size_t, TransGrid> trans_map;
-  Transition map with a 3x3 grids as a key. A key is obtained as follows.
-
-    .#.
-    ..# --> {0, 1, 0, 0, 0, 1, 1, 1, 1} --> 0b010001111 -> 143
-    ###
-
-  Only seven entries are needed at most.
-    number of '2x2 to 3x3' patterns(6) + start grid(1) = 7
-
 struct TransGrid {
     std::array<long, 4> pop_count;
     std::vector<std::pair<size_t, long>> next_grids;
 };
 
   pop_count:
-    Number of lit pixels after 0 to 3 iterations
+    Number of lit pixels after 0 to 3 conversions from a 3x3 grid
   next_grids:
-    Nine 3x3 grids after three iterations.
+    Nine 3x3 grids after three iterations (key and quantity)
+
+std::map<size_t, TransGrid> trans_map;
+
+  Transition map with a 3x3 grids as a key. A key is made as follows.
+
+    .#.
+    ..# --> {0, 1, 0, 0, 0, 1, 1, 1, 1} --> 0b010001111 --> 143
+    ###
+
+  Only seven entries are needed at most.
+    number of '2x2 to 3x3' patterns(6) + start grid(1) = 7
 
 In the above example, it would look like this:
 
