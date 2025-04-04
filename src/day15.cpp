@@ -49,6 +49,9 @@ judgement(unsigned long a, unsigned long b) {
     constexpr unsigned long B {48271};
     constexpr unsigned long M {0x7FFFFFFF};
 
+    // This method stores 10 million values, and then checks them.
+    // (2 * P2_N_PAIRS * unsigned short -> at least 20MB)
+    // If there is not enough memory, it needs to use a different algorithm.
     std::vector<unsigned short> mul4;
     std::vector<unsigned short> mul8;
     mul4.reserve(P2_N_PAIRS);
