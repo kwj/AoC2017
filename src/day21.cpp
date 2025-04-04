@@ -78,7 +78,7 @@ struct TransGrid {
 
 std::map<size_t, TransGrid> trans_map;
 
-  Transition map with a 3x3 grids as a key. A key is made as follows.
+  Transition map with a 3x3 grid as a key. A key is made as follows.
 
     .#.
     ..# --> {0, 1, 0, 0, 0, 1, 1, 1, 1} --> 0b010001111 --> 143
@@ -378,8 +378,8 @@ countUpPixels(TransMap const &trans_map, size_t id, size_t depth) {
     }
 
     long acc {0};
-    for (auto const [next_id, cnt] : trans_map.at(id).next_grids) {
-        acc += cnt * countUpPixels(trans_map, next_id, depth - 3);
+    for (auto const [next_id, qty] : trans_map.at(id).next_grids) {
+        acc += qty * countUpPixels(trans_map, next_id, depth - 3);
     }
 
     return acc;

@@ -66,7 +66,7 @@ followPath(std::vector<char> const &grid_data, long rows, long cols) {
     while (grid[r, c] != ' ') {
         if (grid[r, c] == '+') {
             std::ranges::swap(dr, dc);
-            if (grid[r - dr, c - dc] != ' ') {
+            if (grid[r + dr, c + dc] == ' ') {
                 dr = -dr;
                 dc = -dc;
             }

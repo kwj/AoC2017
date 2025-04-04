@@ -32,8 +32,7 @@ export namespace day11 {
 
 class [[nodiscard]] HexPos {
   public:
-    HexPos(long init_a, long init_b, long init_c) :
-        a(init_a), b(init_b), c(init_c) {};
+    HexPos(long _a, long _b, long _c) : a(_a), b(_b), c(_c) {};
     HexPos operator+(HexPos const &other) const;
     HexPos &operator+=(HexPos const &other);
     [[nodiscard]] long distance() const;
