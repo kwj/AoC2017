@@ -1,6 +1,7 @@
 module;
 
 #include <algorithm>
+#include <functional>
 #include <istream>
 #include <string>
 #include <tuple>
@@ -40,14 +41,13 @@ solve(std::istream &is) {
     return {part1(input_data), part2(input_data)};
 }
 
-template <typename Fn>
 void
 checkBridges(
     std::vector<Component> &cmpnts,
     long target,
     long total_strength,
     long len,
-    Fn &&f
+    std::function<void(long, long)> f
 ) {
     for (auto &[used, p1, p2, str] : cmpnts) {
         if (used) {
