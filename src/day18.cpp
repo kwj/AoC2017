@@ -8,12 +8,11 @@ the answer to the problem.
   x = (((x * A1) % M1) * A2 + C) % M1;
 
 [Part 2]
-This is a cooperative bubble sort (descending order) by two processes.
-The initial data is the numerical sequence generated in the part 1.
+As the title suggests, this is a cooperative bubble sort (descending order) by
+two processes. The initial data is the numerical sequence generated in the part 1.
 
-In the following, for simplicity, consider a sequence of numbers of
-length 7 instead of 127. The two processes are referred to as proc/0
-and proc/1.
+In the following, for simplicity, consider a sequence of numbers of length 7
+instead of 127. The two processes are referred to as proc/0 and proc/1.
 
     proc/0                proc/1      (example: 7-elements)
       |                     |
