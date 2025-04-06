@@ -34,7 +34,8 @@ module :private;
 
 namespace day10 {
 
-constexpr unsigned long KNOTS_LEN {256};
+constexpr unsigned long BLOCK_LEN {16};
+constexpr unsigned long KNOTS_LEN {BLOCK_LEN * 16};
 
 std::tuple<long, std::string>
 solve(std::istream &is) {
@@ -108,9 +109,10 @@ part2(std::string_view s) {
 
     auto hash = knotHash(lengths, 64);
     std::ostringstream oss;
-    for (auto it = hash.cbegin(); it < hash.cend(); std::advance(it, 16)) {
+    for (auto it = hash.cbegin(); it <= hash.cend() - BLOCK_LEN;
+         std::advance(it, BLOCK_LEN)) {
         auto h = std::ranges::fold_left(
-            std::ranges::subrange(it, it + 16), 0, std::bit_xor<long> {}
+            std::ranges::subrange(it, it + BLOCK_LEN), 0, std::bit_xor<long> {}
         );
         oss << std::format("{:02x}", h & 0xFF);
     }

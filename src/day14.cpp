@@ -34,7 +34,8 @@ module :private;
 
 namespace day14 {
 
-constexpr unsigned long KNOTS_LEN {256};
+constexpr unsigned long BLOCK_LEN {16};
+constexpr unsigned long KNOTS_LEN {BLOCK_LEN * 16};
 constexpr size_t EDGE_LEN {128};
 
 std::tuple<long, long>
@@ -104,9 +105,12 @@ makeGrid(std::string_view prefix) {
 #endif
 
         auto hash = knotHash(lengths, 64);
-        for (auto it = hash.cbegin(); it < hash.cend(); std::advance(it, 16)) {
+        for (auto it = hash.cbegin(); it <= hash.cend() - BLOCK_LEN;
+             std::advance(it, BLOCK_LEN)) {
             auto h = std::ranges::fold_left(
-                std::ranges::subrange(it, it + 16), 0, std::bit_xor<long> {}
+                std::ranges::subrange(it, it + BLOCK_LEN),
+                0,
+                std::bit_xor<long> {}
             );
             for (long mask = 0b10000000; mask > 0; mask >>= 1) {
                 grid.push_back(h & mask);
