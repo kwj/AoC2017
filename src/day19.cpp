@@ -86,7 +86,7 @@ std::pair<std::string, long>
 followPath(std::vector<char> const &grid_data, long cols) {
     std::vector<std::vector<char>> grid;
     for (auto it = grid_data.cbegin(); it != grid_data.cend();
-         std::advance(it, cols)) {
+         std::ranges::advance(it, cols)) {
         grid.push_back(
             std::ranges::subrange(it, it + cols) |
             std::ranges::to<std::vector<char>>()

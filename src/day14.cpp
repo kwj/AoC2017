@@ -106,7 +106,7 @@ makeGrid(std::string_view prefix) {
 
         auto hash = knotHash(lengths, 64);
         for (auto it = hash.cbegin(); it <= hash.cend() - BLOCK_LEN;
-             std::advance(it, BLOCK_LEN)) {
+             std::ranges::advance(it, BLOCK_LEN)) {
             auto h = std::ranges::fold_left(
                 std::ranges::subrange(it, it + BLOCK_LEN),
                 0,

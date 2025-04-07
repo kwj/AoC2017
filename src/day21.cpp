@@ -290,7 +290,7 @@ makeTransGrid(
             grid_16[i], grid_16[i + 1], grid_16[i + 4], grid_16[i + 5]
         });
         auto it = m_2to3[id].bits.cbegin();
-        for (auto k = 0; k < 3; ++k, std::advance(it, 3)) {
+        for (auto k = 0; k < 3; ++k, std::ranges::advance(it, 3)) {
             std::ranges::copy_n(it, 3, grid_36.begin() + j + 6 * k);
         }
     }
@@ -314,7 +314,7 @@ makeTransGrid(
             grid_36[i], grid_36[i + 1], grid_36[i + 6], grid_36[i + 7]
         });
         auto it = m_2to3[id].bits.cbegin();
-        for (auto k = 0; k < 3; ++k, std::advance(it, 3)) {
+        for (auto k = 0; k < 3; ++k, std::ranges::advance(it, 3)) {
             std::ranges::copy_n(it, 3, grid_81.begin() + j + 9 * k);
         }
 
