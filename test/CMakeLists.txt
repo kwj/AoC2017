@@ -10,7 +10,7 @@ FetchContent_MakeAvailable(googletest)
 
 set(test_exe aoc2017-test)
 
-file(GLOB_RECURSE CXX_TEST_FILES "${CMAKE_CURRENT_SOURCE_DIR}/*_test.cpp")
+file(GLOB CXX_TEST_FILES "*_test.cpp")
 add_executable(${test_exe})
 target_sources(${test_exe} PRIVATE ${CXX_TEST_FILES})
 target_link_libraries(${test_exe} PRIVATE gtest_main solvers)
