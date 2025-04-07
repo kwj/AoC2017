@@ -102,6 +102,7 @@ module;
 #include <bit>
 #include <cstddef>
 #include <istream>
+#include <iterator>
 #include <map>
 #include <set>
 #include <string>
@@ -289,10 +290,8 @@ makeTransGrid(
             grid_16[i], grid_16[i + 1], grid_16[i + 4], grid_16[i + 5]
         });
         auto it = m_2to3[id].bits.cbegin();
-        for (auto k = 0uz; k < 3; ++k) {
-            grid_36[j + 6 * k] = *it++;
-            grid_36[j + 6 * k + 1] = *it++;
-            grid_36[j + 6 * k + 2] = *it++;
+        for (auto k = 0; k < 3; ++k, std::advance(it, 3)) {
+            std::ranges::copy_n(it, 3, grid_36.begin() + j + 6 * k);
         }
     }
     result.pop_count[2] = std::ranges::count(grid_36, 1);
@@ -315,10 +314,8 @@ makeTransGrid(
             grid_36[i], grid_36[i + 1], grid_36[i + 6], grid_36[i + 7]
         });
         auto it = m_2to3[id].bits.cbegin();
-        for (auto k = 0uz; k < 3; ++k) {
-            grid_81[j + 9 * k] = *it++;
-            grid_81[j + 9 * k + 1] = *it++;
-            grid_81[j + 9 * k + 2] = *it++;
+        for (auto k = 0; k < 3; ++k, std::advance(it, 3)) {
+            std::ranges::copy_n(it, 3, grid_81.begin() + j + 9 * k);
         }
 
         auto next_id = bitsToId(m_2to3[id].bits);
