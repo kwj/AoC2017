@@ -282,7 +282,7 @@ makeTransGrid(
     result.pop_count[1] = std::ranges::count(grid_16, 1);
 
     // step 2
-    std::vector<std::pair<size_t, size_t>> const idxmap_1 = {
+    std::vector<std::pair<size_t, ptrdiff_t>> const idxmap_1 = {
         {0, 0}, {2, 3}, {8, 18}, {10, 21}
     };
     for (auto const [i, j] : idxmap_1) {
@@ -290,7 +290,7 @@ makeTransGrid(
             grid_16[i], grid_16[i + 1], grid_16[i + 4], grid_16[i + 5]
         });
         auto it = m_2to3[id].bits.cbegin();
-        for (auto k = 0; k < 3; ++k, std::ranges::advance(it, 3)) {
+        for (ptrdiff_t k = 0; k < 3; ++k, std::ranges::advance(it, 3)) {
             std::ranges::copy_n(it, 3, grid_36.begin() + j + 6 * k);
         }
     }
@@ -298,7 +298,7 @@ makeTransGrid(
 
     // step 3
     std::map<size_t, long> counter;
-    std::vector<std::pair<size_t, size_t>> const idxmap_2 = {
+    std::vector<std::pair<size_t, ptrdiff_t>> const idxmap_2 = {
         {0, 0},
         {2, 3},
         {4, 6},
@@ -314,7 +314,7 @@ makeTransGrid(
             grid_36[i], grid_36[i + 1], grid_36[i + 6], grid_36[i + 7]
         });
         auto it = m_2to3[id].bits.cbegin();
-        for (auto k = 0; k < 3; ++k, std::ranges::advance(it, 3)) {
+        for (ptrdiff_t k = 0; k < 3; ++k, std::ranges::advance(it, 3)) {
             std::ranges::copy_n(it, 3, grid_81.begin() + j + 9 * k);
         }
 
