@@ -45,7 +45,7 @@ countProgramsInGroup(
     size_t id
 ) {
     long cnt {1};
-    for (auto const &nbr_id : connections[id]) {
+    for (auto nbr_id : connections[id]) {
         if (id_tbl[nbr_id]) {
             id_tbl[nbr_id] = false;
             cnt += countProgramsInGroup(connections, id_tbl, nbr_id);

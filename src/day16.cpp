@@ -74,10 +74,10 @@ Choreography::merge(Choreography const &other) const {
     decltype(by_pos_tbl) new_p;
     decltype(by_ltr_tbl) new_c;
 
-    for (auto const i : by_pos_tbl) {
+    for (auto i : by_pos_tbl) {
         new_p.push_back(other.by_pos_tbl[i]);
     }
-    for (auto const i : by_ltr_tbl) {
+    for (auto i : by_ltr_tbl) {
         new_c.push_back(other.by_ltr_tbl[i]);
     }
 
@@ -88,7 +88,7 @@ std::string
 Choreography::show() const {
     std::ostringstream oss;
 
-    for (auto const i : by_pos_tbl) {
+    for (auto i : by_pos_tbl) {
         oss << static_cast<char>(by_ltr_tbl[i] + 'a');
     }
 

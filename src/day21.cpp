@@ -163,7 +163,7 @@ size_t
 bitsToId(T const &bit_seq) {
     size_t id {0};
 
-    for (auto const b : bit_seq) {
+    for (auto b : bit_seq) {
         id = (id << 1) | b;
     }
 
@@ -361,7 +361,7 @@ parse(std::istream &is) {
     }
 
     TransMap trans_map;
-    for (auto const id : id_group) {
+    for (auto id : id_group) {
         trans_map[id] = makeTransGrid(m_2to3, m_3to4, id);
     }
 

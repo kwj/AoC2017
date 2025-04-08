@@ -179,7 +179,7 @@ parse(std::istream &is) {
 long
 norm(std::vector<long> const &vs) {
     long result {0};
-    for (auto const v : vs) {
+    for (auto v : vs) {
         result += std::abs(v);
     }
 
@@ -359,7 +359,7 @@ solveQuadratic(long a, long b, long c) {
     }
 
     // only collision times after start are needed
-    std::erase_if(result, [](auto const n) { return n < 0; });
+    std::erase_if(result, [](auto n) { return n < 0; });
 
     if (result.size() > 0) {
         return result;
@@ -385,7 +385,7 @@ getCollisionTime(Particle const &p1, Particle const &p2) {
 
         auto collisions = solveQuadratic(da, 2 * dv + da, 2 * dp);
         if (collisions) {
-            for (auto const t : collisions.value()) {
+            for (auto t : collisions.value()) {
                 if (p1.position(t) == p2.position(t)) {
                     tmp.insert(t);
                 }
@@ -443,7 +443,7 @@ part2(std::vector<Particle> const &particles) {
         }
 
         // clear suvival flags of collided particles
-        for (auto const idx : del_particles) {
+        for (auto idx : del_particles) {
             survival_tbl[idx] = false;
         }
     }
