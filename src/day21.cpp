@@ -100,6 +100,7 @@ module;
 #include <algorithm>
 #include <array>
 #include <bit>
+#include <concepts>
 #include <cstddef>
 #include <istream>
 #include <iterator>
@@ -108,6 +109,7 @@ module;
 #include <string>
 #include <string_view>
 #include <tuple>
+#include <type_traits>
 #include <utility>
 #include <vector>
 
@@ -159,6 +161,10 @@ struct [[nodiscard]] Map_3x3to4x4 {
 };
 
 template <typename T>
+concept BitSeq = std::ranges::random_access_range<T> &&
+                 std::is_unsigned_v<std::ranges::range_value_t<T>>;
+
+template <BitSeq T>
 size_t
 bitsToId(T const &bit_seq) {
     size_t id {0};
@@ -170,7 +176,7 @@ bitsToId(T const &bit_seq) {
     return id;
 }
 
-template <typename T>
+template <BitSeq T>
 std::set<size_t>
 getVariants_2x2(T const &bit_seq) {
     std::set<size_t> ids;
@@ -213,7 +219,7 @@ configMap(std::array<Map_2x2to3x3, 16> &m, std::string_view sv) {
     return bitsToId(dst);
 }
 
-template <typename T>
+template <BitSeq T>
 std::set<size_t>
 getVariants_3x3(T const &bit_seq) {
     std::set<size_t> ids;

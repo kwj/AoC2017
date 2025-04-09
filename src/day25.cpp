@@ -1,6 +1,7 @@
 module;
 
 #include <array>
+#include <concepts>
 #include <cstddef>
 #include <deque>
 #include <istream>
@@ -51,7 +52,7 @@ solve(std::istream &is) {
 }
 
 // virtual tape
-template <typename T, T N>
+template <std::integral T, T N>
 class [[nodiscard]] Tape {
   public:
     Tape() {
@@ -65,7 +66,7 @@ class [[nodiscard]] Tape {
     std::deque<T>::iterator it;
 };
 
-template <typename T, T N>
+template <std::integral T, T N>
 T
 Tape<T, N>::write(T v, bool dir) {
     *it = v;
