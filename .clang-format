@@ -15,6 +15,7 @@ BreakConstructorInitializers: AfterColon
 BreakTemplateDeclarations: Yes
 ColumnLimit: 80
 EmptyLineBeforeAccessModifier: Always
+IndentRequiresClause: false
 IndentWidth: 4
 PackConstructorInitializers: NextLine
 # Set `Never` to ReflowComments in clang-format 20 or later
