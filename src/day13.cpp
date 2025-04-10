@@ -102,7 +102,12 @@ part2(std::map<long, std::set<long>> const &tbl) {
         crnt_lcm = next_lcm;
     }
 
-    return *std::ranges::min_element(delays);
+    // if there is no answer, return -1 for safety
+    if (delays.size() == 0) {
+        return -1;
+    } else {
+        return *std::ranges::min_element(delays);
+    }
 }
 
 } // namespace day13
