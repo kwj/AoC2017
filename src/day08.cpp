@@ -5,6 +5,7 @@ module;
 #include <format>
 #include <functional>
 #include <istream>
+#include <limits>
 #include <ranges>
 #include <regex>
 #include <stdexcept>
@@ -106,7 +107,12 @@ part1(std::vector<Instruction> const &insts) {
         }
     }
 
-    return *std::ranges::max_element(regs | std::views::values);
+    // if there is no answer, return LONG_MIN for safety
+    if (regs.size() == 0) {
+        return std::numeric_limits<long>::min();
+    } else {
+        return *std::ranges::max_element(regs | std::views::values);
+    }
 }
 
 long
