@@ -15,34 +15,32 @@ Example rules
   ###
 
 [step 1]
-  ##|#.
-  .#|##
-  --+--
-  ..|#.
-  ##|.#
+  .#.       ###.
+  ..#  =>>  .###
+  ###       ..#.
+            ##.#
 
 [step 2]
-  #.|.#|..
-  .#|#.|##
-  --+--+--
-  #.|.#|..
-  #.|..|##
-  --+--+--
-  #.|##|.#
-  ..|##|..
+              #..|#..
+  ##|#.       .##|.##
+  .#|##       #..|#..
+  --+--  =>>  ---+---
+  ..|#.       #..|.##
+  ##|.#       #.#|#.#
+              ..#|#..
 
 [step 3]
-  .##|.##|#..
-  #.#|#.#|#.#
-  #..|#..|..#
-  ---+---+---
-  #..|.#.|#..
-  #.#|#..|#.#
-  ..#|##.|..#
-  ---+---+---
-  .#.|#.#|.#.
-  #..|.#.|#..
-  ##.|#.#|##.
+                 .##|.##|#..
+  #.|.#|..       #.#|#.#|#.#
+  .#|#.|##       #..|#..|..#
+  --+--+--       ---+---+---
+  #.|.#|..       #..|.#.|#..
+  #.|..|##  =>>  #.#|#..|#.#
+  --+--+--       ..#|##.|..#
+  #.|##|.#       ---+---+---
+  ..|##|..       .#.|#.#|.#.
+                 #..|.#.|#..
+                 ##.|#.#|##.
 
 nine 3x3 grids:
   .##
@@ -144,21 +142,20 @@ solve(std::istream &is) {
     return {part1(input_data), part2(input_data)};
 }
 
+using Grid_2x2 = std::array<size_t, 4>;  // 4 = 2 * 2
+using Grid_3x3 = std::array<size_t, 9>;  // 9 = 3 * 3
+using Grid_4x4 = std::array<size_t, 16>; // 16 = 4 * 4
+using Grid_6x6 = std::array<size_t, 36>; // 36 = 6 * 6
+using Grid_9x9 = std::array<size_t, 81>; // 81 = 9 * 9
+
+using Tbl_2x2to3x3 = std::array<Grid_3x3, 16>;  // 16 = 2 ^ 4
+using Tbl_3x3to4x4 = std::array<Grid_4x4, 512>; // 512 = 2 ^ 9
+
 //  the start grid (glider)
 //    .#.
 //    ..# --> {0, 1, 0, 0, 0, 1, 1, 1, 1}
 //    ###
-std::array<size_t, 9> const start_grid = {0, 1, 0, 0, 0, 1, 1, 1, 1};
-
-struct [[nodiscard]] Map_2x2to3x3 {
-    std::array<size_t, 9> bits; // 3x3 grid after transition
-    long pop_count;             // number of lit pixels in 2x2 grid
-};
-
-struct [[nodiscard]] Map_3x3to4x4 {
-    std::array<size_t, 16> bits; // 4x4 grid after transition
-    long pop_count;              // number of lit pixels in 3x3 grid
-};
+Grid_3x3 const start_grid = {0, 1, 0, 0, 0, 1, 1, 1, 1};
 
 template <typename T>
 concept BitSeq = std::ranges::random_access_range<T> &&
@@ -203,17 +200,16 @@ getVariants_2x2(T const &bit_seq) {
 
 // Update the 2x2 to 3x3 mapping table and return a 3x3 grid's ID which is used as a key
 size_t
-configMap(std::array<Map_2x2to3x3, 16> &m, std::string_view sv) {
-    std::array<size_t, 4> src = {0, 1, 3, 4};
-    std::array<size_t, 9> dst = {9, 10, 11, 13, 14, 15, 17, 18, 19};
+configMap(Tbl_2x2to3x3 &tbl, std::string_view sv) {
+    Grid_2x2 src = {0, 1, 3, 4};
+    Grid_3x3 dst = {9, 10, 11, 13, 14, 15, 17, 18, 19};
 
     auto f = [&sv](size_t &n) { n = sv[n] == '#' ? 1uz : 0uz; };
     std::ranges::for_each(src, f);
     std::ranges::for_each(dst, f);
 
-    auto cnt = std::popcount(bitsToId(src));
     for (auto id : getVariants_2x2(src)) {
-        m[id] = {.bits = dst, .pop_count = cnt};
+        tbl[id] = dst;
     }
 
     return bitsToId(dst);
@@ -248,9 +244,9 @@ getVariants_3x3(T const &bit_seq) {
 
 // Update the 3x3 to 4x4 mapping table
 void
-configMap(std::array<Map_3x3to4x4, 512> &m, std::string_view sv) {
-    std::array<size_t, 9> src = {0, 1, 2, 4, 5, 6, 8, 9, 10};
-    std::array<size_t, 16> dst = {
+configMap(Tbl_3x3to4x4 &tbl, std::string_view sv) {
+    Grid_3x3 src = {0, 1, 2, 4, 5, 6, 8, 9, 10};
+    Grid_4x4 dst = {
         15, 16, 17, 18, 20, 21, 22, 23, 25, 26, 27, 28, 30, 31, 32, 33
     };
 
@@ -258,9 +254,8 @@ configMap(std::array<Map_3x3to4x4, 512> &m, std::string_view sv) {
     std::ranges::for_each(src, f);
     std::ranges::for_each(dst, f);
 
-    auto cnt = std::popcount(bitsToId(src));
     for (auto id : getVariants_3x3(src)) {
-        m[id] = {.bits = dst, .pop_count = cnt};
+        tbl[id] = dst;
     }
 
     return;
@@ -268,23 +263,18 @@ configMap(std::array<Map_3x3to4x4, 512> &m, std::string_view sv) {
 
 TransGrid
 makeTransGrid(
-    std::array<Map_2x2to3x3, 16> const &m_2to3,
-    std::array<Map_3x3to4x4, 512> const &m_3to4,
-    size_t start
+    Tbl_2x2to3x3 const &tbl_2to3, Tbl_3x3to4x4 const &tbl_3to4, size_t start
 ) {
     TransGrid result {};
-    std::array<size_t, 16> grid_16;
-    std::array<size_t, 36> grid_36;
-    std::array<size_t, 81> grid_81;
-    grid_16.fill(0);
-    grid_36.fill(0);
-    grid_81.fill(0);
+    Grid_4x4 grid_16 {};
+    Grid_6x6 grid_36 {};
+    Grid_9x9 grid_81 {};
 
     // step 0
-    result.pop_count[0] = m_3to4[start].pop_count;
+    result.pop_count[0] = std::popcount(start);
 
     // step 1
-    grid_16 = m_3to4[start].bits;
+    grid_16 = tbl_3to4[start];
     result.pop_count[1] = std::ranges::count(grid_16, 1);
 
     // step 2
@@ -295,7 +285,7 @@ makeTransGrid(
         auto id = bitsToId(std::vector<size_t> {
             grid_16[i], grid_16[i + 1], grid_16[i + 4], grid_16[i + 5]
         });
-        auto it = m_2to3[id].bits.cbegin();
+        auto it = tbl_2to3[id].cbegin();
         for (ptrdiff_t k = 0; k < 3; ++k, std::ranges::advance(it, 3)) {
             std::ranges::copy_n(it, 3, grid_36.begin() + j + 6 * k);
         }
@@ -319,12 +309,12 @@ makeTransGrid(
         auto id = bitsToId(std::vector<size_t> {
             grid_36[i], grid_36[i + 1], grid_36[i + 6], grid_36[i + 7]
         });
-        auto it = m_2to3[id].bits.cbegin();
+        auto it = tbl_2to3[id].cbegin();
         for (ptrdiff_t k = 0; k < 3; ++k, std::ranges::advance(it, 3)) {
             std::ranges::copy_n(it, 3, grid_81.begin() + j + 9 * k);
         }
 
-        auto next_id = bitsToId(m_2to3[id].bits);
+        auto next_id = bitsToId(tbl_2to3[id]);
         counter[next_id] += 1;
     }
     result.pop_count[3] = std::ranges::count(grid_81, 1);
@@ -344,8 +334,8 @@ makeTransGrid(
 TransMap
 parse(std::istream &is) {
     // The indices of these arrays are also used as the ID of these structures.
-    std::array<Map_2x2to3x3, 16> m_2to3;  // 16 = 2 ^ 4
-    std::array<Map_3x3to4x4, 512> m_3to4; // 512 = 2 ^ 9
+    Tbl_2x2to3x3 tbl_2to3;
+    Tbl_3x3to4x4 tbl_3to4;
 
     // Grid IDs for TransGrid objects creation
     std::vector<size_t> id_group {bitsToId(start_grid)};
@@ -355,11 +345,12 @@ parse(std::istream &is) {
         case 20:
             // 2x2 grid to 3x3 grid
             // note grid IDs of 3x3 grids that be produced from 2x2 grids for later use
-            id_group.push_back(configMap(m_2to3, line)); // function overloading
+            id_group.push_back(configMap(tbl_2to3, line)
+            ); // function overloading
             break;
         case 34:
             // 3x3 grid to 4x4 grid
-            configMap(m_3to4, line); // function overloading
+            configMap(tbl_3to4, line); // function overloading
             break;
         default:
             break; // no-op
@@ -368,7 +359,7 @@ parse(std::istream &is) {
 
     TransMap trans_map;
     for (auto id : id_group) {
-        trans_map[id] = makeTransGrid(m_2to3, m_3to4, id);
+        trans_map[id] = makeTransGrid(tbl_2to3, tbl_3to4, id);
     }
 
     return trans_map;
