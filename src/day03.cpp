@@ -78,18 +78,19 @@ part1(long target) {
     }
 }
 
-struct [[nodiscard]] ComplexHash {
-    size_t operator()(std::complex<int> const &key) const {
+using Pos = std::complex<long>;
+
+struct [[nodiscard]] PosHash {
+    size_t operator()(Pos const &key) const {
         auto h = std::hash<long> {};
-        auto r = static_cast<long>(key.real());
-        auto i = static_cast<long>(key.imag());
+        auto r = key.real();
+        auto i = key.imag();
 
         return h((r & 0xFFFF) << 16 | (i & 0xFFFF));
     }
 };
 
-using Pos = std::complex<int>;
-using Grid = std::unordered_map<Pos, long, ComplexHash>;
+using Grid = std::unordered_map<Pos, long, PosHash>;
 
 long
 fixValue(Grid &m, Pos const &pos) {

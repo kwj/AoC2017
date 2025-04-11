@@ -16,13 +16,13 @@ export module day22;
 
 export namespace day22 {
 
-using Pos = std::complex<int>;
+using Pos = std::complex<long>;
 
 struct [[nodiscard]] PosHash {
     size_t operator()(Pos const &key) const;
 };
 
-using Grid = std::unordered_map<Pos, int, PosHash>;
+using Grid = std::unordered_map<Pos, size_t, PosHash>;
 
 std::tuple<long, long> solve(std::istream &is);
 std::pair<Grid, Pos> parse(std::istream &is);
@@ -39,8 +39,8 @@ namespace day22 {
 size_t
 PosHash::operator()(Pos const &key) const {
     auto h = std::hash<long> {};
-    auto r = static_cast<long>(key.real());
-    auto i = static_cast<long>(key.imag());
+    auto r = key.real();
+    auto i = key.imag();
 
     return h((r & 0xFFFF) << 16 | (i & 0xFFFF));
 }
@@ -54,10 +54,10 @@ solve(std::istream &is) {
 
 // Part 1: 0 -> 2 -> 0 -> 2 -> 0 -> ...
 // Part 2: 0 -> 1 -> 2 -> 3 -> 0 -> 1 -> 2 -> ...
-constexpr int CLEAN = 0;
-[[maybe_unused]] constexpr int WEAK = 1;
-constexpr int INFECTED = 2;
-[[maybe_unused]] constexpr int FLAGGED = 3;
+constexpr size_t CLEAN = 0;
+[[maybe_unused]] constexpr size_t WEAK = 1;
+constexpr size_t INFECTED = 2;
+[[maybe_unused]] constexpr size_t FLAGGED = 3;
 
 std::pair<Grid, Pos>
 parse(std::istream &is) {
@@ -67,21 +67,21 @@ parse(std::istream &is) {
     }
 
     Grid grid;
-    int y {0};
+    long y {0};
     for (auto const &chars : work) {
-        for (auto const [x, ch] : std::views::zip(std::views::iota(0), chars)) {
-            if (ch == '#') {
+        for (auto const [x, c] : std::views::zip(std::views::iota(0L), chars)) {
+            if (c == '#') {
                 grid[{x, y}] = INFECTED;
             }
         }
         ++y;
     }
 
-    return {grid, Pos(static_cast<int>(std::ssize(work[0])) / 2, y / 2)};
+    return {grid, Pos(std::ssize(work[0]) / 2, y / 2)};
 }
 
 long
-simulate(Grid grid, Pos pos, long iteration, int delta) {
+simulate(Grid grid, Pos pos, long iteration, size_t delta) {
     constexpr Pos turn_cw(0, 1), turn_ccw(0, -1), turn_180(-1, 0),
         straight(1, 0);
     std::vector<Pos> dir_tbl {turn_ccw, straight, turn_cw, turn_180};
@@ -101,7 +101,7 @@ simulate(Grid grid, Pos pos, long iteration, int delta) {
             ++result;
         }
 
-        dir *= dir_tbl[static_cast<size_t>(crnt_state)];
+        dir *= dir_tbl[crnt_state];
         pos += dir;
     }
 
