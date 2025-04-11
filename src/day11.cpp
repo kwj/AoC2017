@@ -88,18 +88,18 @@ parse(std::istream &is) {
 
     std::vector<HexPos> dirs;
     for (auto const &subr : std::views::split(s, ',')) {
-        auto dir = std::string_view(subr);
-        if (dir == "n") {
+        auto d = std::string_view(subr);
+        if (d == "n") {
             dirs.emplace_back(0, 1, -1);
-        } else if (dir == "ne") {
+        } else if (d == "ne") {
             dirs.emplace_back(1, 0, -1);
-        } else if (dir == "se") {
+        } else if (d == "se") {
             dirs.emplace_back(1, -1, 0);
-        } else if (dir == "s") {
+        } else if (d == "s") {
             dirs.emplace_back(0, -1, 1);
-        } else if (dir == "sw") {
+        } else if (d == "sw") {
             dirs.emplace_back(-1, 0, 1);
-        } else if (dir == "nw") {
+        } else if (d == "nw") {
             dirs.emplace_back(-1, 1, 0);
         }
     }

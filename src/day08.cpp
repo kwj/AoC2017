@@ -71,26 +71,26 @@ parse(std::istream &is) {
             auto op2 = std::stol(m[6].str());
             auto cond = m[5].str();
 
-            std::function<bool(long, long)> cond_fn;
+            std::function<bool(long, long)> fn;
             if (cond == ">") {
-                cond_fn = cmpGT;
+                fn = cmpGT;
             } else if (cond == ">=") {
-                cond_fn = cmpGE;
+                fn = cmpGE;
             } else if (cond == "<") {
-                cond_fn = cmpLT;
+                fn = cmpLT;
             } else if (cond == "<=") {
-                cond_fn = cmpLE;
+                fn = cmpLE;
             } else if (cond == "==") {
-                cond_fn = cmpEQ;
+                fn = cmpEQ;
             } else if (cond == "!=") {
-                cond_fn = cmpNE;
+                fn = cmpNE;
             } else {
                 throw std::runtime_error(
                     std::format("Invalid comparison operator: {}", cond)
                 );
             }
 
-            insts.emplace_back(r1, r2, op1, op2, cond_fn);
+            insts.emplace_back(r1, r2, op1, op2, fn);
         }
     }
 
