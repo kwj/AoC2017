@@ -119,7 +119,7 @@ part2(long target) {
     Grid grid = {{{0, 0}, 1}};
     Pos curr_pos {0, 0};
     Pos dir {1, 0};
-    Pos turn_ccw90 {0, 1};
+    Pos const turn_ccw90 {0, 1};
     int i {0};
     int dist {1};
 
