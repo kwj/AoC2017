@@ -108,9 +108,7 @@ makeGrid(std::string_view prefix) {
         for (auto it = hash.cbegin(); it <= hash.cend() - BLOCK_LEN;
              std::ranges::advance(it, BLOCK_LEN)) {
             auto h = std::ranges::fold_left(
-                std::ranges::subrange(it, it + BLOCK_LEN),
-                0,
-                std::bit_xor<long> {}
+                it, it + BLOCK_LEN, 0, std::bit_xor<long> {}
             );
             for (long mask = 0b10000000; mask > 0; mask >>= 1) {
                 grid.push_back(h & mask);

@@ -112,7 +112,7 @@ part2(std::string_view s) {
     for (auto it = hash.cbegin(); it <= hash.cend() - BLOCK_LEN;
          std::ranges::advance(it, BLOCK_LEN)) {
         auto h = std::ranges::fold_left(
-            std::ranges::subrange(it, it + BLOCK_LEN), 0, std::bit_xor<long> {}
+            it, it + BLOCK_LEN, 0, std::bit_xor<long> {}
         );
         oss << std::format("{:02x}", h & 0xFF);
     }
