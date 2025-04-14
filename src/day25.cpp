@@ -101,9 +101,7 @@ parse(std::istream &is) {
     auto start = static_cast<unsigned long>(lines[0][15] - 'A');
     auto steps = util::getNumbers(lines[1])[0];
 
-    std::vector<std::array<Op, 2>> rules;
     std::map<size_t, std::array<Op, 2>> tmp;
-
     auto data = std::span(lines);
     for (auto offset = 3uz; offset < lines.size() - 2; offset += 10) {
         std::array<Op, 2> actions;
@@ -121,6 +119,7 @@ parse(std::istream &is) {
         tmp[state] = actions;
     }
 
+    std::vector<std::array<Op, 2>> rules;
 // P1206R7 (range to container conversion) is not yet fully supported in GCC 14.
 #if __cpp_lib_containers_ranges >= 202202L
     rules.append_range(std::views::values(tmp));
@@ -134,7 +133,7 @@ parse(std::istream &is) {
 }
 
 unsigned long
-run(size_t state, long steps, std::vector<std::array<Op, 2>> &rules) {
+run(size_t state, long steps, std::vector<std::array<Op, 2>> const &rules) {
     auto tape = Tape<size_t, 0uz>();
     auto counter {0ul};
     auto curr {0uz};
