@@ -30,15 +30,15 @@ struct [[nodiscard]] Op {
 
 using TransTbl = std::vector<std::array<Op, 2>>;
 
-struct [[nodiscard]] Head {
+struct [[nodiscard]] Input {
     size_t init_state;
     long steps;
     TransTbl tbl;
 };
 
 std::tuple<long> solve(std::istream &is);
-Head parse(std::istream &is);
-unsigned long part1(Head &input);
+Input parse(std::istream &is);
+unsigned long part1(Input &input);
 std::string part2();
 
 } // namespace day25
@@ -95,7 +95,7 @@ Tape<T, N>::write(T v, bool dir) {
     return *it;
 }
 
-Head
+Input
 parse(std::istream &is) {
     std::vector<std::string> lines;
     for (std::string line; std::getline(is, line);) {
@@ -162,7 +162,7 @@ run(size_t state, long steps, TransTbl const &tbl) {
 }
 
 unsigned long
-part1(Head &input) {
+part1(Input &input) {
     return run(input.init_state, input.steps, input.tbl);
 }
 

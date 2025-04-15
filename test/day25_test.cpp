@@ -12,10 +12,10 @@ class Day25Test : public ::testing::Test {
         return;
     }
 
-    static day25::Head data;
+    static day25::Input data;
 };
 
-day25::Head Day25Test::data;
+day25::Input Day25Test::data;
 
 TEST_F(Day25Test, Part1) {
     auto result = day25::part1(Day25Test::data);
