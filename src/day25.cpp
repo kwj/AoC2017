@@ -1,5 +1,6 @@
 module;
 
+#include <algorithm>
 #include <array>
 #include <concepts>
 #include <cstddef>
@@ -9,6 +10,7 @@ module;
 #include <map>
 #include <ranges>
 #include <span>
+#include <stdexcept>
 #include <string>
 #include <tuple>
 #include <vector>
@@ -26,10 +28,12 @@ struct [[nodiscard]] Op {
     bool dir;    // true: right, false: left
 };
 
+using TransTbl = std::vector<std::array<Op, 2>>;
+
 struct [[nodiscard]] Head {
     size_t init_state;
     long steps;
-    std::vector<std::array<Op, 2>> rules;
+    TransTbl tbl;
 };
 
 std::tuple<long> solve(std::istream &is);
@@ -119,27 +123,32 @@ parse(std::istream &is) {
         tmp[state] = actions;
     }
 
-    std::vector<std::array<Op, 2>> rules;
-// P1206R7 (range to container conversion) is not yet fully supported in GCC 14.
-#if __cpp_lib_containers_ranges >= 202202L
-    rules.append_range(std::views::values(tmp));
-#else
-    for (auto &acts : std::views::values(tmp)) {
-        rules.push_back(acts);
-    }
-#endif
+    auto keys = std::views::keys(tmp);
+    auto is_valid = [&keys](size_t x) {
+        return std::ranges::contains(keys, x);
+    };
 
-    return {.init_state = start, .steps = steps, .rules = rules};
+    // throw an exception if the input data is an invalid state transition table
+    TransTbl tbl(std::ranges::max(keys) + 1);
+    for (auto &[k, v] : tmp) {
+        if (is_valid(v[0].next) && is_valid(v[1].next)) {
+            tbl[k] = v;
+        } else {
+            throw std::runtime_error("Invalid input data");
+        }
+    }
+
+    return {.init_state = start, .steps = steps, .tbl = tbl};
 }
 
 unsigned long
-run(size_t state, long steps, std::vector<std::array<Op, 2>> const &rules) {
+run(size_t state, long steps, TransTbl const &tbl) {
     auto tape = Tape<size_t, 0uz>();
     auto counter {0ul};
     auto curr {0uz};
 
     while (steps-- > 0) {
-        auto [v, next_state, dir] = rules[state][curr];
+        auto [v, next_state, dir] = tbl[state][curr];
         counter += v - curr;
 
         // write a new value on the tape, move the cursor to the right/left and
@@ -154,7 +163,7 @@ run(size_t state, long steps, std::vector<std::array<Op, 2>> const &rules) {
 
 unsigned long
 part1(Head &input) {
-    return run(input.init_state, input.steps, input.rules);
+    return run(input.init_state, input.steps, input.tbl);
 }
 
 std::string
