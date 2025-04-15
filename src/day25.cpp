@@ -38,7 +38,7 @@ struct [[nodiscard]] Input {
 
 std::tuple<long> solve(std::istream &is);
 Input parse(std::istream &is);
-unsigned long part1(Input &input);
+long part1(Input &input);
 std::string part2();
 
 } // namespace day25
@@ -64,12 +64,14 @@ class [[nodiscard]] Tape {
         it = data.begin();
     }
     T write(T v, bool dir);
+    long pop_count(T v);
 
   private:
     std::deque<T> data;
     std::deque<T>::iterator it;
 };
 
+// write a new value, move the cursor to the right/left and readn a new value
 template <std::integral T, T N>
 T
 Tape<T, N>::write(T v, bool dir) {
@@ -93,6 +95,12 @@ Tape<T, N>::write(T v, bool dir) {
     }
 
     return *it;
+}
+
+template <std::integral T, T N>
+long
+Tape<T, N>::pop_count(T v) {
+    return std::ranges::count(data, v);
 }
 
 Input
@@ -141,27 +149,22 @@ parse(std::istream &is) {
     return {.init_state = start, .steps = steps, .tbl = tbl};
 }
 
-unsigned long
+long
 run(size_t state, long steps, TransTbl const &tbl) {
     auto tape = Tape<size_t, 0uz>();
-    auto counter {0ul};
     auto curr {0uz};
 
     while (steps-- > 0) {
-        auto [v, next_state, dir] = tbl[state][curr];
-        counter += v - curr;
+        auto &op = tbl[state][curr];
 
-        // write a new value on the tape, move the cursor to the right/left and
-        // return a next value from the tape
-        curr = tape.write(v, dir);
-
-        state = next_state;
+        curr = tape.write(op.v, op.dir);
+        state = op.next;
     }
 
-    return counter;
+    return tape.pop_count(1);
 }
 
-unsigned long
+long
 part1(Input &input) {
     return run(input.init_state, input.steps, input.tbl);
 }
