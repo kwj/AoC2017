@@ -54,6 +54,7 @@ checkBridges(
             continue;
         }
 
+        // `target ^ p1 ^ p2` is a little faster than `p1 + p2 - target`
         if (target == p1 || target == p2) {
             used = true;
             checkBridges(

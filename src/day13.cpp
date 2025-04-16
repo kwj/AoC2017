@@ -78,6 +78,7 @@ part2(std::map<long, std::set<long>> const &tbl) {
     std::vector<long> delays {0};
     std::vector<long> next_delays;
 
+    // check layers in order of shortest to longest
     for (auto const &[r, depths] : tbl) {
         // period to scan the top of a layer whose range is `r`.
         auto period = 2 * (r - 1);
