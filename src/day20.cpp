@@ -136,6 +136,13 @@ module :private;
 
 namespace day20 {
 
+std::tuple<long, long>
+solve(std::istream &is) {
+    auto input_data = parse(is);
+
+    return {part1(input_data), part2(input_data)};
+}
+
 std::vector<long>
 Particle::position(long tick) const {
     auto new_p = [](long pos, long vel, long acc, long t) {
@@ -147,13 +154,6 @@ Particle::position(long tick) const {
         new_p(p[1], v[1], a[1], tick),
         new_p(p[2], v[2], a[2], tick)
     };
-}
-
-std::tuple<long, long>
-solve(std::istream &is) {
-    auto input_data = parse(is);
-
-    return {part1(input_data), part2(input_data)};
 }
 
 std::vector<Particle>

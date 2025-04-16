@@ -36,6 +36,13 @@ module :private;
 
 namespace day22 {
 
+std::tuple<long, long>
+solve(std::istream &is) {
+    auto input_data = parse(is);
+
+    return {part1(input_data), part2(input_data)};
+}
+
 size_t
 PosHash::operator()(Pos const &key) const {
     auto h = std::hash<long> {};
@@ -43,13 +50,6 @@ PosHash::operator()(Pos const &key) const {
     auto i = key.imag();
 
     return h((r & 0xFFFF) << 16 | (i & 0xFFFF));
-}
-
-std::tuple<long, long>
-solve(std::istream &is) {
-    auto input_data = parse(is);
-
-    return {part1(input_data), part2(input_data)};
 }
 
 // Part 1: 0 -> 2 -> 0 -> 2 -> 0 -> ...

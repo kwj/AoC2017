@@ -46,6 +46,13 @@ module :private;
 
 namespace day16 {
 
+std::tuple<std::string, std::string>
+solve(std::istream &is) {
+    auto input_data = parse(is);
+
+    return {part1(input_data), part2(input_data)};
+}
+
 constexpr size_t N_PROGRAMS {16};
 
 Choreography::Choreography() {
@@ -93,13 +100,6 @@ Choreography::show() const {
     }
 
     return oss.str();
-}
-
-std::tuple<std::string, std::string>
-solve(std::istream &is) {
-    auto input_data = parse(is);
-
-    return {part1(input_data), part2(input_data)};
 }
 
 Choreography
