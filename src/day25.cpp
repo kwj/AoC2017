@@ -64,7 +64,7 @@ class [[nodiscard]] Tape {
         it = data.begin();
     }
     T write(T v, bool dir);
-    long pop_count(T v);
+    long count(T v);
 
   private:
     std::deque<T> data;
@@ -99,7 +99,7 @@ Tape<T, N>::write(T v, bool dir) {
 
 template <std::integral T, T N>
 long
-Tape<T, N>::pop_count(T v) {
+Tape<T, N>::count(T v) {
     return std::ranges::count(data, v);
 }
 
@@ -161,7 +161,7 @@ run(size_t state, long steps, TransTbl const &tbl) {
         state = op.next;
     }
 
-    return tape.pop_count(1);
+    return tape.count(1);
 }
 
 long
