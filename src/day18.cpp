@@ -118,11 +118,11 @@ parse(std::istream &is) {
     std::regex_search(content, m, re);
     auto seed = std::stoull(m[1].str());
 
-    constexpr unsigned long long M1 {0x7FFFFFFF}; // 2^31 - 1
-    constexpr unsigned long long M2 {10000};
-    constexpr unsigned long long A1 {8505};
-    constexpr unsigned long long A2 {129749};
-    constexpr unsigned long long C {12345};
+    constexpr unsigned long long M1 {0x7FFF'FFFF}; // 2^31 - 1
+    constexpr unsigned long long M2 {10'000};
+    constexpr unsigned long long A1 {8'505};
+    constexpr unsigned long long A2 {129'749};
+    constexpr unsigned long long C {12'345};
     constexpr long N_ELEMENTS {127};
     std::vector<long> vs;
     vs.reserve(N_ELEMENTS);

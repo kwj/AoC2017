@@ -104,7 +104,7 @@ parse(std::istream &is) {
 
 long
 part1(long step) {
-    constexpr long N_INSERTIONS {2017};
+    constexpr long N_INSERTIONS {2'017};
     std::vector<long> buf {0};
     buf.reserve(N_INSERTIONS + 1);
 

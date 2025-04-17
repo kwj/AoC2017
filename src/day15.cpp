@@ -45,9 +45,9 @@ std::pair<long, long>
 judgement(unsigned long a, unsigned long b) {
     constexpr long P1_N_PAIRS {40'000'000};
     constexpr long P2_N_PAIRS {5'000'000};
-    constexpr unsigned long A {16807};
-    constexpr unsigned long B {48271};
-    constexpr unsigned long M {0x7FFFFFFF};
+    constexpr unsigned long A {16'807};
+    constexpr unsigned long B {48'271};
+    constexpr unsigned long M {0x7FFF'FFFF};
 
     // This method stores 10 million values, and then checks them.
     // (2 * P2_N_PAIRS * unsigned short -> at least 20MB)
