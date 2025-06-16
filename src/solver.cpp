@@ -85,9 +85,9 @@ convertTime(std::chrono::steady_clock::rep &&x) {
     }
 }
 
-template <auto solveFn, int day>
+template <auto solveFn>
 void
-solver(std::string fpath) {
+solver(int day, std::string fpath) {
     if (fpath.size() == 0) {
         fpath = std::format("./inputs/{0:02d}/input", day);
     }
@@ -113,26 +113,26 @@ solver(std::string fpath) {
 }
 
 // NOLINTNEXTLINE (cert-err58-cpp)
-std::map<int, std::function<void(std::string)>> const Solvers {
-    {1, solver<day01::solve, 1>},   {2, solver<day02::solve, 2>},
-    {3, solver<day03::solve, 3>},   {4, solver<day04::solve, 4>},
-    {5, solver<day05::solve, 5>},   {6, solver<day06::solve, 6>},
-    {7, solver<day07::solve, 7>},   {8, solver<day08::solve, 8>},
-    {9, solver<day09::solve, 9>},   {10, solver<day10::solve, 10>},
-    {11, solver<day11::solve, 11>}, {12, solver<day12::solve, 12>},
-    {13, solver<day13::solve, 13>}, {14, solver<day14::solve, 14>},
-    {15, solver<day15::solve, 15>}, {16, solver<day16::solve, 16>},
-    {17, solver<day17::solve, 17>}, {18, solver<day18::solve, 18>},
-    {19, solver<day19::solve, 19>}, {20, solver<day20::solve, 20>},
-    {21, solver<day21::solve, 21>}, {22, solver<day22::solve, 22>},
-    {23, solver<day23::solve, 23>}, {24, solver<day24::solve, 24>},
-    {25, solver<day25::solve, 25>},
+std::map<int, std::function<void(int, std::string)>> const Solvers {
+    {1, solver<day01::solve>},  {2, solver<day02::solve>},
+    {3, solver<day03::solve>},  {4, solver<day04::solve>},
+    {5, solver<day05::solve>},  {6, solver<day06::solve>},
+    {7, solver<day07::solve>},  {8, solver<day08::solve>},
+    {9, solver<day09::solve>},  {10, solver<day10::solve>},
+    {11, solver<day11::solve>}, {12, solver<day12::solve>},
+    {13, solver<day13::solve>}, {14, solver<day14::solve>},
+    {15, solver<day15::solve>}, {16, solver<day16::solve>},
+    {17, solver<day17::solve>}, {18, solver<day18::solve>},
+    {19, solver<day19::solve>}, {20, solver<day20::solve>},
+    {21, solver<day21::solve>}, {22, solver<day22::solve>},
+    {23, solver<day23::solve>}, {24, solver<day24::solve>},
+    {25, solver<day25::solve>},
 };
 
 void
 runAllSolver() {
-    for (auto const &fn : std::views::values(Solvers)) {
-        fn("");
+    for (auto const &[day, fn] : Solvers) {
+        fn(day, "");
     }
 
     return;
@@ -141,7 +141,7 @@ runAllSolver() {
 void
 runSolver(int day, std::string fpath) {
     if (Solvers.contains(day)) {
-        Solvers.at(day)(fpath);
+        Solvers.at(day)(day, fpath);
     } else {
         std::print("There is no solution for Day {}\n", day);
     }
