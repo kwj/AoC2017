@@ -199,6 +199,7 @@ getVariants_2x2(T const &bit_seq) {
 }
 
 // Update the 2x2 to 3x3 mapping table and return a 3x3 grid's ID which is used as a key
+// note: function overloading
 size_t
 configMap(Tbl_2x2to3x3 &tbl, std::string_view sv) {
     Grid_2x2 src = {0, 1, 3, 4};
@@ -243,6 +244,7 @@ getVariants_3x3(T const &bit_seq) {
 }
 
 // Update the 3x3 to 4x4 mapping table
+// note: function overloading
 void
 configMap(Tbl_3x3to4x4 &tbl, std::string_view sv) {
     Grid_3x3 src = {0, 1, 2, 4, 5, 6, 8, 9, 10};
@@ -348,12 +350,11 @@ parse(std::istream &is) {
         case 20:
             // 2x2 grid to 3x3 grid
             // note grid IDs of 3x3 grids that be produced from 2x2 grids for later use
-            id_group.push_back(configMap(tbl_2to3, line)
-            ); // function overloading
+            id_group.push_back(configMap(tbl_2to3, line));
             break;
         case 34:
             // 3x3 grid to 4x4 grid
-            configMap(tbl_3to4, line); // function overloading
+            configMap(tbl_3to4, line);
             break;
         default:
             break; // no-op
