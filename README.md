@@ -14,6 +14,12 @@ URL: https://adventofcode.com/2017
 * [GoogleTest](https://github.com/google/googletest) (Tested with GoogleTest v1.16.0)
   - Note: CMake automatically downloads GoogleTest as part of the build's configure step.
 
+> ### Updated (May 2026)
+>
+> After updating to Ubuntu 26.04, GoogleTest v1.16.0 and v1.17.0 failed with Clang 21. As a temporary workaround, I'm currently using the latest commit of GoogleTest as of this point in time.
+>
+> Note: I verified that all prerequisites other than GoogleTest can be used with the versions included in Ubuntu 26.04.
+
 ## Solutions
 
 * [Day 1: Inverse Captcha](./src/day01.cpp)
