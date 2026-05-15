@@ -3,7 +3,15 @@ include(FetchContent)
 FetchContent_Declare(
     googletest
     GIT_REPOSITORY https://github.com/google/googletest.git
-    GIT_TAG v1.16.0
+
+    # GoogleTest v1.16.0 and v1.17.0 failed with Clang 21.
+    # I feel this was fixed in this commit.
+    # https://github.com/google/googletest/commit/fa8438ae6b70c57010177de47a9f13d7041a6328
+    #
+    # So, I specified that the latest commit should be used as of May 14, 2026.
+    #
+    # To-do: Update this setting when a new tag is created.
+    GIT_TAG d72f9c8aea6817cdf1ca0ac10887f328de7f3da2
 )
 
 FetchContent_MakeAvailable(googletest)
