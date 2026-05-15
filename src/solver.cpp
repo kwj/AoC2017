@@ -97,7 +97,7 @@ solver(int day, std::string fpath) {
     auto const tpl = solveFn(input_ss);
     auto const t1 = std::chrono::steady_clock::now();
 
-    auto [n1, n2, unit] = convertTime(
+    auto const &&[n1, n2, unit] = convertTime(
         std::chrono::duration_cast<std::chrono::nanoseconds>(t1 - t0).count()
     );
 
