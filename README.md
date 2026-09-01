@@ -14,7 +14,11 @@ URL: https://adventofcode.com/2017
 * [GoogleTest](https://github.com/google/googletest) (Tested with GoogleTest v1.16.0)
   - Note: CMake automatically downloads GoogleTest as part of the build's configure step.
 
-> ### Updated (May 2026)
+> ### Updated (Sep. 2026)
+>
+> I switched GoogleTest from v1.16.0 to v1.18.0, and it worked well with Clang 21/CMake 4.2/Ninja 1.13 on Ubuntu 26.04.
+
+> ### Updated (May. 2026)
 >
 > After updating to Ubuntu 26.04, GoogleTest v1.16.0 and v1.17.0 failed with Clang 21. As a temporary workaround, I'm currently using the latest commit of GoogleTest as of this point in time.
 >
